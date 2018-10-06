@@ -2,6 +2,6 @@
 .ipynb_checkpoints
 __pycache__
 assignments
-*.dat
-*.batch
-bigartm.*
+.dat
+.batch
+bigartm.
