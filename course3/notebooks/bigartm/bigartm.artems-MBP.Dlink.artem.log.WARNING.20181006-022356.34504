@@ -1,0 +1,6 @@
+Log file created at: 2018/10/06 02:23:56
+Running on machine: artems-MBP.Dlink
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W1006 02:23:56.179426 24846336 helpers.cc:221] File already exists: lectures_batches/aaaaaa.batch
+W1006 02:23:56.897445 25382912 helpers.cc:221] File already exists: lectures_batches/aaaaab.batch
+W1006 02:24:44.050448 2047873024 check_messages.h:1082] Inconsistent fields size in ThetaMatrix: 1728 vs 0 vs 1728 vs 0;

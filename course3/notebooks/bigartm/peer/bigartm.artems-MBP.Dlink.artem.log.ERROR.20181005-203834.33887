@@ -1,0 +1,5 @@
+Log file created at: 2018/10/05 20:38:34
+Running on machine: artems-MBP.Dlink
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E1005 20:38:34.733911 2047873024 c_interface.cc:59] DiskReadException :  File ../data/lectures.txt does not exist.
+E1005 20:38:39.036728 2047873024 c_interface.cc:59] DiskReadException :  File /data/lectures.txt does not exist.
