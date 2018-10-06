@@ -1,8 +1,0 @@
-Log file created at: 2018/10/05 15:24:26
-Running on machine: artems-MBP.Dlink
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-W1005 15:24:26.560533 28065792 helpers.cc:221] File already exists: school_batches/aaaaaa.batch
-W1005 15:24:26.567340 26992640 helpers.cc:221] File already exists: school_batches/aaaaab.batch
-W1005 15:24:26.574690 27529216 helpers.cc:221] File already exists: school_batches/aaaaae.batch
-W1005 15:24:26.580826 25919488 helpers.cc:221] File already exists: school_batches/aaaaad.batch
-W1005 15:24:26.588615 28602368 helpers.cc:221] File already exists: school_batches/aaaaac.batch

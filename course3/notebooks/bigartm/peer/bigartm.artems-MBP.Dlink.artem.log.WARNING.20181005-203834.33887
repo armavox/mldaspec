@@ -1,8 +1,0 @@
-Log file created at: 2018/10/05 20:38:34
-Running on machine: artems-MBP.Dlink
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-E1005 20:38:34.733911 2047873024 c_interface.cc:59] DiskReadException :  File ../data/lectures.txt does not exist.
-E1005 20:38:39.036728 2047873024 c_interface.cc:59] DiskReadException :  File /data/lectures.txt does not exist.
-W1006 00:15:48.838668 25382912 helpers.cc:221] File already exists: lectures_batches/aaaaaa.batch
-W1006 00:15:49.588182 33857536 helpers.cc:221] File already exists: lectures_batches/aaaaab.batch
-W1006 00:17:33.997227 2047873024 check_messages.h:1082] Inconsistent fields size in ThetaMatrix: 1728 vs 0 vs 1728 vs 0;

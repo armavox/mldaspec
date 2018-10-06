@@ -1,9 +1,0 @@
-Log file created at: 2018/10/05 15:25:52
-Running on machine: artems-MBP.Dlink
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-W1005 15:25:52.480741 26456064 helpers.cc:221] File already exists: school_batches/aaaaaa.batch
-W1005 15:25:52.487993 26992640 helpers.cc:221] File already exists: school_batches/aaaaac.batch
-W1005 15:25:52.496018 25919488 helpers.cc:221] File already exists: school_batches/aaaaab.batch
-W1005 15:25:52.504858 28065792 helpers.cc:221] File already exists: school_batches/aaaaae.batch
-W1005 15:25:52.515144 27529216 helpers.cc:221] File already exists: school_batches/aaaaad.batch
-W1005 15:28:52.447305 2047873024 check_messages.h:1082] Inconsistent fields size in ThetaMatrix: 476 vs 0 vs 476 vs 0;
