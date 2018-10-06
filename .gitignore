@@ -5,3 +5,4 @@ assignments
 *.dat
 *.batch
 **/bigartm.*
+**/umn_foursquare_datasets/*
