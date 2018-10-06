@@ -2,7 +2,10 @@
 .ipynb_checkpoints
 __pycache__
 assignments
+<<<<<<< HEAD
 *.dat
 *.batch
 **/bigartm.*
 **/umn_foursquare_datasets/*
+=======
+>>>>>>> bd1a1247166b4bccd1f74d1f1080a345bf90063c
