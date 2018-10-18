@@ -1,4 +1,3 @@
-# the_number_of_symbols_to_limit_the_line_length_according_to_PEP8_is________79
 import itertools
 import numpy as np
 
