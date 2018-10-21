@@ -56,7 +56,7 @@ def proportions_diff_confint_rel(sample1, sample2, alpha=0.05):
     return (left_boundary, right_boundary)
 
 
-def proportions_diff_z_stat_ind(sample1, sample2):
+def proportions_diff_z_stat_ind(sample1, sample2, alternative='two-sided'):
     """Proportion test fot two proportions based on normal distribution.
 
     Parameters
@@ -67,6 +67,7 @@ def proportions_diff_z_stat_ind(sample1, sample2):
     Returns
     -------
     z_stat : float
+    p_value : float
 
     """
     n1 = len(sample1)
@@ -76,10 +77,13 @@ def proportions_diff_z_stat_ind(sample1, sample2):
     p2 = float(sum(sample2)) / n2
     P = float(p1*n1 + p2*n2) / (n1 + n2)
 
-    return (p1 - p2) / np.sqrt(P * (1 - P) * (1. / n1 + 1. / n2))
+    z_stat = (p1 - p2) / np.sqrt(P * (1 - P) * (1. / n1 + 1. / n2))
+    p_value = _proportions_diff_z_test(z_stat, alternative)
+
+    return z_stat, p_value
 
 
-def proportions_diff_z_stat_rel(sample1, sample2):
+def proportions_diff_z_stat_rel(sample1, sample2, alternative='two-sided'):
     """Returns z-statistic for two samples of proportions.
 
     Parameters
@@ -92,6 +96,7 @@ def proportions_diff_z_stat_rel(sample1, sample2):
     Returns
     -------
     z_stat : float
+    p_value : float
 
     """
     sample = list(zip(sample1, sample2))
@@ -100,10 +105,13 @@ def proportions_diff_z_stat_rel(sample1, sample2):
     f = sum([1 if (x[0] == 1 and x[1] == 0) else 0 for x in sample])
     g = sum([1 if (x[0] == 0 and x[1] == 1) else 0 for x in sample])
 
-    return float(f - g) / np.sqrt(f + g - float((f - g)**2) / n)
+    z_stat = float(f - g) / np.sqrt(f + g - float((f - g)**2) / n)
+    p_value = _proportions_diff_z_test(z_stat, alternative)
+
+    return z_stat, p_value
 
 
-def proportions_diff_z_test(z_stat, alternative='two-sided'):
+def _proportions_diff_z_test(z_stat, alternative='two-sided'):
     """Return p-value based on normal distribution test.
 
     """
@@ -119,3 +127,30 @@ def proportions_diff_z_test(z_stat, alternative='two-sided'):
 
     if alternative == 'greater':
         return 1 - scipy.stats.norm.cdf(z_stat)
+
+
+def cramers_corrected_stat(confusion_matrix):
+    """Calculates Cramers V statistic for categorial-categorial association.
+        uses correction from Bergsma and Wicher,
+        Journal of the Korean Statistical Society 42 (2013): 323-328
+
+    Parameters
+    ----------
+    confusion_matrix : pandas confusion matrix
+        >>> import pandas as pd
+        >>> confusion_matrix = pd.crosstab(dataframe_1, dataframe_2)
+
+    Returns
+    -------
+    Cramers'V : float
+
+    """
+    chi2 = scipy.stats.chi2_contingency(confusion_matrix)[0]
+    n = confusion_matrix.sum().sum()
+    phi2 = chi2/n
+    r, k = confusion_matrix.shape
+    phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1))
+    rcorr = r - ((r-1)**2)/(n-1)
+    kcorr = k - ((k-1)**2)/(n-1)
+
+    return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
