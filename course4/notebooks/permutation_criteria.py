@@ -72,7 +72,7 @@ def _permutation_zero_dist_ind(sample1, sample2, max_combinations=None):
     return distr
 
 
-def permutation_test_2sample_ind(sample1, sample2, max_permutations=10000,
+def permutation_test_2sample_ind(sample1, sample2, max_permutations=1000,
                                  alternative='two-sided'):
 
     if alternative not in ('two-sided', 'less', 'greater'):
