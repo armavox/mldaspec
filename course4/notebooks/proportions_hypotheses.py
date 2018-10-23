@@ -130,7 +130,8 @@ def _proportions_diff_z_test(z_stat, alternative='two-sided'):
 
 
 def cramers_corrected_stat(confusion_matrix):
-    """Calculates Cramers V statistic for categorial-categorial association.
+    """Calculates Cramers V statistic for
+        categorial-categorial association.
         uses correction from Bergsma and Wicher,
         Journal of the Korean Statistical Society 42 (2013): 323-328
 
@@ -143,14 +144,55 @@ def cramers_corrected_stat(confusion_matrix):
     Returns
     -------
     Cramers'V : float
+        Cramers'V correlation coefficient
+    p_value : float
+        p_value of hypothesis testing with null-hypothesis of
+        Cramers'V is equal zero.
 
     """
-    chi2 = scipy.stats.chi2_contingency(confusion_matrix)[0]
+    chi2 = scipy.stats.chi2_contingency(confusion_matrix)
     n = confusion_matrix.sum().sum()
-    phi2 = chi2/n
+    phi2 = chi2[0] / n
     r, k = confusion_matrix.shape
     phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1))
     rcorr = r - ((r-1)**2)/(n-1)
     kcorr = k - ((k-1)**2)/(n-1)
 
-    return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
+    cramers_v = np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
+
+    return cramers_v, chi2[1]
+
+
+def check_ct(ct):
+    """Checks following conditions to use chi2_contingency and Cramers'V.
+
+    Conditions are as follows:
+        - n_obs >= 40
+        - (ni+ * n+j / n_obs) < 5 in less than 20% cells
+        Where ni+ is sum of the i-th row in contingency table and n+j is
+        the sum of the i-th columns in the contingency table.
+
+    Parameters
+    ----------
+    ct : pd.crosstab(df.feature_1, df.feature_2) or ndarray
+        pandas crosstab or any confusion matrix
+
+    Returns
+    -------
+    num_obs : int
+        number of observations
+    observed_prop : float
+
+    Notes
+    -----
+    num_obs must be equal or greater than 40
+    observed_prop must be less than 0.2
+
+    """
+    ct_check = ct.copy()
+    for i in ct.index:
+        for j in ct.columns:
+            ct_check.loc[i, j] = (ct.loc[i].sum() * ct[j].sum()) / ct.sum().sum()
+    n_obs = ct.sum().sum()
+    observed_prop = (ct_check < 5).values.mean()
+    return n_obs, observed_prop
