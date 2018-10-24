@@ -24,7 +24,7 @@ class SeriesModel:
         self.best_model = None
         self.results_table = None
 
-    def fit_sarimax(self, p, d, q, P, D, Q, S):
+    def fit_sarimax(self, p=1, d=0, q=0, P=0, D=0, Q=0, S=0):
         """Method to find best params for SARIMAX model
 
         Parameters
