@@ -23,10 +23,15 @@ class SeriesModel:
         self.series = series
         self.best_model = None
         self.results_table = None
+        # TODO: check if the time-series type data
 
     def __repr__(self):
-        string = str(self.best_model.summary())
-        return string
+        if self.best_model is not None:
+            string = str(self.best_model.summary())
+            return string
+        else:
+            return ("Model not fitted yet. Fit the model \
+with the method ``fit_sarimax(p, d, q, P, D, Q, S)``")
 
     def fit_sarimax(self, p=1, d=0, q=0, P=0, D=0, Q=0, S=0):
         """Method to find best params for SARIMAX model
@@ -42,7 +47,8 @@ class SeriesModel:
         S : int
             Number of lags in series which represent one season.
         q, Q, p, P : int
-            Parameters for SARIMAX(p, d, q)x(P, D, Q, S) model.
+            Initial approximations for parameters for
+            SARIMAX(p, d, q)x(P, D, Q, S) model.
 
         """
         import warnings
