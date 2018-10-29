@@ -8,6 +8,7 @@
 - VGG: https://github.com/ethereon/caffe-tensorflow
 
 # Материалы для изучения нейронных сетей
+*Материалы подготовил Василий Землянов, ментор специализации*
 
 #### Neural Networks and Deep Learning
 
