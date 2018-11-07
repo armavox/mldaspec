@@ -74,6 +74,10 @@ def _permutation_zero_dist_ind(sample1, sample2, max_combinations=None):
 
 def permutation_test_2sample_ind(sample1, sample2, max_permutations=1000,
                                  alternative='two-sided'):
+    """Permutation test for 2 related samples made by 
+    ``permutation_test_1sample(sample2 - sample1)``
+    
+    """
 
     if alternative not in ('two-sided', 'less', 'greater'):
         raise ValueError("alternative not recognized\n"
