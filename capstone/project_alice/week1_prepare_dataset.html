@@ -11899,12 +11899,12 @@ sklearn 0.19.1
 
 compiler   : GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)
 system     : Darwin
-release    : 17.4.0
+release    : 16.7.0
 machine    : x86_64
 processor  : i386
 CPU cores  : 8
 interpreter: 64bit
-Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
+Git hash   : cb98f694ffbe8daae7bd8ace0fcca1899c5607fb
 </pre>
 </div>
 </div>
@@ -11926,7 +11926,7 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="c1">#pip install tqdm</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm_notebook</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
@@ -11952,7 +11952,7 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Поменяйте на свой путь к данным</span>
-<span class="n">PATH_TO_DATA</span> <span class="o">=</span> <span class="s1">&#39;capstone_user_identification&#39;</span>
+<span class="n">PATH_TO_DATA</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
 </pre></div>
 
 </div>
@@ -11998,17 +11998,17 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
 
     .dataframe tbody tr th {
         vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
     }
 </style>
 <table border="1" class="dataframe">
@@ -12225,14 +12225,111 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 
 </div>
 </div>
-</div>
+</div># toy_df.site_id.shape 
+# Out[]: 7600
+# 7600 / 7 ==  1085.714
+# 7600%7 == 5
+# (7600 + (7 - 7600 % 7)) / 7 == 1086.0
+# Number of elements to fill with zeros to make reshape possible is:
+# (7 - 7600 % 7) == 2
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_train_set</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;data/3users&#39;</span><span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;data/3users/user0001.csv&#39;,
+ &#39;data/3users/user0002.csv&#39;,
+ &#39;data/3users/user0003.csv&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> <span class="n">sites_dict</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">,</span>
+                       <span class="n">inds_dict</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Func to get dictionaries for converting site&#39;s name to it&#39;s index.</span>
+<span class="sd">        If dictionary for data in PATH_TO_DATA has already been compiled, </span>
+<span class="sd">        functions just pickle dict out of files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
+        <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">,</span> <span class="s1">&#39;site&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_data</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing sites dict...&#39;</span><span class="p">):</span>
+            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">])</span>
+            <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">full_df</span><span class="o">.</span><span class="n">site</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                                 <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">ind_to_sites_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
+        
+        <span class="c1"># Save dict to file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ind_to_sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+            <span class="n">sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+            
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+            
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
+<span class="c1">#         full_df = pd.DataFrame(columns=[&#39;timestamp&#39;, &#39;site&#39;])</span>
+<span class="c1">#         for file in tqdm(glob(PATH_TO_DATA + &#39;/**/*&#39;), desc=&#39;Preparing sites dict...&#39;):</span>
+<span class="c1">#             temp_df = pd.read_csv(file, parse_dates=[&#39;timestamp&#39;])</span>
+<span class="c1">#             full_df = full_df.append(temp_df, ignore_index=True)</span>
+
+<span class="c1">#         sites_freq_list = sorted(Counter(full_df.site).items(), </span>
+<span class="c1">#                                  key=lambda x: x[1], reverse=True)</span>
+<span class="c1">#         sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))</span>
+<span class="c1">#         ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())</span>
+<span class="c1">#         ind_to_sites_dict[0] = &#39;no_site&#39;</span>
+
+<span class="c1">#         # Save dict to file</span>
+<span class="c1">#         with open(&#39;sites_dict.pkl&#39;, &#39;wb&#39;) as fout:</span>
+<span class="c1">#             pickle.dump(sites_dict, fout)</span>
+
+<span class="c1">#         with open(&#39;ind_to_sites_dict.pkl&#39;, &#39;wb&#39;) as fout:</span>
+<span class="c1">#             pickle.dump(ind_to_sites_dict, fout)</span>
+        
+    <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
+        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
+        
+    <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
 </pre></div>
 
 </div>
@@ -12240,6 +12337,1042 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 </div>
 
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+
+
+<span class="k">def</span> <span class="nf">prepare_train_set</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Func for partition users logs to desireable num of sessions</span>
+<span class="sd">        and prepare training dataset with sessions of particular users.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    
+    <span class="n">sites_dict</span><span class="p">,</span> <span class="n">inds_dict</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="n">refresh_dict</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing training set...&#39;</span><span class="p">):</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">])</span>
+        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sites_dict</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c1"># Partition user data to sessions</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># We fill noncomplete array with zeros.</span>
+            <span class="n">fill_with_zeros</span> <span class="o">=</span> <span class="n">session_length</span> <span class="o">-</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">session_length</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">fill_with_zeros</span><span class="p">)</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
+        
+        <span class="c1"># Construct the full dataset, consist of user id&#39;s and sessions</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">session</span><span class="p">,</span>
+                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">session_length</span><span class="p">)])</span>
+        
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">)]</span> <span class="o">*</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">full_df</span><span class="p">,</span> <span class="n">sites_dict</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">PATH_TO_DATA</span> <span class="o">+</span> <span class="s1">&#39;/10users/&#39;</span>
+<span class="n">sessions_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sessions_df</span><span class="o">.</span><span class="n">user_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing sites dict...: 100%|██████████| 10/10 [00:00&lt;00:00, 52.53it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 40.83it/s]</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 425 ms, sys: 46.1 ms, total: 471 ms
+Wall time: 468 ms
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sessions_df</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[11]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>site1</th>
+      <th>site2</th>
+      <th>site3</th>
+      <th>site4</th>
+      <th>site5</th>
+      <th>site6</th>
+      <th>site7</th>
+      <th>site8</th>
+      <th>site9</th>
+      <th>site10</th>
+      <th>user_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>192</td>
+      <td>574</td>
+      <td>133</td>
+      <td>3</td>
+      <td>133</td>
+      <td>133</td>
+      <td>3</td>
+      <td>133</td>
+      <td>203</td>
+      <td>133</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>415</td>
+      <td>193</td>
+      <td>674</td>
+      <td>254</td>
+      <td>133</td>
+      <td>31</td>
+      <td>393</td>
+      <td>3305</td>
+      <td>217</td>
+      <td>55</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>55</td>
+      <td>3</td>
+      <td>55</td>
+      <td>55</td>
+      <td>5</td>
+      <td>293</td>
+      <td>415</td>
+      <td>333</td>
+      <td>897</td>
+      <td>55</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>473</td>
+      <td>3306</td>
+      <td>473</td>
+      <td>55</td>
+      <td>55</td>
+      <td>55</td>
+      <td>55</td>
+      <td>937</td>
+      <td>199</td>
+      <td>123</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>342</td>
+      <td>55</td>
+      <td>5</td>
+      <td>3307</td>
+      <td>258</td>
+      <td>211</td>
+      <td>3308</td>
+      <td>2086</td>
+      <td>675</td>
+      <td>2086</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>226</td>
+      <td>675</td>
+      <td>211</td>
+      <td>211</td>
+      <td>55</td>
+      <td>55</td>
+      <td>128</td>
+      <td>172</td>
+      <td>3309</td>
+      <td>3310</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>350</td>
+      <td>574</td>
+      <td>133</td>
+      <td>3</td>
+      <td>133</td>
+      <td>31</td>
+      <td>133</td>
+      <td>393</td>
+      <td>192</td>
+      <td>133</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>262</td>
+      <td>3311</td>
+      <td>1550</td>
+      <td>393</td>
+      <td>55</td>
+      <td>3</td>
+      <td>55</td>
+      <td>3</td>
+      <td>199</td>
+      <td>123</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>55</td>
+      <td>333</td>
+      <td>106</td>
+      <td>203</td>
+      <td>1243</td>
+      <td>513</td>
+      <td>55</td>
+      <td>809</td>
+      <td>106</td>
+      <td>5</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>1007</td>
+      <td>350</td>
+      <td>3312</td>
+      <td>350</td>
+      <td>3313</td>
+      <td>534</td>
+      <td>601</td>
+      <td>601</td>
+      <td>534</td>
+      <td>602</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>602</td>
+      <td>172</td>
+      <td>172</td>
+      <td>463</td>
+      <td>2</td>
+      <td>2</td>
+      <td>6</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2575</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>2575</td>
+      <td>3314</td>
+      <td>3315</td>
+      <td>2087</td>
+      <td>160</td>
+      <td>160</td>
+      <td>117</td>
+      <td>90</td>
+      <td>2</td>
+      <td>90</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>108</td>
+      <td>561</td>
+      <td>603</td>
+      <td>18</td>
+      <td>44</td>
+      <td>108</td>
+      <td>384</td>
+      <td>17</td>
+      <td>90</td>
+      <td>2088</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>90</td>
+      <td>733</td>
+      <td>5</td>
+      <td>101</td>
+      <td>22</td>
+      <td>1244</td>
+      <td>1244</td>
+      <td>90</td>
+      <td>561</td>
+      <td>31</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>20</td>
+      <td>31</td>
+      <td>20</td>
+      <td>90</td>
+      <td>5</td>
+      <td>117</td>
+      <td>6</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>54</td>
+      <td>2</td>
+      <td>62</td>
+      <td>86</td>
+      <td>54</td>
+      <td>86</td>
+      <td>62</td>
+      <td>54</td>
+      <td>62</td>
+      <td>142</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>54</td>
+      <td>62</td>
+      <td>54</td>
+      <td>142</td>
+      <td>61</td>
+      <td>61</td>
+      <td>61</td>
+      <td>61</td>
+      <td>366</td>
+      <td>310</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>310</td>
+      <td>366</td>
+      <td>310</td>
+      <td>1072</td>
+      <td>366</td>
+      <td>1373</td>
+      <td>1373</td>
+      <td>1072</td>
+      <td>310</td>
+      <td>366</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>98</td>
+      <td>98</td>
+      <td>310</td>
+      <td>366</td>
+      <td>2576</td>
+      <td>310</td>
+      <td>1245</td>
+      <td>1152</td>
+      <td>1245</td>
+      <td>310</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>2576</td>
+      <td>1152</td>
+      <td>1245</td>
+      <td>1245</td>
+      <td>310</td>
+      <td>366</td>
+      <td>310</td>
+      <td>366</td>
+      <td>1152</td>
+      <td>310</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>366</td>
+      <td>366</td>
+      <td>1373</td>
+      <td>3</td>
+      <td>310</td>
+      <td>366</td>
+      <td>2</td>
+      <td>1373</td>
+      <td>464</td>
+      <td>1779</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>366</td>
+      <td>310</td>
+      <td>3</td>
+      <td>851</td>
+      <td>310</td>
+      <td>2</td>
+      <td>464</td>
+      <td>575</td>
+      <td>851</td>
+      <td>366</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>310</td>
+      <td>851</td>
+      <td>310</td>
+      <td>575</td>
+      <td>1072</td>
+      <td>366</td>
+      <td>851</td>
+      <td>310</td>
+      <td>575</td>
+      <td>1780</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>2089</td>
+      <td>366</td>
+      <td>310</td>
+      <td>464</td>
+      <td>851</td>
+      <td>851</td>
+      <td>310</td>
+      <td>464</td>
+      <td>575</td>
+      <td>464</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>575</td>
+      <td>310</td>
+      <td>575</td>
+      <td>2090</td>
+      <td>810</td>
+      <td>575</td>
+      <td>310</td>
+      <td>575</td>
+      <td>851</td>
+      <td>464</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>575</td>
+      <td>366</td>
+      <td>310</td>
+      <td>464</td>
+      <td>575</td>
+      <td>464</td>
+      <td>310</td>
+      <td>464</td>
+      <td>575</td>
+      <td>575</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>851</td>
+      <td>464</td>
+      <td>464</td>
+      <td>464</td>
+      <td>193</td>
+      <td>464</td>
+      <td>674</td>
+      <td>464</td>
+      <td>342</td>
+      <td>128</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>464</td>
+      <td>464</td>
+      <td>464</td>
+      <td>575</td>
+      <td>464</td>
+      <td>293</td>
+      <td>575</td>
+      <td>1374</td>
+      <td>43</td>
+      <td>463</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>2</td>
+      <td>2</td>
+      <td>3</td>
+      <td>6</td>
+      <td>2</td>
+      <td>1781</td>
+      <td>245</td>
+      <td>1781</td>
+      <td>588</td>
+      <td>1782</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>128</td>
+      <td>203</td>
+      <td>1374</td>
+      <td>212</td>
+      <td>5</td>
+      <td>588</td>
+      <td>1781</td>
+      <td>513</td>
+      <td>1551</td>
+      <td>588</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>14031</th>
+      <td>67</td>
+      <td>577</td>
+      <td>67</td>
+      <td>537</td>
+      <td>37</td>
+      <td>24</td>
+      <td>24</td>
+      <td>85</td>
+      <td>52</td>
+      <td>242</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14032</th>
+      <td>242</td>
+      <td>242</td>
+      <td>37</td>
+      <td>24</td>
+      <td>24</td>
+      <td>254</td>
+      <td>24</td>
+      <td>37</td>
+      <td>37</td>
+      <td>24</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14033</th>
+      <td>37</td>
+      <td>24</td>
+      <td>24</td>
+      <td>37</td>
+      <td>112</td>
+      <td>72</td>
+      <td>15</td>
+      <td>138</td>
+      <td>15</td>
+      <td>266</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14034</th>
+      <td>454</td>
+      <td>454</td>
+      <td>67</td>
+      <td>52</td>
+      <td>218</td>
+      <td>421</td>
+      <td>24</td>
+      <td>37</td>
+      <td>454</td>
+      <td>37</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14035</th>
+      <td>24</td>
+      <td>24</td>
+      <td>37</td>
+      <td>24</td>
+      <td>37</td>
+      <td>24</td>
+      <td>15</td>
+      <td>2</td>
+      <td>463</td>
+      <td>72</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14036</th>
+      <td>15</td>
+      <td>2</td>
+      <td>527</td>
+      <td>527</td>
+      <td>527</td>
+      <td>2</td>
+      <td>58</td>
+      <td>58</td>
+      <td>31</td>
+      <td>3</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14037</th>
+      <td>58</td>
+      <td>31</td>
+      <td>2</td>
+      <td>1455</td>
+      <td>3</td>
+      <td>58</td>
+      <td>136</td>
+      <td>3</td>
+      <td>1455</td>
+      <td>58</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14038</th>
+      <td>58</td>
+      <td>3</td>
+      <td>5</td>
+      <td>15</td>
+      <td>58</td>
+      <td>2</td>
+      <td>18</td>
+      <td>17</td>
+      <td>36</td>
+      <td>1455</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14039</th>
+      <td>22</td>
+      <td>44</td>
+      <td>5</td>
+      <td>15</td>
+      <td>3</td>
+      <td>36</td>
+      <td>107</td>
+      <td>92</td>
+      <td>36</td>
+      <td>3</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14040</th>
+      <td>36</td>
+      <td>107</td>
+      <td>73</td>
+      <td>15</td>
+      <td>36</td>
+      <td>157</td>
+      <td>36</td>
+      <td>246</td>
+      <td>36</td>
+      <td>36</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14041</th>
+      <td>259</td>
+      <td>5</td>
+      <td>212</td>
+      <td>654</td>
+      <td>2</td>
+      <td>746</td>
+      <td>457</td>
+      <td>479</td>
+      <td>175</td>
+      <td>31</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14042</th>
+      <td>251</td>
+      <td>524</td>
+      <td>283</td>
+      <td>175</td>
+      <td>246</td>
+      <td>80</td>
+      <td>283</td>
+      <td>52</td>
+      <td>297</td>
+      <td>283</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14043</th>
+      <td>172</td>
+      <td>369</td>
+      <td>20</td>
+      <td>119</td>
+      <td>3</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>105</td>
+      <td>4913</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14044</th>
+      <td>1625</td>
+      <td>1625</td>
+      <td>44</td>
+      <td>17</td>
+      <td>5</td>
+      <td>1625</td>
+      <td>18</td>
+      <td>1625</td>
+      <td>1008</td>
+      <td>1008</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14045</th>
+      <td>2245</td>
+      <td>19</td>
+      <td>85</td>
+      <td>498</td>
+      <td>285</td>
+      <td>285</td>
+      <td>24</td>
+      <td>37</td>
+      <td>37</td>
+      <td>24</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14046</th>
+      <td>69</td>
+      <td>69</td>
+      <td>161</td>
+      <td>24</td>
+      <td>37</td>
+      <td>72</td>
+      <td>15</td>
+      <td>2</td>
+      <td>2</td>
+      <td>15</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14047</th>
+      <td>15</td>
+      <td>15</td>
+      <td>15</td>
+      <td>15</td>
+      <td>138</td>
+      <td>112</td>
+      <td>266</td>
+      <td>454</td>
+      <td>67</td>
+      <td>218</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14048</th>
+      <td>421</td>
+      <td>218</td>
+      <td>2</td>
+      <td>65</td>
+      <td>21</td>
+      <td>27</td>
+      <td>6</td>
+      <td>10</td>
+      <td>3</td>
+      <td>30</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14049</th>
+      <td>9</td>
+      <td>33</td>
+      <td>37</td>
+      <td>24</td>
+      <td>51</td>
+      <td>9</td>
+      <td>6</td>
+      <td>23</td>
+      <td>4</td>
+      <td>88</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14050</th>
+      <td>9</td>
+      <td>2</td>
+      <td>37</td>
+      <td>24</td>
+      <td>2</td>
+      <td>2</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14051</th>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>64</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14052</th>
+      <td>64</td>
+      <td>64</td>
+      <td>2</td>
+      <td>9</td>
+      <td>9</td>
+      <td>24</td>
+      <td>37</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14053</th>
+      <td>24</td>
+      <td>37</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>24</td>
+      <td>37</td>
+      <td>9</td>
+      <td>9</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14054</th>
+      <td>24</td>
+      <td>37</td>
+      <td>9</td>
+      <td>9</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>39</td>
+      <td>39</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14055</th>
+      <td>93</td>
+      <td>2</td>
+      <td>463</td>
+      <td>2</td>
+      <td>93</td>
+      <td>93</td>
+      <td>93</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14056</th>
+      <td>3</td>
+      <td>4</td>
+      <td>6</td>
+      <td>10</td>
+      <td>2</td>
+      <td>21</td>
+      <td>3</td>
+      <td>6</td>
+      <td>27</td>
+      <td>65</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14057</th>
+      <td>10</td>
+      <td>21</td>
+      <td>65</td>
+      <td>27</td>
+      <td>30</td>
+      <td>3</td>
+      <td>4</td>
+      <td>9</td>
+      <td>4</td>
+      <td>30</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14058</th>
+      <td>33</td>
+      <td>4</td>
+      <td>9</td>
+      <td>6</td>
+      <td>10</td>
+      <td>51</td>
+      <td>9</td>
+      <td>33</td>
+      <td>4</td>
+      <td>4</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14059</th>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>43</td>
+      <td>51</td>
+      <td>4</td>
+      <td>3</td>
+      <td>3</td>
+      <td>9</td>
+      <td>4</td>
+      <td>241</td>
+    </tr>
+    <tr>
+      <th>14060</th>
+      <td>10</td>
+      <td>21</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>241</td>
+    </tr>
+  </tbody>
+</table>
+<p>14061 rows × 11 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>toy_df = pd.read_csv('data/10users/user0031.csv', parse_dates=['timestamp'])
+flat = toy_df.sort_values(by='site').head(10)['site'].values.flatten()
+flat
+
+
+data = [1] * flat.shape[0]
+indices = [sites_dict[x][0] for x in flat]
+indptr = range(0, flat.shape[0] + 1, 3)
+
+csr_matrix((data, indices, indptr))[:, 1:].todense()
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12251,7 +13384,178 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">inds_dict</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="s1">&#39;data/3users&#39;</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">toy_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="s1">&#39;data/3users&#39;</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 588.59it/s]
+Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 434.21it/s]
+Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 396.51it/s]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">toy_df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">toy_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;user_id&#39;</span><span class="p">]))]</span> <span class="o">=</span> <span class="n">toy_df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">toy_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;user_id&#39;</span><span class="p">]))]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">inds_dict</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+<span class="n">toy_df</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[13]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>site1</th>
+      <th>site2</th>
+      <th>site3</th>
+      <th>site4</th>
+      <th>site5</th>
+      <th>site6</th>
+      <th>site7</th>
+      <th>site8</th>
+      <th>site9</th>
+      <th>site10</th>
+      <th>user_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>vk.com</td>
+      <td>oracle.com</td>
+      <td>oracle.com</td>
+      <td>geo.mozilla.org</td>
+      <td>oracle.com</td>
+      <td>google.com</td>
+      <td>accounts.google.com</td>
+      <td>mail.google.com</td>
+      <td>apis.google.com</td>
+      <td>plus.google.com</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>vk.com</td>
+      <td>google.com</td>
+      <td>google.com</td>
+      <td>google.com</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>vk.com</td>
+      <td>oracle.com</td>
+      <td>football.kulichki.ru</td>
+      <td>football.kulichki.ru</td>
+      <td>oracle.com</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>meduza.io</td>
+      <td>google.com</td>
+      <td>oracle.com</td>
+      <td>google.com</td>
+      <td>oracle.com</td>
+      <td>google.com</td>
+      <td>google.com</td>
+      <td>mail.google.com</td>
+      <td>yandex.ru</td>
+      <td>meduza.io</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>meduza.io</td>
+      <td>google.com</td>
+      <td>oracle.com</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>no_site</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cat <span class="nv">$PATH_TO_DATA</span>/3users/user0001.csv
@@ -12296,7 +13600,7 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cat <span class="nv">$PATH_TO_DATA</span>/3users/user0002.csv
@@ -12332,7 +13636,7 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cat <span class="nv">$PATH_TO_DATA</span>/3users/user0003.csv
@@ -12376,11 +13680,11 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_toy</span><span class="p">,</span> <span class="n">site_freq_3users</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
-                                                     <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+                                                     <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12396,30 +13700,9 @@ Git hash   : 6ef9264b7e441ca8218832835b851e5e1c36629c
 <div class="prompt"></div>
 
 
-
-
-
- 
- 
-<div id="dd32ad7f-a797-4ee6-a82e-262c550235d2"></div>
-<div class="output_subarea output_widget_view ">
-<script type="text/javascript">
-var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "7e522885ec6f462eaf302edb7a04c502"}
-</script>
-</div>
-
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 394.39it/s]
+Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 348.56it/s]
 </pre>
 </div>
 </div>
@@ -12430,7 +13713,7 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_toy</span>
@@ -12446,23 +13729,23 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[13]:</div>
+<div class="prompt output_prompt">Out[18]:</div>
 
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
 
     .dataframe tbody tr th {
         vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
     }
 </style>
 <table border="1" class="dataframe">
@@ -12488,13 +13771,13 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
       <td>3</td>
       <td>2</td>
       <td>2</td>
-      <td>10</td>
+      <td>7</td>
       <td>2</td>
       <td>1</td>
-      <td>7</td>
-      <td>5</td>
       <td>8</td>
+      <td>5</td>
       <td>9</td>
+      <td>10</td>
       <td>1</td>
     </tr>
     <tr>
@@ -12575,7 +13858,7 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">site_freq_3users</span>
@@ -12591,23 +13874,23 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[14]:</div>
+<div class="prompt output_prompt">Out[19]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;accounts.google.com&#39;: (7, 1),
- &#39;apis.google.com&#39;: (8, 1),
- &#39;football.kulichki.ru&#39;: (6, 2),
- &#39;geo.mozilla.org&#39;: (10, 1),
- &#39;google.com&#39;: (1, 9),
- &#39;mail.google.com&#39;: (5, 2),
- &#39;meduza.io&#39;: (4, 3),
- &#39;oracle.com&#39;: (2, 8),
- &#39;plus.google.com&#39;: (9, 1),
- &#39;vk.com&#39;: (3, 3),
- &#39;yandex.ru&#39;: (11, 1)}</pre>
+<pre>{&#39;accounts.google.com&#39;: [8, 1],
+ &#39;apis.google.com&#39;: [9, 1],
+ &#39;football.kulichki.ru&#39;: [6, 2],
+ &#39;geo.mozilla.org&#39;: [7, 1],
+ &#39;google.com&#39;: [1, 9],
+ &#39;mail.google.com&#39;: [5, 2],
+ &#39;meduza.io&#39;: [4, 3],
+ &#39;oracle.com&#39;: [2, 8],
+ &#39;plus.google.com&#39;: [10, 1],
+ &#39;vk.com&#39;: [3, 3],
+ &#39;yandex.ru&#39;: [11, 1]}</pre>
 </div>
 
 </div>
@@ -12628,13 +13911,46 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_10users</span><span class="p">,</span> <span class="n">site_freq_10users</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_10users</span><span class="p">,</span> <span class="n">site_freq_10users</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="s1">&#39;data/10users/&#39;</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train_data_10users</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing sites dict...: 100%|██████████| 10/10 [00:00&lt;00:00, 58.32it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 46.36it/s]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[20]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(14061, 11)</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12650,13 +13966,33 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">site_freq_10users</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[21]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>4913</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12673,14 +14009,90 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">train_data_150users</span><span class="p">,</span> <span class="n">site_freq_150users</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<span class="n">train_data_150users</span><span class="p">,</span> <span class="n">site_freq_150users</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="s1">&#39;data/150users/&#39;</span><span class="p">,</span>
+                                                            <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train_data_150users</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing sites dict...: 100%|██████████| 150/150 [00:03&lt;00:00, 28.64it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:03&lt;00:00, 47.75it/s]</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 5.6 s, sys: 1.73 s, total: 7.33 s
+Wall time: 7.32 s
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_150users</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[23]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>137019</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12696,13 +14108,33 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">site_freq_150users</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[24]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>27797</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12716,7 +14148,7 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 <li>www.google.fr</li>
 <li>www.youtube.com</li>
 <li>safebrowsing-cache.google.com</li>
-<li>www.linkedin.com</li>
+<li>www.linkedin.com <strong>[+]</strong></li>
 </ul>
 
 </div>
@@ -12724,13 +14156,42 @@ var element = $('#dd32ad7f-a797-4ee6-a82e-262c550235d2');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">site_freq_150users</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[25]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;www.google.fr&#39;,
+ &#39;www.google.com&#39;,
+ &#39;www.facebook.com&#39;,
+ &#39;apis.google.com&#39;,
+ &#39;s.youtube.com&#39;,
+ &#39;clients1.google.com&#39;,
+ &#39;mail.google.com&#39;,
+ &#39;plus.google.com&#39;,
+ &#39;safebrowsing-cache.google.com&#39;,
+ &#39;www.youtube.com&#39;]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 

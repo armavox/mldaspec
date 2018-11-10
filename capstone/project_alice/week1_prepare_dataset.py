@@ -83,7 +83,7 @@ from glob import glob
 import os
 import pickle
 #pip install tqdm
-from tqdm import tqdm_notebook
+from tqdm import tqdm
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
@@ -95,7 +95,7 @@ from scipy.sparse import csr_matrix
 
 
 # Поменяйте на свой путь к данным
-PATH_TO_DATA = 'capstone_user_identification'
+PATH_TO_DATA = 'data'
 
 
 # In[5]:
@@ -269,42 +269,187 @@ user31_data.head()
 # - В итоге некоторые сессии могут повторяться – оставьте как есть, не удаляйте дубликаты. Если в двух сессиях все сайты одинаковы, но сессии принадлежат разным пользователям, то тоже оставляйте как есть, это естественная неопределенность в данных
 # - Не оставляйте в частотном словаре сайт 0 (уже в конце, когда функция возвращает этот словарь)
 # - 150 файлов из *capstone_websites_data/150users/* у меня обработались за 1.7 секунды, но многое, конечно, зависит от реализации функции и от используемого железа. И вообще, первая реализация скорее всего будет не самой эффективной, дальше можно заняться профилированием (особенно если планируете запускать этот код для 3000 пользователей). Также эффективная реализация этой функции поможет нам на следующей неделе.
-
+# toy_df.site_id.shape 
+# Out[]: 7600
+# 7600 / 7 ==  1085.714
+# 7600%7 == 5
+# (7600 + (7 - 7600 % 7)) / 7 == 1086.0
+# Number of elements to fill with zeros to make reshape possible is:
+# (7 - 7600 % 7) == 2
 # In[7]:
 
 
-def prepare_train_set(path_to_csv_files, session_length=10):
-    ''' ВАШ КОД ЗДЕСЬ '''
+glob('data/3users'+'/*')
 
-
-# **Примените полученную функцию к игрушечному примеру, убедитесь, что все работает как надо.**
 
 # In[8]:
 
 
-get_ipython().system('cat $PATH_TO_DATA/3users/user0001.csv')
+def prepare_sites_dict(path_to_data, sites_dict=r'sites_dict.pkl',
+                       inds_dict=r'ind_to_sites_dict.pkl', refresh=False):
+    """Func to get dictionaries for converting site's name to it's index.
+        If dictionary for data in PATH_TO_DATA has already been compiled, 
+        functions just pickle dict out of files.
+    """
+    def get_dict():
+        full_df = pd.DataFrame(columns=['timestamp', 'site'])
+        for file in tqdm(glob(path_to_data + '/*'), desc='Preparing sites dict...'):
+            temp_df = pd.read_csv(file, parse_dates=['timestamp'])
+            full_df = full_df.append(temp_df, ignore_index=True)
+
+        sites_freq_list = sorted(Counter(full_df.site).items(), 
+                                 key=lambda x: x[1], reverse=True)
+        sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
+        ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
+        ind_to_sites_dict[0] = 'no_site'
+        
+        # Save dict to file
+        with open('sites_dict.pkl', 'wb') as fout:
+            pickle.dump(sites_dict, fout)
+
+        with open('ind_to_sites_dict.pkl', 'wb') as fout:
+            pickle.dump(ind_to_sites_dict, fout)
+            
+        return sites_dict, ind_to_sites_dict
+    
+    try:
+        with open(sites_dict, 'rb') as input_file:
+            sites_dict = pickle.load(input_file)
+            
+        with open(inds_dict, 'rb') as input_file:
+            ind_to_sites_dict = pickle.load(input_file)
+            
+    except FileNotFoundError:
+        sites_dict, ind_to_sites_dict = get_dict()
+#         full_df = pd.DataFrame(columns=['timestamp', 'site'])
+#         for file in tqdm(glob(PATH_TO_DATA + '/**/*'), desc='Preparing sites dict...'):
+#             temp_df = pd.read_csv(file, parse_dates=['timestamp'])
+#             full_df = full_df.append(temp_df, ignore_index=True)
+
+#         sites_freq_list = sorted(Counter(full_df.site).items(), 
+#                                  key=lambda x: x[1], reverse=True)
+#         sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
+#         ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
+#         ind_to_sites_dict[0] = 'no_site'
+
+#         # Save dict to file
+#         with open('sites_dict.pkl', 'wb') as fout:
+#             pickle.dump(sites_dict, fout)
+
+#         with open('ind_to_sites_dict.pkl', 'wb') as fout:
+#             pickle.dump(ind_to_sites_dict, fout)
+        
+    if refresh:
+        sites_dict, ind_to_sites_dict = get_dict()
+        
+    return sites_dict, ind_to_sites_dict
 
 
 # In[9]:
 
 
-get_ipython().system('cat $PATH_TO_DATA/3users/user0002.csv')
+import re
+from collections import Counter
+
+
+def prepare_train_set(path_to_csv_files, session_length=10, refresh_dict=False):
+    """Func for partition users logs to desireable num of sessions
+        and prepare training dataset with sessions of particular users.
+    """
+    
+    full_df = pd.DataFrame()
+    
+    sites_dict, inds_dict = prepare_sites_dict(path_to_csv_files, refresh=refresh_dict)
+        
+    for file in tqdm(glob(path_to_csv_files +'/*'), desc='Preparing training set...'):
+        temp_df = pd.read_csv(file, parse_dates=['timestamp'])
+        temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
+        
+        # Partition user data to sessions
+        try:
+            session = temp_df.site_id.values
+            session = session.reshape(-1, session_length)
+        except ValueError:
+            # We fill noncomplete array with zeros.
+            fill_with_zeros = session_length - temp_df.site_id.values.shape[0] % session_length
+            session = np.append(temp_df.site_id.values, [0]*fill_with_zeros)
+            session = session.reshape(-1, session_length)
+        
+        # Construct the full dataset, consist of user id's and sessions
+        temp_df = pd.DataFrame(session,
+                       columns=['site'+ str(x+1) for x in range(session_length)])
+        
+        user_id = re.findall(r'\d+', file)[-1]
+        temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
+        
+        full_df = full_df.append(temp_df, ignore_index=True)
+    
+    return full_df, sites_dict
 
 
 # In[10]:
 
 
-get_ipython().system('cat $PATH_TO_DATA/3users/user0003.csv')
+get_ipython().run_cell_magic('time', '', "path = PATH_TO_DATA + '/10users/'\nsessions_df, _ = prepare_train_set(path, refresh_dict=True)\nsessions_df.user_id.nunique()")
 
+
+# In[11]:
+
+
+sessions_df
+
+toy_df = pd.read_csv('data/10users/user0031.csv', parse_dates=['timestamp'])
+flat = toy_df.sort_values(by='site').head(10)['site'].values.flatten()
+flat
+
+
+data = [1] * flat.shape[0]
+indices = [sites_dict[x][0] for x in flat]
+indptr = range(0, flat.shape[0] + 1, 3)
+
+csr_matrix((data, indices, indptr))[:, 1:].todense()
+# **Примените полученную функцию к игрушечному примеру, убедитесь, что все работает как надо.**
 
 # In[12]:
 
 
-train_data_toy, site_freq_3users = prepare_train_set(os.path.join(PATH_TO_DATA, '3users'), 
-                                                     session_length=10)
+_, inds_dict = prepare_sites_dict('data/3users', refresh=True)
+toy_df, _ = prepare_train_set('data/3users', refresh_dict=True)
 
 
 # In[13]:
+
+
+toy_df[list(set(toy_df.columns) - set(['user_id']))] = toy_df[list(set(toy_df.columns) - set(['user_id']))].applymap(lambda x: inds_dict[x])
+toy_df
+
+
+# In[14]:
+
+
+get_ipython().system('cat $PATH_TO_DATA/3users/user0001.csv')
+
+
+# In[15]:
+
+
+get_ipython().system('cat $PATH_TO_DATA/3users/user0002.csv')
+
+
+# In[16]:
+
+
+get_ipython().system('cat $PATH_TO_DATA/3users/user0003.csv')
+
+
+# In[17]:
+
+
+train_data_toy, site_freq_3users = prepare_train_set(os.path.join(PATH_TO_DATA, '3users'), 
+                                                     session_length=10, refresh_dict=True)
+
+
+# In[18]:
 
 
 train_data_toy
@@ -312,7 +457,7 @@ train_data_toy
 
 # Частоты сайтов (второй элемент кортежа) точно должны быть такими, нумерация может быть любой (первые элементы кортежей могут отличаться).
 
-# In[14]:
+# In[19]:
 
 
 site_freq_3users
@@ -322,48 +467,55 @@ site_freq_3users
 # 
 # **<font color='red'> Вопрос 1. </font> Сколько уникальных сессий из 10 сайтов в выборке с 10 пользователями?**
 
-# In[ ]:
+# In[20]:
 
 
-train_data_10users, site_freq_10users = ''' ВАШ КОД ЗДЕСЬ '''
+train_data_10users, site_freq_10users = prepare_train_set('data/10users/', refresh_dict=True)
+train_data_10users.shape
 
 
 # **<font color='red'> Вопрос 2. </font> Сколько всего уникальных сайтов в выборке из 10 пользователей? **
 
-# In[ ]:
+# In[21]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+len(site_freq_10users)
 
 
 # Примените полученную функцию к данным по 150 пользователям.
 # 
 # **<font color='red'> Вопрос 3. </font> Сколько уникальных сессий из 10 сайтов в выборке с 150 пользователями?**
 
-# In[ ]:
+# In[22]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_150users, site_freq_150users = ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', "train_data_150users, site_freq_150users = prepare_train_set('data/150users/',\n                                                            refresh_dict=True)\ntrain_data_150users.shape")
+
+
+# In[23]:
+
+
+train_data_150users.shape[0]
 
 
 # **<font color='red'> Вопрос 4. </font> Сколько всего уникальных сайтов в выборке из 150 пользователей? **
 
-# In[ ]:
+# In[24]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+len(site_freq_150users)
 
 
 # **<font color='red'> Вопрос 5. </font> Какой из этих сайтов НЕ входит в топ-10 самых популярных сайтов среди посещенных 150 пользователями?**
 # - www.google.fr
 # - www.youtube.com
 # - safebrowsing-cache.google.com
-# - www.linkedin.com
+# - www.linkedin.com **[+]**
 
-# In[ ]:
+# In[25]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+list(site_freq_150users)[:10]
 
 
 # **Для дальнейшего анализа запишем полученные объекты DataFrame в csv-файлы.**
