@@ -123,13 +123,13 @@ from matplotlib import pyplot as plt
 PATH_TO_DATA = 'data'
 
 
-# In[133]:
+# In[280]:
 
 
 from collections import Counter
 def prepare_sites_dict(path_to_data, 
-                       sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
-                       inds_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
+                       sites_dict_file='sites_dict.pkl',
+                       inds_dict_file='ind_to_sites_dict.pkl',
                        refresh=False,
                        return_inds_dict=False):
     """Func to get dictionaries for converting site's name to it's index.
@@ -152,19 +152,19 @@ def prepare_sites_dict(path_to_data,
             ind_to_sites_dict = {}
         
         # Save dict to file
-        with open(sites_dict_file, 'wb') as fout:
+        with open(os.path.join(PATH_TO_DATA, sites_dict_file), 'wb') as fout:
             pickle.dump(sites_dict, fout)
         if return_inds_dict:
-            with open(inds_dict_file, 'wb') as fout:
+            with open(os.path.join(PATH_TO_DATA, inds_dict_file), 'wb') as fout:
                 pickle.dump(ind_to_sites_dict, fout)
             
         return sites_dict, ind_to_sites_dict
     
     try:
-        with open(sites_dict_file, 'rb') as input_file:
+        with open(os.path.join(PATH_TO_DATA, sites_dict_file), 'rb') as input_file:
             sites_dict = pickle.load(input_file)
         if return_inds_dict:    
-            with open(inds_dict_file, 'rb') as input_file:
+            with open(os.path.join(PATH_TO_DATA, inds_dict_file), 'rb') as input_file:
                 ind_to_sites_dict = pickle.load(input_file)
         else:
             ind_to_sites_dict = {}
@@ -280,7 +280,7 @@ def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path,
     return to_csr(X), y
 
 
-# In[240]:
+# In[257]:
 
 
 X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
@@ -290,44 +290,21 @@ X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'),
 
 # **Примените полученную функцию с параметрами *session_length=5* и *window_size=3* к игрушечному примеру. Убедитесь, что все работает как надо.**
 
-# In[245]:
+# In[259]:
 
 
 X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
                                                        os.path.join(PATH_TO_DATA,'site_freq_3users.pkl'),
-                                       session_length=5, window_size=3, refresh_dict=True)
+                                       session_length=5, window_size=3, refresh_dict=False)
 
 
-# In[246]:
+# In[267]:
 
 
 X_toy_s5_w3.todense()
 
 
-# In[ ]:
-
-
-matrix([[0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-        [1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
-        [0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
-        [3, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 1, 0, 0, 2, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-        [2, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-        [3, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1],
-        [1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
-
-
-# In[247]:
-
-
-y_s5_w3
-
-
-# In[9]:
+# In[268]:
 
 
 y_s5_w3
@@ -339,18 +316,26 @@ y_s5_w3
 # 
 # **На моем ноутбуке этот участок кода отработал за 26 секунд, хотя понятно, что все зависит от эффективности реализации функции *prepare_sparse_train_set_window* и мощности используемого железа. И честно говоря, моя первая реализация была намного менее эффективной (34 минуты), так что тут у Вас есть возможность оптимизировать свой код.**
 
-# In[ ]:
+# In[269]:
 
 
-get_ipython().run_cell_magic('time', '', "import itertools\n\ndata_lengths = []\n\nfor num_users in [10, 150]:\n    for window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n        if window_size <= session_length and (window_size, session_length) != (10, 10):\n            X_sparse, y = ''' ВАШ КОД ЗДЕСЬ '''")
+for num_users in [10, 150]:
+    print(os.path.join(PATH_TO_DATA, str(num_users)+'users'))
+    print(os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl'))
+
+
+# In[279]:
+
+
+get_ipython().run_cell_magic('time', '', "import itertools\n\ndata_lengths = []\n\nfor num_users in [10, 150]:\n    path_to_csv = os.path.join(PATH_TO_DATA, f'{num_users}users')\n    path_to_pickle = os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl')\n    for window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n        if window_size <= session_length and (window_size, session_length) != (10, 10):\n            X_sparse, y = prepare_sparse_train_set_window(path_to_csv,\n                                                          path_to_pickle,\n                                                          session_length=session_length,\n                                                          window_size=window_size,\n                                                          refresh_dict=False)\n            X_fout = os.path.join(PATH_TO_DATA, f'X_sparse_{num_users}users_s{session_length}_w{window_size}.pkl')\n            y_fout = os.path.join(PATH_TO_DATA, f'y_{num_users}users_s{session_length}_w{window_size}.pkl')\n            with open(X_fout, 'wb') as fout:\n                pickle.dump(X_sparse, fout)\n            with open(y_fout, 'wb') as fout:\n                pickle.dump(y, fout)\n            \n            data_lengths.append(X_sparse.shape[0])")
 
 
 # **<font color='red'> Вопрос 1. </font>Сколько всего уникальных значений в списке `data_lengths`?**
 
-# In[9]:
+# In[283]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+len(set(data_lengths))
 
 
 # ## Часть 2. Первичный анализ данных, проверка гипотез
