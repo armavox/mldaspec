@@ -95,7 +95,7 @@
 # - Замеряйте время выполнения итераций цикла с помощью *time* из *time*, *tqdm* из *tqdm* или с помощью виджета [log_progress](https://github.com/alexanderkuk/log-progress) ([статья](https://habrahabr.ru/post/276725/) о нем на Хабрахабре)
 # - 150 файлов из *capstone_websites_data/150users/* должны обрабатываться за несколько секунд (в зависимости от входных параметров). Если дольше – не страшно, но знайте, что функцию можно ускорить. 
 
-# In[100]:
+# In[298]:
 
 
 from __future__ import division, print_function
@@ -114,6 +114,7 @@ from scipy import stats
 from statsmodels.stats.proportion import proportion_confint
 get_ipython().run_line_magic('matplotlib', 'inline')
 from matplotlib import pyplot as plt
+plt.rcParams['patch.force_edgecolor'] = True
 
 
 # In[2]:
@@ -342,20 +343,20 @@ len(set(data_lengths))
 
 # **Считаем в DataFrame подготовленный на 1 неделе файл `train_data_10users.csv`. Далее будем работать с ним.**
 
-# In[10]:
+# In[286]:
 
 
 train_df = pd.read_csv(os.path.join(PATH_TO_DATA, 'train_data_10users.csv'), 
                        index_col='session_id')
 
 
-# In[11]:
+# In[287]:
 
 
 train_df.head()
 
 
-# In[12]:
+# In[288]:
 
 
 train_df.info()
@@ -363,7 +364,7 @@ train_df.info()
 
 # **Распределение целевого класса:**
 
-# In[13]:
+# In[289]:
 
 
 train_df['user_id'].value_counts()
@@ -371,20 +372,20 @@ train_df['user_id'].value_counts()
 
 # **Посчитаем распределение числа уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов.**
 
-# In[14]:
+# In[290]:
 
 
 num_unique_sites = [np.unique(train_df.values[i, :-1]).shape[0] 
                     for i in range(train_df.shape[0])]
 
 
-# In[15]:
+# In[291]:
 
 
 pd.Series(num_unique_sites).value_counts()
 
 
-# In[16]:
+# In[299]:
 
 
 pd.Series(num_unique_sites).hist();
@@ -394,62 +395,89 @@ pd.Series(num_unique_sites).hist();
 
 # **<font color='red'> Вопрос 2. </font>Распределено ли нормально число уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов (согласно критерию Шапиро-Уилка)?**
 
-# In[ ]:
+# In[315]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+print(stats.shapiro(num_unique_sites))
+fig, ax = plt.subplots(1, 2, figsize=(12,6))
+
+ax[0].hist(num_unique_sites);
+stats.probplot(num_unique_sites, dist='norm', plot=ax[1], rvalue=True)
+fig.tight_layout();
 
 
 # **Проверьте гипотезу о том, что пользователь хотя бы раз зайдет на сайт, который он уже ранее посетил в сессии из 10 сайтов. Давайте проверим с помощью биномиального критерия для доли, что доля случаев, когда пользователь повторно посетил какой-то сайт (то есть число уникальных сайтов в сессии < 10) велика: больше 95% (обратите внимание, что альтернатива тому, что доля равна 95% –  одностороняя). Ответом на 3 вопрос в тесте будет полученное p-value.**
 
 # **<font color='red'> Вопрос 3. </font>Каково p-value при проверке описанной гипотезы?**
 
-# In[21]:
+# In[317]:
 
 
 has_two_similar = (np.array(num_unique_sites) < 10).astype('int')
 
 
-# In[22]:
+# In[322]:
 
 
-pi_val = stats.binom_test  ''' ВАШ КОД ЗДЕСЬ '''
+
+has_two_similar
+
+
+# Проверяется нулевая гипотеза:
+# - $H_0:$ доля сессий с повторяющимися сайтами = 95%. Против альтернативы:
+# - $H_1:$ доля таких сессий больше чем 95%
+
+# In[333]:
+
+
+stats.binom_test(has_two_similar.sum(), len(num_unique_sites),
+                 p=0.95, alternative='greater')
+
+
+# In[339]:
+
+
+import statsmodels.stats.proportion as psts
+psts.proportions_ztest(has_two_similar.sum(), len(has_two_similar), value=0.95,
+                       prop_var=0.95, alternative='larger')
 
 
 # **<font color='red'> Вопрос 4. </font>Каков 95% доверительный интервал Уилсона для доли случаев, когда пользователь повторно посетил какой-то сайт (из п. 3)?**
 
-# In[25]:
+# In[343]:
 
 
-wilson_interval = ''' ВАШ КОД ЗДЕСЬ '''
+wilson_interval = psts.proportion_confint(has_two_similar.sum(), len(has_two_similar),
+                                          method='wilson')
+wilson_interval
 
 
-# In[26]:
+# In[345]:
 
 
-print('{} {}'.format(round(wilson_interval[0], 3),
+print('{:.4f} {:.4f}'.format(round(wilson_interval[0], 3),
                                    round(wilson_interval[1], 3)))
 
 
 # **Постройте распределение частоты посещения сайтов (сколько раз тот или иной сайт попадается в выборке) для сайтов, которые были посещены как минимум 1000 раз.**
 
-# In[28]:
+# In[361]:
 
 
-site_freqs = ''' ВАШ КОД ЗДЕСЬ '''
-
-
-# In[ ]:
-
-
-''' ВАШ КОД ЗДЕСЬ '''
+with open('data/site_freq_10users.pkl', 'rb') as f_in:
+    site_freqs = pickle.load(f_in)
+site_freq_df = pd.DataFrame(site_freqs).T
+site_freq_df.columns = (['site_id', 'freq'])
+top_site_freq_df = site_freq_df[site_freq_df.freq >= 1000]
+top_site_freq_df.freq.hist(grid=False)
+plt.title('Гистограмма распределения частоты посещения сайтов\n(сколько раз тот или иной сайт попадается в выборке)', y=1.02);
 
 
 # **Постройте 95% доверительный интервал для средней частоты появления сайта в выборке (во всей, уже не только для тех сайтов, что были посещены как минимум 1000 раз) на основе bootstrap. Используйте столько же bootstrap-подвыборок, сколько сайтов оказалось в исходной выборке по 10 пользователям. Берите подвыборки из посчитанного списка частот посещений сайтов – не надо заново считать эти частоты. Учтите, что частоту появления нуля (сайт с индексом 0 появлялся там, где сессии были короче 10 сайтов) включать не надо. Округлите границы интервала до 3 знаков после запятой и запишите через пробел в файл *answer2_5.txt*. Это будет ответом на 5 вопрос теста.**
 
 # **<font color='red'> Вопрос 5. </font>Каков 95% доверительный интервал для средней частоты появления сайта в выборке?**
 
-# In[31]:
+# In[362]:
 
 
 def get_bootstrap_samples(data, n_samples, random_seed=17):
@@ -459,7 +487,7 @@ def get_bootstrap_samples(data, n_samples, random_seed=17):
     return samples
 
 
-# In[32]:
+# In[363]:
 
 
 def stat_intervals(stat, alpha):
@@ -468,10 +496,13 @@ def stat_intervals(stat, alpha):
     return boundaries
 
 
-# In[34]:
+# In[367]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+boot_means = get_bootstrap_samples(site_freq_df.freq.values,
+                                   site_freq_df.freq.values.size).mean(axis=1)
+
+stat_intervals(boot_means, 0.05)
 
 
 # ## Пути улучшения
