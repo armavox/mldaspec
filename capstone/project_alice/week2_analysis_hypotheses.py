@@ -233,7 +233,7 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[203]:
+# In[239]:
 
 
 def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path, 
@@ -252,26 +252,22 @@ def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path,
     for file in tqdm(glob(path_to_csv_files +'/*'), desc='Preparing training set...'):
         temp_df = pd.read_csv(file, usecols=['site'])  # UPD: deleted parse_dates, added usecols
         temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
+        
         # Convert with sliding window
         windptr = range(0, temp_df.shape[0], window_size)
         sessions = []
         for ptr in windptr:
             sess = temp_df.site_id.values[ptr:ptr+session_length]
+            # All incomplete sessions are being completed by zeros
             if len(sess) < session_length:
-                sess = np.r_[sess, [0] * session_length - len(sess)]
+                sess = np.r_[sess, [0] * (session_length - len(sess))]
             sessions = np.r_[sessions, sess]
-        
+            
         # Partition user data to sessions
-        try:
-            sessions = sessions.reshape(-1, session_length)
-        except ValueError:
-            # We fill noncomplete array with zeros.
-            fill_with_zeros = session_length - sessions.shape[0] % session_length
-            sessions = np.append(sessions, [0]*fill_with_zeros)
-            sessions = sessions.reshape(-1, session_length)
+        sessions = sessions.reshape(-1, session_length)
         
         # Construct the full dataset, consist of user id's and sessions
-        temp_df = pd.DataFrame(session,
+        temp_df = pd.DataFrame(sessions,
                        columns=['site'+ str(x+1) for x in range(session_length)])
         # Find username in the file name
         user_id = re.findall(r'\d+', file)[-1]
@@ -284,7 +280,7 @@ def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path,
     return to_csr(X), y
 
 
-# In[204]:
+# In[240]:
 
 
 X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
@@ -294,7 +290,7 @@ X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'),
 
 # **Примените полученную функцию с параметрами *session_length=5* и *window_size=3* к игрушечному примеру. Убедитесь, что все работает как надо.**
 
-# In[205]:
+# In[245]:
 
 
 X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
@@ -302,7 +298,7 @@ X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA
                                        session_length=5, window_size=3, refresh_dict=True)
 
 
-# In[206]:
+# In[246]:
 
 
 X_toy_s5_w3.todense()
@@ -325,7 +321,7 @@ matrix([[0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 0],
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
 
-# In[202]:
+# In[247]:
 
 
 y_s5_w3
