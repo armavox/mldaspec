@@ -285,8 +285,20 @@ glob('data/3users'+'/*')
 # In[8]:
 
 
-def prepare_sites_dict(path_to_data, sites_dict=r'sites_dict.pkl',
-                       inds_dict=r'ind_to_sites_dict.pkl', refresh=False):
+with open(os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'), 'rb') as input_file:
+            id_sites_dict = pickle.load(input_file)
+        
+        
+
+
+# In[9]:
+
+
+
+def prepare_sites_dict(path_to_data, 
+                       sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
+                       inds_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
+                       refresh=False):
     """Func to get dictionaries for converting site's name to it's index.
         If dictionary for data in PATH_TO_DATA has already been compiled, 
         functions just pickle dict out of files.
@@ -304,40 +316,23 @@ def prepare_sites_dict(path_to_data, sites_dict=r'sites_dict.pkl',
         ind_to_sites_dict[0] = 'no_site'
         
         # Save dict to file
-        with open('sites_dict.pkl', 'wb') as fout:
+        with open(sites_dict_file, 'wb') as fout:
             pickle.dump(sites_dict, fout)
 
-        with open('ind_to_sites_dict.pkl', 'wb') as fout:
+        with open(inds_dict_file, 'wb') as fout:
             pickle.dump(ind_to_sites_dict, fout)
             
         return sites_dict, ind_to_sites_dict
     
     try:
-        with open(sites_dict, 'rb') as input_file:
+        with open(sites_dict_file, 'rb') as input_file:
             sites_dict = pickle.load(input_file)
             
-        with open(inds_dict, 'rb') as input_file:
+        with open(inds_dict_file, 'rb') as input_file:
             ind_to_sites_dict = pickle.load(input_file)
             
     except FileNotFoundError:
         sites_dict, ind_to_sites_dict = get_dict()
-#         full_df = pd.DataFrame(columns=['timestamp', 'site'])
-#         for file in tqdm(glob(PATH_TO_DATA + '/**/*'), desc='Preparing sites dict...'):
-#             temp_df = pd.read_csv(file, parse_dates=['timestamp'])
-#             full_df = full_df.append(temp_df, ignore_index=True)
-
-#         sites_freq_list = sorted(Counter(full_df.site).items(), 
-#                                  key=lambda x: x[1], reverse=True)
-#         sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
-#         ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
-#         ind_to_sites_dict[0] = 'no_site'
-
-#         # Save dict to file
-#         with open('sites_dict.pkl', 'wb') as fout:
-#             pickle.dump(sites_dict, fout)
-
-#         with open('ind_to_sites_dict.pkl', 'wb') as fout:
-#             pickle.dump(ind_to_sites_dict, fout)
         
     if refresh:
         sites_dict, ind_to_sites_dict = get_dict()
@@ -345,7 +340,7 @@ def prepare_sites_dict(path_to_data, sites_dict=r'sites_dict.pkl',
     return sites_dict, ind_to_sites_dict
 
 
-# In[9]:
+# In[10]:
 
 
 import re
@@ -387,69 +382,60 @@ def prepare_train_set(path_to_csv_files, session_length=10, refresh_dict=False):
     return full_df, sites_dict
 
 
-# In[10]:
-
-
-get_ipython().run_cell_magic('time', '', "path = PATH_TO_DATA + '/10users/'\nsessions_df, _ = prepare_train_set(path, refresh_dict=True)\nsessions_df.user_id.nunique()")
-
-
 # In[11]:
 
 
-sessions_df
+get_ipython().run_cell_magic('time', '', "path = PATH_TO_DATA + '/150users/'\nsessions_df, _ = prepare_train_set(path, refresh_dict=False)\nsessions_df.user_id.nunique()")
 
-toy_df = pd.read_csv('data/10users/user0031.csv', parse_dates=['timestamp'])
-flat = toy_df.sort_values(by='site').head(10)['site'].values.flatten()
-flat
-
-
-data = [1] * flat.shape[0]
-indices = [sites_dict[x][0] for x in flat]
-indptr = range(0, flat.shape[0] + 1, 3)
-
-csr_matrix((data, indices, indptr))[:, 1:].todense()
-# **Примените полученную функцию к игрушечному примеру, убедитесь, что все работает как надо.**
 
 # In[12]:
+
+
+sessions_df.head()
+
+
+# **Примените полученную функцию к игрушечному примеру, убедитесь, что все работает как надо.**
+
+# In[13]:
 
 
 _, inds_dict = prepare_sites_dict('data/3users', refresh=True)
 toy_df, _ = prepare_train_set('data/3users', refresh_dict=True)
 
 
-# In[13]:
+# In[14]:
 
 
 toy_df[list(set(toy_df.columns) - set(['user_id']))] = toy_df[list(set(toy_df.columns) - set(['user_id']))].applymap(lambda x: inds_dict[x])
 toy_df
 
 
-# In[14]:
+# In[15]:
 
 
 get_ipython().system('cat $PATH_TO_DATA/3users/user0001.csv')
 
 
-# In[15]:
+# In[16]:
 
 
 get_ipython().system('cat $PATH_TO_DATA/3users/user0002.csv')
 
 
-# In[16]:
+# In[17]:
 
 
 get_ipython().system('cat $PATH_TO_DATA/3users/user0003.csv')
 
 
-# In[17]:
+# In[18]:
 
 
 train_data_toy, site_freq_3users = prepare_train_set(os.path.join(PATH_TO_DATA, '3users'), 
                                                      session_length=10, refresh_dict=True)
 
 
-# In[18]:
+# In[19]:
 
 
 train_data_toy
@@ -457,7 +443,7 @@ train_data_toy
 
 # Частоты сайтов (второй элемент кортежа) точно должны быть такими, нумерация может быть любой (первые элементы кортежей могут отличаться).
 
-# In[19]:
+# In[20]:
 
 
 site_freq_3users
@@ -467,7 +453,7 @@ site_freq_3users
 # 
 # **<font color='red'> Вопрос 1. </font> Сколько уникальных сессий из 10 сайтов в выборке с 10 пользователями?**
 
-# In[20]:
+# In[21]:
 
 
 train_data_10users, site_freq_10users = prepare_train_set('data/10users/', refresh_dict=True)
@@ -476,7 +462,7 @@ train_data_10users.shape
 
 # **<font color='red'> Вопрос 2. </font> Сколько всего уникальных сайтов в выборке из 10 пользователей? **
 
-# In[21]:
+# In[22]:
 
 
 len(site_freq_10users)
@@ -486,13 +472,13 @@ len(site_freq_10users)
 # 
 # **<font color='red'> Вопрос 3. </font> Сколько уникальных сессий из 10 сайтов в выборке с 150 пользователями?**
 
-# In[22]:
+# In[23]:
 
 
 get_ipython().run_cell_magic('time', '', "train_data_150users, site_freq_150users = prepare_train_set('data/150users/',\n                                                            refresh_dict=True)\ntrain_data_150users.shape")
 
 
-# In[23]:
+# In[24]:
 
 
 train_data_150users.shape[0]
@@ -500,7 +486,7 @@ train_data_150users.shape[0]
 
 # **<font color='red'> Вопрос 4. </font> Сколько всего уникальных сайтов в выборке из 150 пользователей? **
 
-# In[24]:
+# In[25]:
 
 
 len(site_freq_150users)
@@ -512,7 +498,7 @@ len(site_freq_150users)
 # - safebrowsing-cache.google.com
 # - www.linkedin.com **[+]**
 
-# In[25]:
+# In[26]:
 
 
 list(site_freq_150users)[:10]
@@ -520,7 +506,7 @@ list(site_freq_150users)[:10]
 
 # **Для дальнейшего анализа запишем полученные объекты DataFrame в csv-файлы.**
 
-# In[ ]:
+# In[27]:
 
 
 train_data_10users.to_csv(os.path.join(PATH_TO_DATA, 
@@ -537,50 +523,61 @@ train_data_150users.to_csv(os.path.join(PATH_TO_DATA,
 # 
 # Обратите внимание, что в коротких сессиях, меньше 10 сайтов, у нас остались нули, так что первый признак (сколько раз попался 0) по смыслу отличен от остальных (сколько раз попался сайт с индексом $i$). Поэтому первый столбец разреженной матрицы надо будет удалить. 
 
-# In[18]:
+# In[28]:
+
+
+train_data_toy
+
+
+# In[29]:
 
 
 X_toy, y_toy = train_data_toy.iloc[:, :-1].values, train_data_toy.iloc[:, -1].values
 
 
-# In[19]:
+# In[30]:
 
 
-X_toy
+def to_csr(X):
+    session_length = X.shape[1]
+    data = [1] * X.ravel().shape[0]
+    indices = X.ravel()
+    indptr = range(0, X.ravel().shape[0] + session_length, session_length)
+    return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[ ]:
+# In[31]:
 
 
-X_sparse_toy = csr_matrix ''' ВАШ КОД ЗДЕСЬ '''   
+X_sparse_toy = to_csr(X_toy)
 
 
 # **Размерность разреженной матрицы должна получиться равной 11, поскольку в игрушечном примере 3 пользователя посетили 11 уникальных сайтов.**
 
-# In[21]:
+# In[32]:
 
 
 X_sparse_toy.todense()
 
 
-# In[ ]:
+# In[33]:
 
 
 X_10users, y_10users = train_data_10users.iloc[:, :-1].values,                        train_data_10users.iloc[:, -1].values
 X_150users, y_150users = train_data_150users.iloc[:, :-1].values,                          train_data_150users.iloc[:, -1].values
 
 
-# In[ ]:
+# In[34]:
 
 
-X_sparse_10users = ''' ВАШ КОД ЗДЕСЬ '''
-X_sparse_150users = ''' ВАШ КОД ЗДЕСЬ '''
+X_sparse_10users = to_csr(X_10users)
+X_sparse_150users = to_csr(X_150users)
 
 
 # **Сохраним эти разреженные матрицы с помощью [pickle](https://docs.python.org/2/library/pickle.html) (сериализация в Python), также сохраним вектора *y_10users, y_150users* – целевые значения (id пользователя)  в выборках из 10 и 150 пользователей. То что названия этих матриц начинаются с X и y, намекает на то, что на этих данных мы будем проверять первые модели классификации.
 # Наконец, сохраним также и частотные словари сайтов для 3, 10 и 150 пользователей.**
 
-# In[ ]:
+# In[35]:
 
 
 with open(os.path.join(PATH_TO_DATA, 'X_sparse_10users.pkl'), 'wb') as X10_pkl:
@@ -601,13 +598,13 @@ with open(os.path.join(PATH_TO_DATA, 'site_freq_150users.pkl'), 'wb') as site_fr
 
 # **Чисто для подстраховки проверим, что число столбцов в разреженных матрицах `X_sparse_10users` и `X_sparse_150users` равно ранее посчитанным числам уникальных сайтов для 10 и 150 пользователей соответственно.**
 
-# In[ ]:
+# In[36]:
 
 
 assert X_sparse_10users.shape[1] == len(site_freq_10users)
 
 
-# In[ ]:
+# In[37]:
 
 
 assert X_sparse_150users.shape[1] == len(site_freq_150users)
