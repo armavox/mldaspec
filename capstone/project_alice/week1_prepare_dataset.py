@@ -59,20 +59,20 @@
 
 # Наконец, для лучшей воспроизводимости результатов приведем список версий основных используемых в проекте библиотек: NumPy, SciPy, Pandas, Matplotlib, Statsmodels и Scikit-learn. Для этого воспользуемся расширением [watermark](https://github.com/rasbt/watermark). Рекомендуется использовать докер-контейнер открытого курса OpenDataScience по машинному обучению, инструкции [тут](https://goo.gl/RrwpNd).
 
-# In[1]:
+# In[2]:
 
 
 # pip install watermark
 get_ipython().run_line_magic('load_ext', 'watermark')
 
 
-# In[2]:
+# In[3]:
 
 
 get_ipython().run_line_magic('watermark', '-v -m -p numpy,scipy,pandas,matplotlib,statsmodels,sklearn -g')
 
 
-# In[3]:
+# In[4]:
 
 
 from __future__ import division, print_function
@@ -91,21 +91,21 @@ from scipy.sparse import csr_matrix
 
 # **Посмотрим на один из файлов с данными о посещенных пользователем (номер 31) веб-страницах.**
 
-# In[4]:
+# In[5]:
 
 
 # Поменяйте на свой путь к данным
 PATH_TO_DATA = 'data'
 
 
-# In[5]:
+# In[6]:
 
 
 user31_data = pd.read_csv(os.path.join(PATH_TO_DATA, 
                                        '10users/user0031.csv'))
 
 
-# In[6]:
+# In[7]:
 
 
 user31_data.head()
@@ -276,19 +276,10 @@ user31_data.head()
 # (7600 + (7 - 7600 % 7)) / 7 == 1086.0
 # Number of elements to fill with zeros to make reshape possible is:
 # (7 - 7600 % 7) == 2
-# In[7]:
-
-
-glob('data/3users'+'/*')
-
-
 # In[8]:
 
 
-with open(os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'), 'rb') as input_file:
-            id_sites_dict = pickle.load(input_file)
-        
-        
+glob('data/3users'+'/*')
 
 
 # In[9]:
@@ -382,13 +373,13 @@ def prepare_train_set(path_to_csv_files, session_length=10, refresh_dict=False):
     return full_df, sites_dict
 
 
-# In[11]:
+# In[13]:
 
 
-get_ipython().run_cell_magic('time', '', "path = PATH_TO_DATA + '/150users/'\nsessions_df, _ = prepare_train_set(path, refresh_dict=False)\nsessions_df.user_id.nunique()")
+get_ipython().run_cell_magic('time', '', "path = PATH_TO_DATA + '/3users/'\nsessions_df, _ = prepare_train_set(path, refresh_dict=True)\nsessions_df.user_id.nunique()")
 
 
-# In[12]:
+# In[14]:
 
 
 sessions_df.head()

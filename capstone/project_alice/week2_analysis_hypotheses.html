@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>week1_prepare_dataset</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>week2_analysis_hypotheses</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11777,7 +11777,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><center>
 <img src="https://habrastorage.org/web/677/8e1/337/6778e1337c3d4b159d7e99df94227cb2.jpg"/></p>
-<h2 id="&#1057;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;-&quot;&#1052;&#1072;&#1096;&#1080;&#1085;&#1085;&#1086;&#1077;-&#1086;&#1073;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077;-&#1080;-&#1072;&#1085;&#1072;&#1083;&#1080;&#1079;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;&quot;">&#1057;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; "&#1052;&#1072;&#1096;&#1080;&#1085;&#1085;&#1086;&#1077; &#1086;&#1073;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1080; &#1072;&#1085;&#1072;&#1083;&#1080;&#1079; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093;"<a class="anchor-link" href="#&#1057;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;-&quot;&#1052;&#1072;&#1096;&#1080;&#1085;&#1085;&#1086;&#1077;-&#1086;&#1073;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077;-&#1080;-&#1072;&#1085;&#1072;&#1083;&#1080;&#1079;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;&quot;">&#182;</a></h2><p>Автор материала: программист-исследователь Mail.Ru Group, старший преподаватель Факультета Компьютерных Наук ВШЭ  <a href="https://yorko.github.io/">Юрий Кашницкий</a></p>
+<h2 id="&#1057;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;-&quot;&#1052;&#1072;&#1096;&#1080;&#1085;&#1085;&#1086;&#1077;-&#1086;&#1073;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077;-&#1080;-&#1072;&#1085;&#1072;&#1083;&#1080;&#1079;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;&quot;">&#1057;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; "&#1052;&#1072;&#1096;&#1080;&#1085;&#1085;&#1086;&#1077; &#1086;&#1073;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1080; &#1072;&#1085;&#1072;&#1083;&#1080;&#1079; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093;"<a class="anchor-link" href="#&#1057;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;-&quot;&#1052;&#1072;&#1096;&#1080;&#1085;&#1085;&#1086;&#1077;-&#1086;&#1073;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077;-&#1080;-&#1072;&#1085;&#1072;&#1083;&#1080;&#1079;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;&quot;">&#182;</a></h2><p><center>Автор материала: программист-исследователь Mail.Ru Group, старший преподаватель Факультета Компьютерных Наук ВШЭ <a href="https://yorko.github.io/">Юрий Кашницкий</a></p>
 
 </div>
 </div>
@@ -11786,29 +11786,23 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1><center> Capstone проект №1 <br> Идентификация пользователей по посещенным веб-страницам</h1>
+<h1><center> Capstone проект №1 <br>Идентификация пользователей по посещенным веб-страницам</h1>
 <p><img src='http://i.istockimg.com/file_thumbview_approve/21546327/5/stock-illustration-21546327-identification-de-l-utilisateur.jpg'></p>
-<p>В этом проекте мы будем решать задачу идентификации пользователя по его поведению в сети Интернет. Это сложная и интересная задача на стыке анализа данных и поведенческой психологии. В качестве примера, компания Яндекс решает задачу идентификации взломщика почтового ящика по его поведению. В двух словах, взломщик будет себя вести не так, как владелец ящика: он может не удалять сообщения сразу по прочтении, как это делал хозяин, он будет по-другому ставить флажки сообщениям и даже по-своему двигать мышкой. Тогда такого злоумышленника можно идентифицировать и "выкинуть" из почтового ящика, предложив хозяину войти по SMS-коду. Этот пилотный проект описан в <a href="https://habrahabr.ru/company/yandex/blog/230583/">статье</a> на Хабрахабре. Похожие вещи делаются, например, в Google Analytics и описываются в научных статьях, найти можно многое по фразам "Traversal Pattern Mining" и "Sequential Pattern Mining".</p>
-<p>Мы будем решать похожую задачу: по последовательности из нескольких веб-сайтов, посещенных подряд один и тем же человеком, мы будем идентифицировать этого человека. Идея такая: пользователи Интернета по-разному переходят по ссылкам, и это может помогать их идентифицировать (кто-то сначала в почту, потом про футбол почитать, затем новости, контакт, потом наконец – работать, кто-то – сразу работать).</p>
-<p>Будем использовать данные из <a href="http://ceur-ws.org/Vol-1703/paper12.pdf">статьи</a> "A Tool for Classification of Sequential Data". И хотя мы не можем рекомендовать эту статью (описанные методы делеки от state-of-the-art, лучше обращаться к <a href="http://www.charuaggarwal.net/freqbook.pdf">книге</a> "Frequent Pattern Mining" и последним статьям с ICDM), но данные там собраны аккуратно и представляют интерес.</p>
-<p>Имеются данные с прокси-серверов Университета Блеза Паскаля, они имеют очень простой вид. Для каждого пользователя заведен csv-файл с названием user****.csv (где вместо звездочек – 4 цифры, соответствующие ID пользователя), а в нем посещения сайтов записаны в следующем формате: <br></p>
-<center>*timestamp, посещенный веб-сайт*</center><p>Скачать исходные данные можно по ссылке в статье, там же описание.
-Для этого задания хватит данных не по всем 3000 пользователям, а по 10 и 150. <a href="https://drive.google.com/file/d/1AU3M_mFPofbfhFQa_Bktozq_vFREkWJA/view?usp=sharing">Ссылка</a> на архив <em>capstone_user_identification</em> (~7 Mb, в развернутом виде ~ 60 Mb).</p>
-<p>В финальном проекте уже придется столкнуться с тем, что не все операции можно выполнить за разумное время (скажем, перебрать с кросс-валидацией 100 комбинаций параметров случайного леса на этих данных Вы вряд ли сможете), поэтому мы будем использовать параллельно 2 выборки: по 10 пользователям и по 150. Для 10 пользователей будем писать и отлаживать код, для 150 – будет рабочая версия.</p>
-<p>Данные устроены следующем образом:</p>
+<h1><center>Неделя 2. Подготовка и первичный анализ данных</h1>
+<p>На второй неделе мы продолжим подготавливать данные для дальнейшего анализа и построения прогнозных моделей. Конкретно, раньше мы определили что сессия – это последовательность из 10 посещенных пользователем сайтов, теперь сделаем длину сессии параметром, и потом при обучении прогнозных моделей выберем лучшую длину сессии.
+Также мы познакомимся с предобработанными данными и статистически проверим первые гипотезы, связанные с нашими наблюдениями.</p>
+<p><strong>План 2 недели:</strong></p>
 <ul>
-<li>В каталоге 10users лежат 10 csv-файлов с названием вида "user[USER_ID].csv", где [USER_ID] – ID пользователя;</li>
-<li>Аналогично для каталога 150users – там 150 файлов;</li>
-<li>В каталоге 3users – игрушечный пример из 3 файлов, это для отладки кода предобработки, который Вы далее напишете.</li>
+<li>Часть 1. Подготовка нескольких обучающих выборок для сравнения</li>
+<li>Часть 2. Первичный анализ данных, проверка гипотез</li>
 </ul>
-<p>На 5 неделе будет задание по <a href="https://www.kaggle.com/c/catch-me-if-you-can-intruder-detection-through-webpage-session-tracking2">соревнованию</a> Kaggle Inclass, которое организовано специально под Capstone проект нашей специализации. Соревнование уже открыто и, конечно, желающие могут начать уже сейчас.</p>
-<h1><center>Неделя 1. Подготовка данных к анализу и построению моделей</h1>
-<p>Первая часть проекта посвящена подготовке данных для дальнейшего описательного анализа и построения прогнозных моделей. Надо будет написать код для предобработки данных (исходно посещенные веб-сайты указаны для каждого пользователя в отдельном файле) и формирования единой обучающей выборки. Также в этой части мы познакомимся с разреженным форматом данных (матрицы <code>Scipy.sparse</code>), который хорошо подходит для данной задачи.</p>
-<p><strong>План 1 недели:</strong></p>
+<p><strong>В этой части проекта Вам могут быть полезны  следующие видеозаписи лекций курса "Построение выводов по данным":</strong></p>
 <ul>
-<li>Часть 1. Подготовка обучающей выборки</li>
-<li>Часть 2. Работа с разреженным форматом данных</li>
+<li><a href="https://www.coursera.org/learn/stats-for-data-analysis/lecture/3oi53/dovieritiel-nyie-intiervaly-dlia-doli">Доверительные интервалы для доли</a></li>
+<li><a href="https://www.coursera.org/learn/stats-for-data-analysis/lecture/JwmBw/binomial-nyi-kritierii-dlia-doli">Биномиальный критерий для доли</a></li>
+<li><a href="https://www.coursera.org/learn/stats-for-data-analysis/lecture/GZjW7/dovieritiel-nyie-intiervaly-na-osnovie-butstriepa">Доверительные интервалы на основе бутстрепа</a></li>
 </ul>
+<p><strong>Кроме того, в задании будут использоваться библиотеки Python <a href="https://docs.python.org/3/library/glob.html">glob</a>, <a href="https://docs.python.org/2/library/pickle.html">pickle</a>, <a href="https://docs.python.org/3/library/itertools.html">itertools</a> и класс <a href="https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.sparse.csr_matrix.html">csr_matrix</a> из scipy.sparse.</strong></p>
 
 </div>
 </div>
@@ -11819,7 +11813,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077;">&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077;<a class="anchor-link" href="#&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077;">&#182;</a></h3><ol>
 <li>Заполните код в этой тетрадке </li>
-<li>Если вы проходите специализацию Яндеса и МФТИ, пошлите файл с ответами в соответствующем Programming Assignment. <br> Если вы проходите курс ODS, выберите ответы в <a href="https://docs.google.com/forms/d/e/1FAIpQLSedmwHb4cOI32zKJmEP7RvgEjNoz5GbeYRc83qFXVH82KFgGA/viewform">веб-форме</a>. </li>
+<li>Если вы проходите специализацию Яндеса и МФТИ, пошлите файл с ответами в соответствующем Programming Assignment. <br> Если вы проходите курс ODS, выберите ответы в <a href="https://docs.google.com/forms/d/13ZnT7w7foHD0uw0ynTtj7atdiCGvlltF8ThhbJCvLsc">веб-форме</a>.  </li>
 </ol>
 
 </div>
@@ -11829,15 +11823,44 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>В этой части проекта Вам могут быть полезны видеозаписи следующих лекций 1 и 2 недели курса "Математика и Python для анализа данных":</strong></p>
-<ul>
-<li><a href="https://www.coursera.org/learn/mathematics-and-python/lecture/Kd7dL/tsikly-funktsii-ghienieratory-list-comprehension">Циклы, функции, генераторы, list comprehension</a></li>
-<li><a href="https://www.coursera.org/learn/mathematics-and-python/lecture/8Xvwp/chtieniie-dannykh-iz-failov">Чтение данных из файлов</a></li>
-<li><a href="https://www.coursera.org/learn/mathematics-and-python/lecture/vde7k/zapis-failov-izmienieniie-failov">Запись файлов, изменение файлов</a></li>
-<li><a href="https://www.coursera.org/learn/mathematics-and-python/lecture/rcjAW/pandas-data-frame">Pandas.DataFrame</a></li>
-<li><a href="https://www.coursera.org/learn/mathematics-and-python/lecture/lsXAR/pandas-indieksatsiia-i-sieliektsiia">Pandas. Индексация и селекция</a></li>
-</ul>
-<p><strong>Кроме того, в задании будут использоваться библиотеки Python <a href="https://docs.python.org/3/library/glob.html"><code>glob</code></a>, <a href="https://docs.python.org/2/library/pickle.html"><code>pickle</code></a> и класс <a href="https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.sparse.csr_matrix.html"><code>csr_matrix</code></a> из <code>Scipy.sparse</code>.</strong></p>
+<h2 id="&#1063;&#1072;&#1089;&#1090;&#1100;-1.-&#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072;-&#1085;&#1077;&#1089;&#1082;&#1086;&#1083;&#1100;&#1082;&#1080;&#1093;-&#1086;&#1073;&#1091;&#1095;&#1072;&#1102;&#1097;&#1080;&#1093;-&#1074;&#1099;&#1073;&#1086;&#1088;&#1086;&#1082;-&#1076;&#1083;&#1103;-&#1089;&#1088;&#1072;&#1074;&#1085;&#1077;&#1085;&#1080;&#1103;">&#1063;&#1072;&#1089;&#1090;&#1100; 1. &#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072; &#1085;&#1077;&#1089;&#1082;&#1086;&#1083;&#1100;&#1082;&#1080;&#1093; &#1086;&#1073;&#1091;&#1095;&#1072;&#1102;&#1097;&#1080;&#1093; &#1074;&#1099;&#1073;&#1086;&#1088;&#1086;&#1082; &#1076;&#1083;&#1103; &#1089;&#1088;&#1072;&#1074;&#1085;&#1077;&#1085;&#1080;&#1103;<a class="anchor-link" href="#&#1063;&#1072;&#1089;&#1090;&#1100;-1.-&#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072;-&#1085;&#1077;&#1089;&#1082;&#1086;&#1083;&#1100;&#1082;&#1080;&#1093;-&#1086;&#1073;&#1091;&#1095;&#1072;&#1102;&#1097;&#1080;&#1093;-&#1074;&#1099;&#1073;&#1086;&#1088;&#1086;&#1082;-&#1076;&#1083;&#1103;-&#1089;&#1088;&#1072;&#1074;&#1085;&#1077;&#1085;&#1080;&#1103;">&#182;</a></h2><p>Пока мы брали последовательности из 10 сайтов, и это было наобум. Давайте сделаем число сайтов в сессии параметром, чтоб в дальнейшем сравнить модели классификации, обученные на разных выборках – с 5, 7, 10 и 15 сайтами в сессии. Более того, пока мы брали по 10 сайтов подряд, без пересечения. Теперь давайте применим идею скользящего окна – сессии будут перекрываться.</p>
+<p><strong>Пример</strong>: для длины сессии 10 и ширины окна 7 файл из 30 записей породит не 3 сессии, как раньше (1-10, 11-20, 21-30), а 5 (1-10, 8-17, 15-24, 22-30, 29-30). При этом в предпоследней сессии будет один ноль, а в последней – 8 нолей.</p>
+<p>Создадим несколько выборок для разных сочетаний параметров длины сессии и ширины окна. Все они представлены в табличке ниже:</p>
+<p><style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+</style></p>
+<table class="tg">
+  <tr>
+    <th class="tg-031e">session_length -&gt;<br>window_size <br></th>
+    <th class="tg-031e">5</th>
+    <th class="tg-031e">7</th>
+    <th class="tg-031e">10</th>
+    <th class="tg-031e">15</th>
+  </tr>
+  <tr>
+    <td class="tg-031e">5</td>
+    <td class="tg-031e">v</td>
+    <td class="tg-031e">v</td>
+    <td class="tg-031e">v</td>
+    <td class="tg-031e">v</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">7</td>
+    <td class="tg-031e"></td>
+    <td class="tg-031e">v</td>
+    <td class="tg-031e">v</td>
+    <td class="tg-031e">v</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">10</td>
+    <td class="tg-031e"></td>
+    <td class="tg-031e"></td>
+    <td class="tg-031e"><font color='green'>v</font></td>
+    <td class="tg-031e">v</td>
+  </tr>
+</table><p>Итого должно получиться 18 разреженных матриц – указанные в таблице 9 сочетаний параметров формирования сессий для выборок из 10 и 150 пользователей. При этом 2 выборки мы уже сделали в прошлой части, они соответствуют сочетанию параметров: session_length=10, window_size=10, которые помечены в таблице выше галочкой зеленого цвета (done).</p>
 
 </div>
 </div>
@@ -11846,76 +11869,33 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Наконец, для лучшей воспроизводимости результатов приведем список версий основных используемых в проекте библиотек: NumPy, SciPy, Pandas, Matplotlib, Statsmodels и Scikit-learn. Для этого воспользуемся расширением <a href="https://github.com/rasbt/watermark">watermark</a>. Рекомендуется использовать докер-контейнер открытого курса OpenDataScience по машинному обучению, инструкции <a href="https://goo.gl/RrwpNd">тут</a>.</p>
+<p>Реализуйте функцию <em>prepare_sparse_train_set_window</em>.</p>
+<p>Аргументы:</p>
+<ul>
+<li><em>path_to_csv_files</em> – путь к каталогу с csv-файлами</li>
+<li><em>site_freq_path</em> – путь к pickle-файлу с частотным словарем, полученным в 1 части проекта</li>
+<li><em>session_length</em> – длина сессии (параметр)</li>
+<li><em>window_size</em> – ширина окна (параметр) </li>
+</ul>
+<p>Функция должна возвращать 2 объекта:</p>
+<ul>
+<li>разреженную матрицу <em>X_sparse</em> (двухмерная Scipy.sparse.csr_matrix), в которой строки соответствуют сессиям из <em>session_length</em> сайтов, а <em>max(site_id)</em> столбцов – количеству посещений <em>site_id</em> в сессии. </li>
+<li>вектор <em>y</em> (Numpy array) "ответов" в виде ID пользователей, которым принадлежат сессии из <em>X_sparse</em></li>
+</ul>
+<p>Детали:</p>
+<ul>
+<li>Модифицируйте созданную в 1 части функцию <em>prepare_train_set</em></li>
+<li>Некоторые сессии могут повторяться – оставьте как есть, не удаляйте дубликаты</li>
+<li>Замеряйте время выполнения итераций цикла с помощью <em>time</em> из <em>time</em>, <em>tqdm</em> из <em>tqdm</em> или с помощью виджета <a href="https://github.com/alexanderkuk/log-progress">log_progress</a> (<a href="https://habrahabr.ru/post/276725/">статья</a> о нем на Хабрахабре)</li>
+<li>150 файлов из <em>capstone_websites_data/150users/</em> должны обрабатываться за несколько секунд (в зависимости от входных параметров). Если дольше – не страшно, но знайте, что функцию можно ускорить. </li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># pip install watermark</span>
-<span class="o">%</span><span class="k">load_ext</span> watermark
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">watermark</span> -v -m -p numpy,scipy,pandas,matplotlib,statsmodels,sklearn -g
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPython 3.6.4
-IPython 6.2.1
-
-numpy 1.11.3
-scipy 1.0.0
-pandas 0.22.0
-matplotlib 2.1.2
-statsmodels 0.8.0
-sklearn 0.19.1
-
-compiler   : GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)
-system     : Darwin
-release    : 16.7.0
-machine    : x86_64
-processor  : i386
-CPU cores  : 8
-interpreter: 64bit
-Git hash   : 3129c69ee93db33d857571239779095a46933d11
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[100]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
@@ -11924,12 +11904,16 @@ Git hash   : 3129c69ee93db33d857571239779095a46933d11
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-<span class="c1">#pip install tqdm</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.proportion</span> <span class="k">import</span> <span class="n">proportion_confint</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 </pre></div>
 
 </div>
@@ -11937,18 +11921,9 @@ Git hash   : 3129c69ee93db33d857571239779095a46933d11
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Посмотрим на один из файлов с данными о посещенных пользователем (номер 31) веб-страницах.</strong></p>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Поменяйте на свой путь к данным</span>
@@ -11962,351 +11937,51 @@ Git hash   : 3129c69ee93db33d857571239779095a46933d11
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[133]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">user31_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> 
-                                       <span class="s1">&#39;10users/user0031.csv&#39;</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">user31_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[7]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>timestamp</th>
-      <th>site</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2013-11-15 08:12:07</td>
-      <td>fpdownload2.macromedia.com</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2013-11-15 08:12:17</td>
-      <td>laposte.net</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2013-11-15 08:12:17</td>
-      <td>www.laposte.net</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2013-11-15 08:12:17</td>
-      <td>www.google.com</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2013-11-15 08:12:18</td>
-      <td>www.laposte.net</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Поставим задачу классификации: идентифицировать пользователя по сессии из 10 подряд посещенных сайтов. Объектом в этой задаче будет сессия из 10 сайтов, последовательно посещенных одним и тем же пользователем, признаками – индексы этих 10 сайтов (чуть позже здесь появится "мешок" сайтов, подход Bag of Words). Целевым классом будет id пользователя.</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="&#1055;&#1088;&#1080;&#1084;&#1077;&#1088;-&#1076;&#1083;&#1103;-&#1080;&#1083;&#1083;&#1102;&#1089;&#1090;&#1088;&#1072;&#1094;&#1080;&#1080;"><center>&#1055;&#1088;&#1080;&#1084;&#1077;&#1088; &#1076;&#1083;&#1103; &#1080;&#1083;&#1083;&#1102;&#1089;&#1090;&#1088;&#1072;&#1094;&#1080;&#1080;</center><a class="anchor-link" href="#&#1055;&#1088;&#1080;&#1084;&#1077;&#1088;-&#1076;&#1083;&#1103;-&#1080;&#1083;&#1083;&#1102;&#1089;&#1090;&#1088;&#1072;&#1094;&#1080;&#1080;">&#182;</a></h3><p><strong>Пусть пользователя всего 2, длина сессии – 2 сайта.</strong></p>
-<p><center>user0001.csv</center></p>
-<p><style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-yw4l{vertical-align:top}
-</style></p>
-<table class="tg">
-  <tr>
-    <th class="tg-031e">timestamp</th>
-    <th class="tg-031e">site</th>
-  </tr>
-  <tr>
-    <td class="tg-031e">00:00:01</td>
-    <td class="tg-031e">vk.com</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">00:00:11</td>
-    <td class="tg-yw4l">google.com</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">00:00:16</td>
-    <td class="tg-031e">vk.com</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">00:00:20</td>
-    <td class="tg-031e">yandex.ru</td>
-  </tr>
-</table><p><center>user0002.csv</center></p>
-<p><style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-yw4l{vertical-align:top}
-</style></p>
-<table class="tg">
-  <tr>
-    <th class="tg-031e">timestamp</th>
-    <th class="tg-031e">site</th>
-  </tr>
-  <tr>
-    <td class="tg-031e">00:00:02</td>
-    <td class="tg-031e">yandex.ru</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">00:00:14</td>
-    <td class="tg-yw4l">google.com</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">00:00:17</td>
-    <td class="tg-031e">facebook.com</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">00:00:25</td>
-    <td class="tg-031e">yandex.ru</td>
-  </tr>
-</table><p>Идем по 1 файлу, нумеруем сайты подряд: vk.com – 1, google.com – 2 и т.д. Далее по второму файлу.</p>
-<p>Отображение сайтов в их индесы должно получиться таким:</p>
-<p><style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-yw4l{vertical-align:top}
-</style></p>
-<table class="tg">
-  <tr>
-    <th class="tg-031e">site</th>
-    <th class="tg-yw4l">site_id</th>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">vk.com</td>
-    <td class="tg-yw4l">1</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">google.com</td>
-    <td class="tg-yw4l">2</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">yandex.ru</td>
-    <td class="tg-yw4l">3</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">facebook.com</td>
-    <td class="tg-yw4l">4</td>
-  </tr>
-</table><p>Тогда обучающая выборка будет такой (целевой признак – user_id):</p>
-<p><style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-s6z2{text-align:center}
-.tg .tg-baqh{text-align:center;vertical-align:top}
-.tg .tg-hgcj{font-weight:bold;text-align:center}
-.tg .tg-amwm{font-weight:bold;text-align:center;vertical-align:top}
-</style></p>
-<table class="tg">
-  <tr>
-    <th class="tg-hgcj">session_id</th>
-    <th class="tg-hgcj">site1</th>
-    <th class="tg-hgcj">site2</th>
-    <th class="tg-amwm">user_id</th>
-  </tr>
-  <tr>
-    <td class="tg-s6z2">1</td>
-    <td class="tg-s6z2">1</td>
-    <td class="tg-s6z2">2</td>
-    <td class="tg-baqh">1</td>
-  </tr>
-  <tr>
-    <td class="tg-s6z2">2</td>
-    <td class="tg-s6z2">1</td>
-    <td class="tg-s6z2">3</td>
-    <td class="tg-baqh">1</td>
-  </tr>
-  <tr>
-    <td class="tg-s6z2">3</td>
-    <td class="tg-s6z2">3</td>
-    <td class="tg-s6z2">2</td>
-    <td class="tg-baqh">2</td>
-  </tr>
-  <tr>
-    <td class="tg-s6z2">4</td>
-    <td class="tg-s6z2">4</td>
-    <td class="tg-s6z2">3</td>
-    <td class="tg-baqh">2</td>
-  </tr>
-</table><p>Здесь 1 объект – это сессия из 2 посещенных сайтов 1-ым пользователем (target=1). Это сайты vk.com и google.com (номер 1 и 2). И так далее, всего 4 сессии. Пока сессии у нас не пересекаются по сайтам, то есть посещение каждого отдельного сайта относится только к одной сессии.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#1063;&#1072;&#1089;&#1090;&#1100;-1.-&#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072;-&#1086;&#1073;&#1091;&#1095;&#1072;&#1102;&#1097;&#1077;&#1081;-&#1074;&#1099;&#1073;&#1086;&#1088;&#1082;&#1080;">&#1063;&#1072;&#1089;&#1090;&#1100; 1. &#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072; &#1086;&#1073;&#1091;&#1095;&#1072;&#1102;&#1097;&#1077;&#1081; &#1074;&#1099;&#1073;&#1086;&#1088;&#1082;&#1080;<a class="anchor-link" href="#&#1063;&#1072;&#1089;&#1090;&#1100;-1.-&#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072;-&#1086;&#1073;&#1091;&#1095;&#1072;&#1102;&#1097;&#1077;&#1081;-&#1074;&#1099;&#1073;&#1086;&#1088;&#1082;&#1080;">&#182;</a></h2><p>Реализуйте функцию <em>prepare_train_set</em>, которая принимает на вход путь к каталогу с csv-файлами <em>path_to_csv_files</em> и параметр <em>session_length</em> – длину сессии, а возвращает 2 объекта:</p>
-<ul>
-<li>DataFrame, в котором строки соответствуют уникальным сессиям из <em>session_length</em> сайтов, <em>session_length</em> столбцов – индексам этих <em>session_length</em> сайтов и последний столбец – ID пользователя</li>
-<li>частотный словарь сайтов вида {'site_string': [site_id, site_freq]}, например для недавнего игрушечного примера это будет {'vk.com': (1, 2), 'google.com': (2, 2), 'yandex.ru': (3, 3), 'facebook.com': (4, 1)}</li>
-</ul>
-<p>Детали:</p>
-<ul>
-<li>Смотрите чуть ниже пример вывода, что должна возвращать функция</li>
-<li>Используйте <code>glob</code> (или аналоги) для обхода файлов в каталоге. Для определенности, отсортируйте список файлов лексикографически. Удобно использовать <code>tqdm_notebook</code> (или просто <code>tqdm</code> в случае python-скрипта) для отслеживания числа выполненных итераций цикла</li>
-<li>Создайте частотный словарь уникальных сайтов (вида {'site_string': (site_id, site_freq)}) и заполняйте его по ходу чтения файлов. Начните с 1</li>
-<li>Рекомендуется меньшие индексы давать более часто попадающимся сайтам (приницип наименьшего описания)</li>
-<li>Не делайте entity recognition, считайте <em>google.com</em>, <em><a href="http://www.google.com">http://www.google.com</a></em> и <em>www.google.com</em> разными сайтами (подключить entity recognition можно уже в рамках индивидуальной работы над проектом)</li>
-<li>Скорее всего в файле число записей не кратно числу <em>session_length</em>. Тогда последняя сессия будет короче. Остаток заполняйте нулями. То есть если в файле 24 записи и сессии длины 10, то 3 сессия будет состоять из 4 сайтов, и ей мы сопоставим вектор [<em>site1_id</em>, <em>site2_id</em>, <em>site3_id</em>, <em>site4_id</em>, 0, 0, 0, 0, 0, 0, <em>user_id</em>] </li>
-<li>В итоге некоторые сессии могут повторяться – оставьте как есть, не удаляйте дубликаты. Если в двух сессиях все сайты одинаковы, но сессии принадлежат разным пользователям, то тоже оставляйте как есть, это естественная неопределенность в данных</li>
-<li>Не оставляйте в частотном словаре сайт 0 (уже в конце, когда функция возвращает этот словарь)</li>
-<li>150 файлов из <em>capstone_websites_data/150users/</em> у меня обработались за 1.7 секунды, но многое, конечно, зависит от реализации функции и от используемого железа. И вообще, первая реализация скорее всего будет не самой эффективной, дальше можно заняться профилированием (особенно если планируете запускать этот код для 3000 пользователей). Также эффективная реализация этой функции поможет нам на следующей неделе.</li>
-</ul>
-
-</div>
-</div>
-</div># toy_df.site_id.shape 
-# Out[]: 7600
-# 7600 / 7 ==  1085.714
-# 7600%7 == 5
-# (7600 + (7 - 7600 % 7)) / 7 == 1086.0
-# Number of elements to fill with zeros to make reshape possible is:
-# (7 - 7600 % 7) == 2
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;data/3users&#39;</span><span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[8]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;data/3users/user0001.csv&#39;,
- &#39;data/3users/user0002.csv&#39;,
- &#39;data/3users/user0003.csv&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<span class="k">def</span> <span class="nf">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> 
                        <span class="n">sites_dict_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">),</span>
                        <span class="n">inds_dict_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">),</span>
-                       <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                       <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">return_inds_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Func to get dictionaries for converting site&#39;s name to it&#39;s index.</span>
 <span class="sd">        If dictionary for data in PATH_TO_DATA has already been compiled, </span>
 <span class="sd">        functions just pickle dict out of files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
-        <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">,</span> <span class="s1">&#39;site&#39;</span><span class="p">])</span>
+        <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span> <span class="c1"># UPD deleted &#39;timestamp&#39;</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_data</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing sites dict...&#39;</span><span class="p">):</span>
-            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">])</span>
+            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span>  <span class="c1"># UPD: added usecols</span>
             <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">full_df</span><span class="o">.</span><span class="n">site</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
                                  <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-        <span class="n">ind_to_sites_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
+        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">ind_to_sites_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="p">{}</span>
         
         <span class="c1"># Save dict to file</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ind_to_sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ind_to_sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
             
         <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
     
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
             <span class="n">sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
-            
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
-            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>    
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+                <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="p">{}</span>
             
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
         <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
@@ -12324,46 +11999,10 @@ Git hash   : 3129c69ee93db33d857571239779095a46933d11
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[207]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
-
-
-<span class="k">def</span> <span class="nf">prepare_train_set</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Func for partition users logs to desireable num of sessions</span>
-<span class="sd">        and prepare training dataset with sessions of particular users.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    
-    <span class="n">sites_dict</span><span class="p">,</span> <span class="n">inds_dict</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="n">refresh_dict</span><span class="p">)</span>
-        
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing training set...&#39;</span><span class="p">):</span>
-        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">])</span>
-        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sites_dict</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        
-        <span class="c1"># Partition user data to sessions</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">session</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span>
-            <span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="c1"># We fill noncomplete array with zeros.</span>
-            <span class="n">fill_with_zeros</span> <span class="o">=</span> <span class="n">session_length</span> <span class="o">-</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">session_length</span>
-            <span class="n">session</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">fill_with_zeros</span><span class="p">)</span>
-            <span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
-        
-        <span class="c1"># Construct the full dataset, consist of user id&#39;s and sessions</span>
-        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">session</span><span class="p">,</span>
-                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">session_length</span><span class="p">)])</span>
-        
-        <span class="n">user_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">)]</span> <span class="o">*</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        
-        <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="n">full_df</span><span class="p">,</span> <span class="n">sites_dict</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">randarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12373,13 +12012,10 @@ Git hash   : 3129c69ee93db33d857571239779095a46933d11
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[208]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">PATH_TO_DATA</span> <span class="o">+</span> <span class="s1">&#39;/3users/&#39;</span>
-<span class="n">sessions_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">sessions_df</span><span class="o">.</span><span class="n">user_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">randarr</span>
 </pre></div>
 
 </div>
@@ -12392,36 +12028,16 @@ Git hash   : 3129c69ee93db33d857571239779095a46933d11
 
 <div class="output_area">
 
-<div class="prompt"></div>
+<div class="prompt output_prompt">Out[208]:</div>
 
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 502.51it/s]
-Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 326.26it/s]</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 68.9 ms, sys: 16.5 ms, total: 85.4 ms
-Wall time: 93 ms
-</pre>
-</div>
+<div class="output_text output_subarea output_execute_result">
+<pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30])</pre>
 </div>
 
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>
-</pre>
-</div>
 </div>
 
 </div>
@@ -12430,10 +12046,25 @@ Wall time: 93 ms
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[231]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sessions_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">sess_len</span> <span class="o">=</span> <span class="mi">12</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[232]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">windptr</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">randarr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">windptr</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12446,296 +12077,13 @@ Wall time: 93 ms
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[14]:</div>
+<div class="prompt output_prompt">Out[232]:</div>
 
 
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>site1</th>
-      <th>site2</th>
-      <th>site3</th>
-      <th>site4</th>
-      <th>site5</th>
-      <th>site6</th>
-      <th>site7</th>
-      <th>site8</th>
-      <th>site9</th>
-      <th>site10</th>
-      <th>user_id</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>3</td>
-      <td>2</td>
-      <td>2</td>
-      <td>7</td>
-      <td>2</td>
-      <td>1</td>
-      <td>8</td>
-      <td>5</td>
-      <td>9</td>
-      <td>10</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>3</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>2</td>
-      <td>6</td>
-      <td>6</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td>5</td>
-      <td>11</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>1</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>3</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Примените полученную функцию к игрушечному примеру, убедитесь, что все работает как надо.</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">inds_dict</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="s1">&#39;data/3users&#39;</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">toy_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="s1">&#39;data/3users&#39;</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 470.95it/s]
-Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 586.59it/s]
-Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 307.31it/s]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">toy_df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">toy_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;user_id&#39;</span><span class="p">]))]</span> <span class="o">=</span> <span class="n">toy_df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">toy_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;user_id&#39;</span><span class="p">]))]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">inds_dict</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
-<span class="n">toy_df</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[14]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>site1</th>
-      <th>site2</th>
-      <th>site3</th>
-      <th>site4</th>
-      <th>site5</th>
-      <th>site6</th>
-      <th>site7</th>
-      <th>site8</th>
-      <th>site9</th>
-      <th>site10</th>
-      <th>user_id</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>vk.com</td>
-      <td>oracle.com</td>
-      <td>oracle.com</td>
-      <td>geo.mozilla.org</td>
-      <td>oracle.com</td>
-      <td>google.com</td>
-      <td>accounts.google.com</td>
-      <td>mail.google.com</td>
-      <td>apis.google.com</td>
-      <td>plus.google.com</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>vk.com</td>
-      <td>google.com</td>
-      <td>google.com</td>
-      <td>google.com</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>vk.com</td>
-      <td>oracle.com</td>
-      <td>football.kulichki.ru</td>
-      <td>football.kulichki.ru</td>
-      <td>oracle.com</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>meduza.io</td>
-      <td>google.com</td>
-      <td>oracle.com</td>
-      <td>google.com</td>
-      <td>oracle.com</td>
-      <td>google.com</td>
-      <td>google.com</td>
-      <td>mail.google.com</td>
-      <td>yandex.ru</td>
-      <td>meduza.io</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>meduza.io</td>
-      <td>google.com</td>
-      <td>oracle.com</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>no_site</td>
-      <td>3</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<div class="output_text output_subarea output_execute_result">
+<pre>[0, 5, 10, 15, 20, 25]</pre>
 </div>
 
 </div>
@@ -12746,10 +12094,22 @@ Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[233]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cat <span class="nv">$PATH_TO_DATA</span>/3users/user0001.csv
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">windptr</span><span class="p">:</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">randarr</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">sess_len</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sess_len</span><span class="p">:</span>
+        <span class="n">sess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">sess_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">))]</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">session</span><span class="p">,</span> <span class="n">sess</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">randarr</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">sess_len</span><span class="p">])</span>
+<span class="n">session</span>
+
+<span class="c1"># fill_with_zeros = sess_len - session.shape[0] % sess_len</span>
+<span class="c1"># session = np.append(session, [0]*fill_with_zeros)</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">sess_len</span><span class="p">)</span>
+<span class="n">session</span>
 </pre></div>
 
 </div>
@@ -12766,800 +12126,30 @@ Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>timestamp,site
-2013-11-15 09:28:17,vk.com
-2013-11-15 09:33:04,oracle.com
-2013-11-15 09:52:48,oracle.com
-2013-11-15 11:37:26,geo.mozilla.org
-2013-11-15 11:40:32,oracle.com
-2013-11-15 11:40:34,google.com
-2013-11-15 11:40:35,accounts.google.com
-2013-11-15 11:40:37,mail.google.com
-2013-11-15 11:40:40,apis.google.com
-2013-11-15 11:41:35,plus.google.com
-2013-11-15 12:40:35,vk.com
-2013-11-15 12:40:37,google.com
-2013-11-15 12:40:40,google.com
-2013-11-15 12:41:35,google.com
+<pre>0 [ 1  2  3  4  5  6  7  8  9 10 11 12]
+5 [ 6  7  8  9 10 11 12 13 14 15 16 17]
+10 [11 12 13 14 15 16 17 18 19 20 21 22]
+15 [16 17 18 19 20 21 22 23 24 25 26 27]
+20 [21 22 23 24 25 26 27 28 29 30]
+25 [26 27 28 29 30]
 </pre>
 </div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cat <span class="nv">$PATH_TO_DATA</span>/3users/user0002.csv
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
 <div class="output_area">
 
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>timestamp,site
-2013-11-15 09:28:17,vk.com
-2013-11-15 09:33:04,oracle.com
-2013-11-15 09:52:48,football.kulichki.ru
-2013-11-15 11:37:26,football.kulichki.ru
-2013-11-15 11:40:32,oracle.com
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cat <span class="nv">$PATH_TO_DATA</span>/3users/user0003.csv
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>timestamp,site
-2013-11-15 09:28:17,meduza.io
-2013-11-15 09:33:04,google.com
-2013-11-15 09:52:48,oracle.com
-2013-11-15 11:37:26,google.com
-2013-11-15 11:40:32,oracle.com
-2013-11-15 11:40:34,google.com
-2013-11-15 11:40:35,google.com
-2013-11-15 11:40:37,mail.google.com
-2013-11-15 11:40:40,yandex.ru
-2013-11-15 11:41:35,meduza.io
-2013-11-15 12:28:17,meduza.io
-2013-11-15 12:33:04,google.com
-2013-11-15 12:52:48,oracle.com
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_toy</span><span class="p">,</span> <span class="n">site_freq_3users</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
-                                                     <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 434.58it/s]
-Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 252.65it/s]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_toy</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[19]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>site1</th>
-      <th>site2</th>
-      <th>site3</th>
-      <th>site4</th>
-      <th>site5</th>
-      <th>site6</th>
-      <th>site7</th>
-      <th>site8</th>
-      <th>site9</th>
-      <th>site10</th>
-      <th>user_id</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>3</td>
-      <td>2</td>
-      <td>2</td>
-      <td>7</td>
-      <td>2</td>
-      <td>1</td>
-      <td>8</td>
-      <td>5</td>
-      <td>9</td>
-      <td>10</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>3</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>2</td>
-      <td>6</td>
-      <td>6</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td>5</td>
-      <td>11</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>1</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>3</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Частоты сайтов (второй элемент кортежа) точно должны быть такими, нумерация может быть любой (первые элементы кортежей могут отличаться).</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">site_freq_3users</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[20]:</div>
+<div class="prompt output_prompt">Out[233]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;accounts.google.com&#39;: [8, 1],
- &#39;apis.google.com&#39;: [9, 1],
- &#39;football.kulichki.ru&#39;: [6, 2],
- &#39;geo.mozilla.org&#39;: [7, 1],
- &#39;google.com&#39;: [1, 9],
- &#39;mail.google.com&#39;: [5, 2],
- &#39;meduza.io&#39;: [4, 3],
- &#39;oracle.com&#39;: [2, 8],
- &#39;plus.google.com&#39;: [10, 1],
- &#39;vk.com&#39;: [3, 3],
- &#39;yandex.ru&#39;: [11, 1]}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Примените полученную функцию к данным по 10 пользователям.</p>
-<p><strong><font color='red'> Вопрос 1. </font> Сколько уникальных сессий из 10 сайтов в выборке с 10 пользователями?</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_10users</span><span class="p">,</span> <span class="n">site_freq_10users</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="s1">&#39;data/10users/&#39;</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">train_data_10users</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing sites dict...: 100%|██████████| 10/10 [00:00&lt;00:00, 54.17it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 47.75it/s]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[21]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(14061, 11)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong><font color='red'> Вопрос 2. </font> Сколько всего уникальных сайтов в выборке из 10 пользователей? </strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">site_freq_10users</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[22]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>4913</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Примените полученную функцию к данным по 150 пользователям.</p>
-<p><strong><font color='red'> Вопрос 3. </font> Сколько уникальных сессий из 10 сайтов в выборке с 150 пользователями?</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">train_data_150users</span><span class="p">,</span> <span class="n">site_freq_150users</span> <span class="o">=</span> <span class="n">prepare_train_set</span><span class="p">(</span><span class="s1">&#39;data/150users/&#39;</span><span class="p">,</span>
-                                                            <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">train_data_150users</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing sites dict...: 100%|██████████| 150/150 [00:03&lt;00:00, 42.97it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:03&lt;00:00, 49.11it/s]</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 5.21 s, sys: 1.57 s, total: 6.78 s
-Wall time: 6.76 s
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_150users</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[24]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>137019</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong><font color='red'> Вопрос 4. </font> Сколько всего уникальных сайтов в выборке из 150 пользователей? </strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">site_freq_150users</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[25]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>27797</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong><font color='red'> Вопрос 5. </font> Какой из этих сайтов НЕ входит в топ-10 самых популярных сайтов среди посещенных 150 пользователями?</strong></p>
-<ul>
-<li>www.google.fr</li>
-<li>www.youtube.com</li>
-<li>safebrowsing-cache.google.com</li>
-<li>www.linkedin.com <strong>[+]</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">site_freq_150users</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[26]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;www.google.fr&#39;,
- &#39;www.google.com&#39;,
- &#39;www.facebook.com&#39;,
- &#39;apis.google.com&#39;,
- &#39;s.youtube.com&#39;,
- &#39;clients1.google.com&#39;,
- &#39;mail.google.com&#39;,
- &#39;plus.google.com&#39;,
- &#39;safebrowsing-cache.google.com&#39;,
- &#39;www.youtube.com&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Для дальнейшего анализа запишем полученные объекты DataFrame в csv-файлы.</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_10users</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> 
-                                       <span class="s1">&#39;train_data_10users.csv&#39;</span><span class="p">),</span> 
-                        <span class="n">index_label</span><span class="o">=</span><span class="s1">&#39;session_id&#39;</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="n">train_data_150users</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> 
-                                        <span class="s1">&#39;train_data_150users.csv&#39;</span><span class="p">),</span> 
-                         <span class="n">index_label</span><span class="o">=</span><span class="s1">&#39;session_id&#39;</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#1063;&#1072;&#1089;&#1090;&#1100;-2.-&#1056;&#1072;&#1073;&#1086;&#1090;&#1072;-&#1089;-&#1088;&#1072;&#1079;&#1088;&#1077;&#1078;&#1077;&#1085;&#1085;&#1099;&#1084;-&#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1086;&#1084;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;">&#1063;&#1072;&#1089;&#1090;&#1100; 2. &#1056;&#1072;&#1073;&#1086;&#1090;&#1072; &#1089; &#1088;&#1072;&#1079;&#1088;&#1077;&#1078;&#1077;&#1085;&#1085;&#1099;&#1084; &#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1086;&#1084; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093;<a class="anchor-link" href="#&#1063;&#1072;&#1089;&#1090;&#1100;-2.-&#1056;&#1072;&#1073;&#1086;&#1090;&#1072;-&#1089;-&#1088;&#1072;&#1079;&#1088;&#1077;&#1078;&#1077;&#1085;&#1085;&#1099;&#1084;-&#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1086;&#1084;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Если так подумать, то полученные признаки <em>site1</em>, ..., <em>site10</em> смысла не имеют как признаки в задаче классификации. А вот если воспользоваться идеей мешка слов из анализа текстов – это другое дело. Создадим новые матрицы, в которых строкам будут соответствовать сессии из 10 сайтов, а столбцам – индексы сайтов. На пересечении строки $i$ и столбца $j$ будет стоять число $n_{ij}$ – cколько раз сайт $j$ встретился в сессии номер $i$. Делать это будем с помощью разреженных матриц Scipy – <a href="https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.sparse.csr_matrix.html">csr_matrix</a>. Прочитайте документацию, разберитесь, как использовать разреженные матрицы и создайте такие матрицы для наших данных. Сначала проверьте на игрушечном примере, затем примените для 10 и 150 пользователей.</p>
-<p>Обратите внимание, что в коротких сессиях, меньше 10 сайтов, у нас остались нули, так что первый признак (сколько раз попался 0) по смыслу отличен от остальных (сколько раз попался сайт с индексом $i$). Поэтому первый столбец разреженной матрицы надо будет удалить.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_data_toy</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[28]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>site1</th>
-      <th>site2</th>
-      <th>site3</th>
-      <th>site4</th>
-      <th>site5</th>
-      <th>site6</th>
-      <th>site7</th>
-      <th>site8</th>
-      <th>site9</th>
-      <th>site10</th>
-      <th>user_id</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>3</td>
-      <td>2</td>
-      <td>2</td>
-      <td>7</td>
-      <td>2</td>
-      <td>1</td>
-      <td>8</td>
-      <td>5</td>
-      <td>9</td>
-      <td>10</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>3</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>2</td>
-      <td>6</td>
-      <td>6</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td>5</td>
-      <td>11</td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>1</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>3</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<pre>array([[ 1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10., 11., 12.],
+       [ 6.,  7.,  8.,  9., 10., 11., 12., 13., 14., 15., 16., 17.],
+       [11., 12., 13., 14., 15., 16., 17., 18., 19., 20., 21., 22.],
+       [16., 17., 18., 19., 20., 21., 22., 23., 24., 25., 26., 27.],
+       [21., 22., 23., 24., 25., 26., 27., 28., 29., 30.,  0.,  0.],
+       [26., 27., 28., 29., 30.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</pre>
 </div>
 
 </div>
@@ -13570,20 +12160,7 @@ Wall time: 6.76 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy</span><span class="p">,</span> <span class="n">y_toy</span> <span class="o">=</span> <span class="n">train_data_toy</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">train_data_toy</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[198]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">to_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -13601,10 +12178,55 @@ Wall time: 6.76 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[203]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_sparse_toy</span> <span class="o">=</span> <span class="n">to_csr</span><span class="p">(</span><span class="n">X_toy</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> 
+                                    <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                    <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Func for partition users logs to desireable num of sessions</span>
+<span class="sd">        and prepare training dataset with sessions of particular users.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    
+    <span class="n">sites_dict</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span>
+                                               <span class="n">sites_dict_file</span><span class="o">=</span><span class="n">site_freq_path</span><span class="p">,</span>
+                                               <span class="n">refresh</span><span class="o">=</span><span class="n">refresh_dict</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing training set...&#39;</span><span class="p">):</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span>  <span class="c1"># UPD: deleted parse_dates, added usecols</span>
+        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sites_dict</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># Convert with sliding window</span>
+        <span class="n">windptr</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">window_size</span><span class="p">)</span>
+        <span class="n">sessions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">windptr</span><span class="p">:</span>
+            <span class="n">sess</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">session_length</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">session_length</span><span class="p">:</span>
+                <span class="n">sess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">session_length</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)]</span>
+            <span class="n">sessions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sessions</span><span class="p">,</span> <span class="n">sess</span><span class="p">]</span>
+        
+        <span class="c1"># Partition user data to sessions</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sessions</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># We fill noncomplete array with zeros.</span>
+            <span class="n">fill_with_zeros</span> <span class="o">=</span> <span class="n">session_length</span> <span class="o">-</span> <span class="n">sessions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">session_length</span>
+            <span class="n">sessions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sessions</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">fill_with_zeros</span><span class="p">)</span>
+            <span class="n">sessions</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
+        
+        <span class="c1"># Construct the full dataset, consist of user id&#39;s and sessions</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">session</span><span class="p">,</span>
+                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">session_length</span><span class="p">)])</span>
+        <span class="c1"># Find username in the file name</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">)]</span> <span class="o">*</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    
+    <span class="k">return</span> <span class="n">to_csr</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">y</span>
 </pre></div>
 
 </div>
@@ -13612,21 +12234,14 @@ Wall time: 6.76 s
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Размерность разреженной матрицы должна получиться равной 11, поскольку в игрушечном примере 3 пользователя посетили 11 уникальных сайтов.</strong></p>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[204]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_sparse_toy</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
+                                                       <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;site_freq_3users.pkl&#39;</span><span class="p">),</span>
+                                       <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -13639,17 +12254,97 @@ Wall time: 6.76 s
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[32]:</div>
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 249.69it/s]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Примените полученную функцию с параметрами <em>session_length=5</em> и <em>window_size=3</em> к игрушечному примеру. Убедитесь, что все работает как надо.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[205]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy_s5_w3</span><span class="p">,</span> <span class="n">y_s5_w3</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
+                                                       <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;site_freq_3users.pkl&#39;</span><span class="p">),</span>
+                                       <span class="n">session_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing sites dict...: 100%|██████████| 3/3 [00:00&lt;00:00, 431.48it/s]
+Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 280.16it/s]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[206]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy_s5_w3</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[206]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>matrix([[1, 3, 1, 0, 1, 0, 1, 1, 1, 1, 0],
-        [3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+<pre>matrix([[0, 3, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+        [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0],
+        [0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0],
+        [3, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 2, 1, 0, 0, 2, 0, 0, 0, 0, 0],
-        [4, 2, 0, 2, 1, 0, 0, 0, 0, 0, 1],
-        [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0]])</pre>
+        [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [2, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+        [3, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0]])</pre>
 </div>
 
 </div>
@@ -13660,13 +12355,788 @@ Wall time: 6.76 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_10users</span><span class="p">,</span> <span class="n">y_10users</span> <span class="o">=</span> <span class="n">train_data_10users</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> \
-                       <span class="n">train_data_10users</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">X_150users</span><span class="p">,</span> <span class="n">y_150users</span> <span class="o">=</span> <span class="n">train_data_150users</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> \
-                         <span class="n">train_data_150users</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[202]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_s5_w3</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[202]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_s5_w3</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Запустите созданную функцию 16 раз с помощью циклов по числу пользователей num_users (10 или 150), значениям параметра <em>session_length</em> (15, 10, 7 или 5) и значениям параметра <em>window_size</em> (10, 7 или 5). Сериализуйте все 16 разреженных матриц (обучающие выборки) и векторов (метки целевого класса – ID пользователя) в файлы <code>X_sparse_{num_users}users_s{session_length}_w{window_size}.pkl</code> и <code>y_{num_users}users_s{session_length}_w{window_size}.pkl</code>.</strong></p>
+<p><strong>Чтоб убедиться, что мы все далее будем работать с идентичными объектами, запишите в список <em>data_lengths</em> число строк во всех полученных рареженных матрицах (16 значений). Если какие-то будут совпадать, это нормально (можно сообразить, почему).</strong></p>
+<p><strong>На моем ноутбуке этот участок кода отработал за 26 секунд, хотя понятно, что все зависит от эффективности реализации функции <em>prepare_sparse_train_set_window</em> и мощности используемого железа. И честно говоря, моя первая реализация была намного менее эффективной (34 минуты), так что тут у Вас есть возможность оптимизировать свой код.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="n">data_lengths</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">num_users</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">session_length</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">window_size</span> <span class="o">&lt;=</span> <span class="n">session_length</span> <span class="ow">and</span> <span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">X_sparse</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong><font color='red'> Вопрос 1. </font>Сколько всего уникальных значений в списке <code>data_lengths</code>?</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#1063;&#1072;&#1089;&#1090;&#1100;-2.-&#1055;&#1077;&#1088;&#1074;&#1080;&#1095;&#1085;&#1099;&#1081;-&#1072;&#1085;&#1072;&#1083;&#1080;&#1079;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;,-&#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072;-&#1075;&#1080;&#1087;&#1086;&#1090;&#1077;&#1079;">&#1063;&#1072;&#1089;&#1090;&#1100; 2. &#1055;&#1077;&#1088;&#1074;&#1080;&#1095;&#1085;&#1099;&#1081; &#1072;&#1085;&#1072;&#1083;&#1080;&#1079; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093;, &#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072; &#1075;&#1080;&#1087;&#1086;&#1090;&#1077;&#1079;<a class="anchor-link" href="#&#1063;&#1072;&#1089;&#1090;&#1100;-2.-&#1055;&#1077;&#1088;&#1074;&#1080;&#1095;&#1085;&#1099;&#1081;-&#1072;&#1085;&#1072;&#1083;&#1080;&#1079;-&#1076;&#1072;&#1085;&#1085;&#1099;&#1093;,-&#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072;-&#1075;&#1080;&#1087;&#1086;&#1090;&#1077;&#1079;">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Считаем в DataFrame подготовленный на 1 неделе файл <code>train_data_10users.csv</code>. Далее будем работать с ним.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;train_data_10users.csv&#39;</span><span class="p">),</span> 
+                       <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;session_id&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[11]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>site1</th>
+      <th>site2</th>
+      <th>site3</th>
+      <th>site4</th>
+      <th>site5</th>
+      <th>site6</th>
+      <th>site7</th>
+      <th>site8</th>
+      <th>site9</th>
+      <th>site10</th>
+      <th>user_id</th>
+    </tr>
+    <tr>
+      <th>session_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>193</td>
+      <td>574</td>
+      <td>133</td>
+      <td>3</td>
+      <td>133</td>
+      <td>133</td>
+      <td>3</td>
+      <td>133</td>
+      <td>203</td>
+      <td>133</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>415</td>
+      <td>192</td>
+      <td>675</td>
+      <td>254</td>
+      <td>133</td>
+      <td>31</td>
+      <td>393</td>
+      <td>3634</td>
+      <td>217</td>
+      <td>55</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>55</td>
+      <td>3</td>
+      <td>55</td>
+      <td>55</td>
+      <td>5</td>
+      <td>293</td>
+      <td>415</td>
+      <td>333</td>
+      <td>900</td>
+      <td>55</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>473</td>
+      <td>3395</td>
+      <td>473</td>
+      <td>55</td>
+      <td>55</td>
+      <td>55</td>
+      <td>55</td>
+      <td>944</td>
+      <td>199</td>
+      <td>123</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>342</td>
+      <td>55</td>
+      <td>5</td>
+      <td>3458</td>
+      <td>258</td>
+      <td>211</td>
+      <td>3369</td>
+      <td>2096</td>
+      <td>674</td>
+      <td>2096</td>
+      <td>31</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 14061 entries, 0 to 14060
+Data columns (total 11 columns):
+site1      14061 non-null int64
+site2      14061 non-null int64
+site3      14061 non-null int64
+site4      14061 non-null int64
+site5      14061 non-null int64
+site6      14061 non-null int64
+site7      14061 non-null int64
+site8      14061 non-null int64
+site9      14061 non-null int64
+site10     14061 non-null int64
+user_id    14061 non-null int64
+dtypes: int64(11)
+memory usage: 1.3 MB
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Распределение целевого класса:</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[13]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>128    2796
+39     2204
+207    1868
+127    1712
+237    1643
+33     1022
+50      802
+31      760
+100     720
+241     534
+Name: user_id, dtype: int64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Посчитаем распределение числа уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_unique_sites</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[15]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>7     2308
+6     2197
+8     2046
+5     1735
+9     1394
+2     1246
+4     1163
+3      894
+10     651
+1      427
+dtype: int64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">();</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYEAAAD8CAYAAACRkhiPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAALEgAACxIB0t1+/AAAD1dJREFUeJzt3V+MXOddxvHvQ1KC61JIlLIytoVzYRU5sZrSVQgUoYUA
+MQThIKHKVWkcEWqkpqVFlpDDTZGQkS9IgUokkmlDXFESWf2jRKQtBNNVhUSaOiXCsdMoVuM0Nk7c
+UiB1LtJu+uNij+XZrd1d787MWfv9fqTRvOed8+c3rzz7+Jw550yqCklSm36o7wIkSf0xBCSpYYaA
+JDXMEJCkhhkCktQwQ0CSGmYISFLDDAFJapghIEkNu7zvAhZy9dVX14YNG/ouY1leeeUVVq9e3XcZ
+K4JjMZfjMZfjcdZyx+KJJ574ZlW9aaH5VnwIbNiwgYMHD/ZdxrJMT08zNTXVdxkrgmMxl+Mxl+Nx
+1nLHIsnzi5nPw0GS1DBDQJIaZghIUsMMAUlqmCEgSQ0zBCSpYYaAJDXMEJCkhhkCktSwFX/FsKTv
+t2HXI71s99ieW3rZrkbHPQFJapghIEkNMwQkqWGGgCQ1zBCQpIYZApLUMENAkhpmCEhSwwwBSWqY
+VwxLSzSMq3Z3bp7h9p6u/pXAPQFJapohIEkNMwQkqWGGgCQ1zBCQpIYZApLUMENAkhpmCEhSwwwB
+SWqYISBJDTMEJKlhhoAkNcwbyElatGHcNO8HOd8N9Y7tuWWk223ZgnsCSdYn+UKSI0kOJ/lA139V
+kkeTPNs9XzmwzF1JjiZ5JsnNA/1vS3Koe+0jSTKatyVJWozFHA6aAXZW1SbgRuDOJJuAXcCBqtoI
+HOim6V7bBlwLbAHuSXJZt657gfcAG7vHliG+F0nSBVowBKrqZFV9pWt/G3gaWAtsBfZ1s+0Dbu3a
+W4EHq+rVqnoOOArckGQN8MaqeqyqCvj4wDKSpB5c0HcCSTYAbwW+BExU1cnupReBia69FnhsYLHj
+Xd93u/b8/nNtZwewA2BiYoLp6ekLKXPFOX369EX/HoblUhqLnZtnlr2OiVXDWc+l4nzjcan8m7kQ
+4/qsLDoEkrwB+BTwwap6efBwflVVkhpWUVW1F9gLMDk5WVNTU8NadS+mp6e52N/DsFxKYzGMXwTb
+uXmGuw95fsYZ5xuPY++aGn8xPRvXZ2VRp4gmeR2zAfCJqvp01/1Sd4iH7vlU138CWD+w+Lqu70TX
+nt8vSerJYs4OCvAx4Omq+vDASw8D27v2duChgf5tSa5Icg2zXwA/3h06ejnJjd06bxtYRpLUg8Xs
+h74deDdwKMmTXd+fAHuA/UnuAJ4H3gFQVYeT7AeOMHtm0Z1V9Vq33HuB+4FVwOe6hySpJwuGQFX9
+G3C+8/lvOs8yu4Hd5+g/CFx3IQVKkkbH20ZIUsMMAUlqmCEgSQ0zBCSpYYaAJDXMEJCkhhkCktQw
+Q0CSGmYISFLDDAFJapghIEkNMwQkqWGGgCQ1zBCQpIYZApLUMENAkhpmCEhSwwwBSWrYYn5jWFrR
+Nux6pO8SpIuWewKS1DBDQJIaZghIUsMMAUlqmCEgSQ0zBCSpYYaAJDXMEJCkhhkCktQwQ0CSGmYI
+SFLDDAFJapghIEkNMwQkqWGGgCQ1zBCQpIYZApLUsAVDIMl9SU4leWqg70+TnEjyZPf4jYHX7kpy
+NMkzSW4e6H9bkkPdax9JkuG/HUnShVjMnsD9wJZz9P9lVV3fPT4LkGQTsA24tlvmniSXdfPfC7wH
+2Ng9zrVOSdIYLRgCVfVF4FuLXN9W4MGqerWqngOOAjckWQO8saoeq6oCPg7cutSiJUnDsZwfmn9/
+ktuAg8DOqvofYC3w2MA8x7u+73bt+f3nlGQHsANgYmKC6enpZZTZv9OnT1/072FYRjEWOzfPDHV9
+4zSx6uKuf9jONx4tfn7G9XdjqSFwL/BnQHXPdwO/N6yiqmovsBdgcnKypqamhrXqXkxPT3Oxv4dh
+GcVY3L7rkaGub5x2bp7h7kPL+b/YpeV843HsXVPjL6Zn4/q7saSzg6rqpap6raq+B/wtcEP30glg
+/cCs67q+E117fr8kqUdLCoHuGP8Zvw2cOXPoYWBbkiuSXMPsF8CPV9VJ4OUkN3ZnBd0GPLSMuiVJ
+Q7DgfmiSB4Ap4Ookx4EPAVNJrmf2cNAx4A8Aqupwkv3AEWAGuLOqXutW9V5mzzRaBXyue0iSerRg
+CFTVO8/R/bEfMP9uYPc5+g8C111QdZKkkfKKYUlqmCEgSQ0zBCSpYYaAJDXMq1QkrXgberwg8Nie
+W3rb9ji4JyBJDTMEJKlhhoAkNcwQkKSGGQKS1DBDQJIaZghIUsMMAUlqmCEgSQ0zBCSpYYaAJDXM
+EJCkhnkDuRGYf7OrnZtnuH1MN8C61G92JWm43BOQpIYZApLUMENAkhpmCEhSwwwBSWqYISBJDfMU
+UQ3FYn8Ddpyny0pamHsCktQwQ0CSGmYISFLDDAFJapghIEkNMwQkqWGGgCQ1zBCQpIYZApLUMENA
+khq2YAgkuS/JqSRPDfRdleTRJM92z1cOvHZXkqNJnkly80D/25Ic6l77SJIM/+1Iki7EYvYE7ge2
+zOvbBRyoqo3AgW6aJJuAbcC13TL3JLmsW+Ze4D3Axu4xf52SpDFbMASq6ovAt+Z1bwX2de19wK0D
+/Q9W1atV9RxwFLghyRrgjVX1WFUV8PGBZSRJPVnqdwITVXWya78ITHTttcALA/Md7/rWdu35/ZKk
+Hi37VtJVVUlqGMWckWQHsANgYmKC6enpYa5+5HZunpkzPbHq+/tGpa+xWuz7G+dYXAwcj7lW4nj0
+9Zk6ffr0WLa91BB4KcmaqjrZHeo51fWfANYPzLeu6zvRtef3n1NV7QX2AkxOTtbU1NQSy+zH/Pvl
+79w8w92HxvPTDcfeNTWW7cy32N8IGOdYXAwcj7lW4nj09Zmanp5mHH/7lno46GFge9feDjw00L8t
+yRVJrmH2C+DHu0NHLye5sTsr6LaBZSRJPVkwcpM8AEwBVyc5DnwI2APsT3IH8DzwDoCqOpxkP3AE
+mAHurKrXulW9l9kzjVYBn+sekqQeLRgCVfXO87x003nm3w3sPkf/QeC6C6pOkjRSXjEsSQ0zBCSp
+YYaAJDXMEJCkhhkCktSwlXVVhpZtwyIv2pIkcE9AkppmCEhSwwwBSWqYISBJDTMEJKlhhoAkNcwQ
+kKSGGQKS1DBDQJIaZghIUsMMAUlqmCEgSQ0zBCSpYYaAJDXMEJCkhhkCktQwQ0CSGmYISFLDDAFJ
+apghIEkN84fmJekH2LDrkV62e/+W1WPZjnsCktQwQ0CSGmYISFLDDAFJapghIEkNMwQkqWGGgCQ1
+zBCQpIYZApLUsGWFQJJjSQ4leTLJwa7vqiSPJnm2e75yYP67khxN8kySm5dbvCRpeYaxJ/BLVXV9
+VU1207uAA1W1ETjQTZNkE7ANuBbYAtyT5LIhbF+StESjOBy0FdjXtfcBtw70P1hVr1bVc8BR4IYR
+bF+StEjLDYEC/iXJE0l2dH0TVXWya78ITHTttcALA8se7/okST1Z7l1Ef6GqTiT5CeDRJF8dfLGq
+Kkld6Eq7QNkBMDExwfT09DLLHK+dm2fmTE+s+v6+VjkWczkeczkeZ50+fXosf/uWFQJVdaJ7PpXk
+M8we3nkpyZqqOplkDXCqm/0EsH5g8XVd37nWuxfYCzA5OVlTU1PLKXPsbp9369mdm2e4+5B37QbH
+Yj7HYy7H46z7t6xmHH/7lnw4KMnqJD96pg38GvAU8DCwvZttO/BQ134Y2JbkiiTXABuBx5e6fUnS
+8i0ncieAzyQ5s55/qKrPJ/kysD/JHcDzwDsAqupwkv3AEWAGuLOqXltW9ZKkZVlyCFTV14C3nKP/
+v4GbzrPMbmD3UrcpSRourxiWpIZd0t/A9PXboJJ0sXBPQJIaZghIUsMMAUlqmCEgSQ0zBCSpYYaA
+JDXMEJCkhhkCktQwQ0CSGmYISFLDDAFJapghIEkNMwQkqWGGgCQ1zBCQpIYZApLUMENAkhpmCEhS
+wwwBSWqYISBJDTMEJKlhhoAkNcwQkKSGGQKS1DBDQJIaZghIUsMMAUlqmCEgSQ0zBCSpYYaAJDXM
+EJCkhhkCktQwQ0CSGmYISFLDxh4CSbYkeSbJ0SS7xr19SdJZYw2BJJcBfwP8OrAJeGeSTeOsQZJ0
+1rj3BG4AjlbV16rqO8CDwNYx1yBJ6ow7BNYCLwxMH+/6JEk9SFWNb2PJ7wBbqur3u+l3Az9bVe+b
+N98OYEc3+WbgmbEVORpXA9/su4gVwrGYy/GYy/E4a7lj8VNV9aaFZrp8GRtYihPA+oHpdV3fHFW1
+F9g7rqJGLcnBqprsu46VwLGYy/GYy/E4a1xjMe7DQV8GNia5JskPA9uAh8dcgySpM9Y9gaqaSfI+
+4J+Ay4D7qurwOGuQJJ017sNBVNVngc+Oe7s9u2QObQ2BYzGX4zGX43HWWMZirF8MS5JWFm8bIUkN
+MwRGJMn6JF9IciTJ4SQf6LumlSDJZUn+I8k/9l1L35L8eJJPJvlqkqeT/FzfNfUlyR91n5OnkjyQ
+5Ef6rmmcktyX5FSSpwb6rkryaJJnu+crR7FtQ2B0ZoCdVbUJuBG401tkAPAB4Om+i1gh/hr4fFX9
+NPAWGh2XJGuBPwQmq+o6Zk8a2dZvVWN3P7BlXt8u4EBVbQQOdNNDZwiMSFWdrKqvdO1vM/sBb/rq
+6CTrgFuAj/ZdS9+S/Bjwi8DHAKrqO1X1v/1W1avLgVVJLgdeD/xXz/WMVVV9EfjWvO6twL6uvQ+4
+dRTbNgTGIMkG4K3Al/qtpHd/Bfwx8L2+C1kBrgG+Afxdd3jso0lW911UH6rqBPAXwNeBk8D/VdU/
+91vVijBRVSe79ovAxCg2YgiMWJI3AJ8CPlhVL/ddT1+S/CZwqqqe6LuWFeJy4GeAe6vqrcArjGh3
+f6XrjnVvZTYYfxJYneR3+61qZanZ0zhHciqnITBCSV7HbAB8oqo+3Xc9PXs78FtJjjF799hfTvL3
+/ZbUq+PA8ao6s3f4SWZDoUW/AjxXVd+oqu8CnwZ+vueaVoKXkqwB6J5PjWIjhsCIJAmzx3ufrqoP
+911P36rqrqpaV1UbmP3S71+rqtn/7VXVi8ALSd7cdd0EHOmxpD59Hbgxyeu7z81NNPol+TwPA9u7
+9nbgoVFsxBAYnbcD72b2f7xPdo/f6LsorSjvBz6R5D+B64E/77meXnR7Q58EvgIcYvbvUlNXDid5
+APh34M1Jjie5A9gD/GqSZ5ndW9ozkm17xbAktcs9AUlqmCEgSQ0zBCSpYYaAJDXMEJCkhhkCktQw
+Q0CSGmYISFLD/h/YG/jX/MdvQAAAAABJRU5ErkJggg==
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Проверьте с помощью QQ-плота и критерия Шапиро-Уилка, что эта величина распределена нормально</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong><font color='red'> Вопрос 2. </font>Распределено ли нормально число уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов (согласно критерию Шапиро-Уилка)?</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Проверьте гипотезу о том, что пользователь хотя бы раз зайдет на сайт, который он уже ранее посетил в сессии из 10 сайтов. Давайте проверим с помощью биномиального критерия для доли, что доля случаев, когда пользователь повторно посетил какой-то сайт (то есть число уникальных сайтов в сессии &lt; 10) велика: больше 95% (обратите внимание, что альтернатива тому, что доля равна 95% –  одностороняя). Ответом на 3 вопрос в тесте будет полученное p-value.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong><font color='red'> Вопрос 3. </font>Каково p-value при проверке описанной гипотезы?</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">has_two_similar</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pi_val</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom_test</span>  <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong><font color='red'> Вопрос 4. </font>Каков 95% доверительный интервал Уилсона для доли случаев, когда пользователь повторно посетил какой-то сайт (из п. 3)?</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wilson_interval</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">wilson_interval</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+                                   <span class="nb">round</span><span class="p">(</span><span class="n">wilson_interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Постройте распределение частоты посещения сайтов (сколько раз тот или иной сайт попадается в выборке) для сайтов, которые были посещены как минимум 1000 раз.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">site_freqs</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Постройте 95% доверительный интервал для средней частоты появления сайта в выборке (во всей, уже не только для тех сайтов, что были посещены как минимум 1000 раз) на основе bootstrap. Используйте столько же bootstrap-подвыборок, сколько сайтов оказалось в исходной выборке по 10 пользователям. Берите подвыборки из посчитанного списка частот посещений сайтов – не надо заново считать эти частоты. Учтите, что частоту появления нуля (сайт с индексом 0 появлялся там, где сессии были короче 10 сайтов) включать не надо. Округлите границы интервала до 3 знаков после запятой и запишите через пробел в файл <em>answer2_5.txt</em>. Это будет ответом на 5 вопрос теста.</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong><font color='red'> Вопрос 5. </font>Каков 95% доверительный интервал для средней частоты появления сайта в выборке?</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_bootstrap_samples</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">17</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">samples</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">stat_intervals</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> 
+                 <span class="p">[</span><span class="mi">100</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">boundaries</span>
 </pre></div>
 
 </div>
@@ -13679,8 +13149,7 @@ Wall time: 6.76 s
 <div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_sparse_10users</span> <span class="o">=</span> <span class="n">to_csr</span><span class="p">(</span><span class="n">X_10users</span><span class="p">)</span>
-<span class="n">X_sparse_150users</span> <span class="o">=</span> <span class="n">to_csr</span><span class="p">(</span><span class="n">X_150users</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
 </pre></div>
 
 </div>
@@ -13692,82 +13161,12 @@ Wall time: 6.76 s
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Сохраним эти разреженные матрицы с помощью <a href="https://docs.python.org/2/library/pickle.html">pickle</a> (сериализация в Python), также сохраним вектора <em>y_10users, y_150users</em> – целевые значения (id пользователя)  в выборках из 10 и 150 пользователей. То что названия этих матриц начинаются с X и y, намекает на то, что на этих данных мы будем проверять первые модели классификации.
-Наконец, сохраним также и частотные словари сайтов для 3, 10 и 150 пользователей.</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;X_sparse_10users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">X10_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">X_sparse_10users</span><span class="p">,</span> <span class="n">X10_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;y_10users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">y10_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">y_10users</span><span class="p">,</span> <span class="n">y10_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;X_sparse_150users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">X150_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">X_sparse_150users</span><span class="p">,</span> <span class="n">X150_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;y_150users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">y150_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">y_150users</span><span class="p">,</span> <span class="n">y150_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;site_freq_3users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">site_freq_3users_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">site_freq_3users</span><span class="p">,</span> <span class="n">site_freq_3users_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;site_freq_10users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">site_freq_10users_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">site_freq_10users</span><span class="p">,</span> <span class="n">site_freq_10users_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;site_freq_150users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">site_freq_150users_pkl</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">site_freq_150users</span><span class="p">,</span> <span class="n">site_freq_150users_pkl</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Чисто для подстраховки проверим, что число столбцов в разреженных матрицах <code>X_sparse_10users</code> и <code>X_sparse_150users</code> равно ранее посчитанным числам уникальных сайтов для 10 и 150 пользователей соответственно.</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">assert</span> <span class="n">X_sparse_10users</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">site_freq_10users</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">assert</span> <span class="n">X_sparse_150users</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">site_freq_150users</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#1055;&#1091;&#1090;&#1080;-&#1091;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1103;">&#1055;&#1091;&#1090;&#1080; &#1091;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1103;<a class="anchor-link" href="#&#1055;&#1091;&#1090;&#1080;-&#1091;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1103;">&#182;</a></h2><ul>
-<li>можно обработать исходные данные по 3000 пользователей; обучать на такой выборке модели лучше при наличии доступа к хорошим мощностям (можно арендовать инстанс Amazon EC2, как именно, описано <a href="https://habrahabr.ru/post/280562/">тут</a>). Хотя далее в курсе мы познакомимся с алгоритмами, способными обучаться на больших выборках при малых вычислительных потребностях;</li>
-<li>помимо явного создания разреженного формата можно еще составить выборки с помощью <code>CountVectorizer</code>, <code>TfidfVectorizer</code> и т.п. Поскольку данные по сути могут быть описаны как последовательности, то можно вычислять n-граммы сайтов. Работает все это или нет, мы будем проверять в <a href="https://inclass.kaggle.com/c/catch-me-if-you-can-intruder-detection-through-webpage-session-tracking2">соревновании</a> Kaggle Inclass (желающие могут начать уже сейчас).</li>
+<h2 id="&#1055;&#1091;&#1090;&#1080;-&#1091;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1103;">&#1055;&#1091;&#1090;&#1080; &#1091;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1103;<a class="anchor-link" href="#&#1055;&#1091;&#1090;&#1080;-&#1091;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1103;">&#182;</a></h2><p>Что еще можно добавить по второй части проекта:</p>
+<ul>
+<li>можно дополнительно рассматривать сессии с параметром – длиной сессии по времени. И составить выборки, скажем, для 5-, 10-, 15- и 20-минутных сессий (это как раз пригодится в <a href="https://inclass.kaggle.com/c/catch-me-if-you-can-intruder-detection-through-webpage-session-tracking2">соревновании</a> Kaggle Inclass)</li>
+<li>можно провести больше первичного анализа и проверять прочие интересные гипотезы (а больше их появится после создания признаков на следующей неделе)</li>
 </ul>
-<p>На следующей неделе мы еще немного поготовим данные и потестируем первые гипотезы, связанные с нашими наблюдениями.</p>
+<p>На 3 неделе мы займемся визуальным анализом данных и построением признаков.</p>
 
 </div>
 </div>
