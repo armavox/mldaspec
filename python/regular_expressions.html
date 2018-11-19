@@ -11782,7 +11782,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
@@ -11842,7 +11842,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">text_to_search</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
@@ -11863,7 +11863,7 @@ div#notebook {
 <span class="s1">Ms Davis</span>
 <span class="s1">Mrs. Robinson</span>
 <span class="s1">Mr. T</span>
-
+<span class="s1">кошка&#39;</span>
 <span class="s1">cat</span>
 <span class="s1">mat</span>
 <span class="s1">pat</span>
@@ -11872,6 +11872,60 @@ div#notebook {
 </pre></div>
 
 </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">text_to_search</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+abcdefghijklmnopqurtuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+1234567890
+Ha HaHa
+MetaCharacters (Need to be escaped):
+. ^ $ * + ? { } [ ] \ | ( )
+coreyms.com
+321-555-4321
+123.555.1234
+123*555*1234
+800-555-1234
+900-555-1234
+Mr. Schafer
+Mr Smith
+Ms Davis
+Mrs. Robinson
+Mr. T
+кошка,
+cat
+mat
+pat
+bat
+
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 

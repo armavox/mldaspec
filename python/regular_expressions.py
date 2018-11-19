@@ -4,7 +4,7 @@
 # # Python regular expressions tutorial
 # ___
 
-# In[2]:
+# In[1]:
 
 
 import re
@@ -24,7 +24,7 @@ sorted([(x, sys.getsizeof(globals().get(x))) for x in dir() if not x.startswith(
 
 # ## Simple
 
-# In[99]:
+# In[46]:
 
 
 text_to_search = '''
@@ -45,12 +45,18 @@ Mr Smith
 Ms Davis
 Mrs. Robinson
 Mr. T
-
+кошка'
 cat
 mat
 pat
 bat
 '''
+
+
+# In[48]:
+
+
+print(re.sub(r'\'', ',', text_to_search))
 
 
 # In[4]:
