@@ -33,7 +33,7 @@
 
 # ## Часть 1. Построение признаков
 
-# In[57]:
+# In[9]:
 
 
 from __future__ import division, print_function
@@ -41,6 +41,7 @@ from __future__ import division, print_function
 import warnings
 warnings.filterwarnings('ignore')
 from glob import glob
+import re
 import os
 from collections import Counter
 from tqdm import tqdm
@@ -70,37 +71,7 @@ PATH_TO_DATA = 'data'
 # 
 # Функция должна возвращать новый DataFrame (как возвращала функция *prepare_train_set*), только признаков должно быть на 4 больше. Порядок, в котором добавляются признаки: *site1*, ... *site10*, *session_timespan*, *#unique_sites*, *start_hour*, *day_of_week* и *user_id* (это видно и чуть ниже по тому, как функция вызывается).
 
-# In[78]:
-
-
-get_ipython().run_line_magic('load_ext', 'memory_profiler')
-
-
-# In[79]:
-
-
-get_ipython().run_line_magic('memit', "path_to_data = 'data/150users/'")
-
-
-# In[81]:
-
-
-get_ipython().run_cell_magic('memit', '', "full_df = pd.DataFrame()\nfor file in glob(path_to_data + '/*'):\n    temp_df = pd.read_csv(file)\n    full_df = full_df.append(temp_df, ignore_index=True)\n\nsites_freq_list = sorted(Counter(full_df.site).items(), \n                         key=lambda x: x[1], reverse=True)\nsites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))\nind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())\nind_to_sites_dict[0] = 'no_site'")
-
-
-# In[82]:
-
-
-get_ipython().run_cell_magic('memit', '', "arr = []\nfor file in glob(path_to_data + '/*'):\n    with open(file) as f:\n        for line in f.readlines()[1:]:  # Exclude header\n            arr.append(line.split(',')[1].strip())  # Add to list only sites\n\nsites_freq_list = sorted(Counter(arr).items(), \n                         key=lambda x: x[1], reverse=True)\n\nsites_dict = dict(\n    (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)\n)\n\nind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())\nind_to_sites_dict[0] = 'no_site'")
-
-
-# In[71]:
-
-
-sites_freq_list
-
-
-# In[8]:
+# In[3]:
 
 
 def get_dict():
@@ -160,7 +131,7 @@ def prepare_sites_dict(path_to_data,
     return sites_dict, id_to_site_dict
 
 
-# In[ ]:
+# In[4]:
 
 
 def to_csr(X):
@@ -171,42 +142,52 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[ ]:
+# In[17]:
 
 
-def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path, 
+def prepare_train_set_with_fe(path_to_csv_files, site_freq_path, #feature_names,
                                     session_length=10, window_size=10,
                                     refresh_dict=False):
     """Func for partition users logs to desireable num of sessions
         and prepare training dataset with sessions of particular users.
-    
     """
+    
     full_df = pd.DataFrame()
     
     sites_dict, _ = prepare_sites_dict(path_to_csv_files,
                                        sites_dict_file=site_freq_path,
                                        refresh=refresh_dict)
-        
+    
     for file in tqdm(glob(path_to_csv_files + '/*'), desc='Preparing training set...'):
-        temp_df = pd.read_csv(file, usecols=['site'])  # UPD: deleted parse_dates, added usecols
+            
+        temp_df = pd.read_csv(file, parse_dates=['timestamp'])
         temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
         
         # Convert with sliding window
         windptr = range(0, temp_df.shape[0], window_size)
         sessions = []
+        timedeltas = []
         for ptr in windptr:
             sess = temp_df.site_id.values[ptr:ptr+session_length]
             # All incomplete sessions are being completed by zeros
             if len(sess) < session_length:
                 sess = np.r_[sess, [0] * (session_length - len(sess))]
             sessions = np.r_[sessions, sess]
+            # Num_unique sites in session
+            # Eval timedelta for session
+            timespan = temp_df.timestamp.values[ptr:ptr+session_length]
+            timedeltas.append((timespan[-1] - timespan[0]) / np.timedelta64(1, 's'))
             
         # Partition user data to sessions
         sessions = sessions.reshape(-1, session_length)
+        timedeltas = np.asarray(timedeltas).reshape(sessions.shape[0], 1)
         
         # Construct the full dataset, consist of user id's and sessions
-        temp_df = pd.DataFrame(sessions,
-                       columns=['site'+ str(x+1) for x in range(session_length)])
+        feature_names = ['site' + str(i) for i in range(1,11)] +                         ['time_diff' + str(j) for j in range(1,10)] +                         ['session_timespan', '#unique_sites', 'start_hour', 
+                         'day_of_week', 'target']
+        temp_df = pd.DataFrame(np.hstack((sessions, timedeltas)),
+                               columns=feature_names)
+        
         # Find username in the file name
         user_id = re.findall(r'\d+', file)[-1]
         temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
@@ -215,20 +196,22 @@ def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path,
         
         X, y = full_df.iloc[:, :-1].values, full_df.iloc[:, -1].values
     
-    return to_csr(X), y
-
-
-# In[3]:
-
-
-def prepare_train_set_with_fe(path_to_csv_files, site_freq_path, feature_names,
-                                    session_length=10, window_size=10):
-    pass
+    return X  #to_csr(X), y
 
 
 # **Проверим функцию на игрушечном примере.**
 
-# In[4]:
+# In[20]:
+
+
+prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
+                          site_freq_path=os.path.join(PATH_TO_DATA, 'site_freq_3users.pkl'),
+                          session_length=10,
+                          window_size=5
+                         ).shape
+
+
+# In[14]:
 
 
 feature_names = ['site' + str(i) for i in range(1,11)] +                 ['time_diff' + str(j) for j in range(1,10)] +                 ['session_timespan', '#unique_sites', 'start_hour', 

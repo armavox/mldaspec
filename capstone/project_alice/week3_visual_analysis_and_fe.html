@@ -11829,7 +11829,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
@@ -11837,6 +11837,7 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
@@ -11888,181 +11889,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> memory_profiler
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[79]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">memit</span> path_to_data = &#39;data/150users/&#39;
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>peak memory: 174.89 MiB, increment: 0.01 MiB
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[81]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">memit</span>
-full_df = pd.DataFrame()
-for file in glob(path_to_data + &#39;/*&#39;):
-    temp_df = pd.read_csv(file)
-    full_df = full_df.append(temp_df, ignore_index=True)
-
-sites_freq_list = sorted(Counter(full_df.site).items(), 
-                         key=lambda x: x[1], reverse=True)
-sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
-ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
-ind_to_sites_dict[0] = &#39;no_site&#39;
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>peak memory: 378.56 MiB, increment: 202.89 MiB
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[82]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">memit</span>
-arr = []
-for file in glob(path_to_data + &#39;/*&#39;):
-    with open(file) as f:
-        for line in f.readlines()[1:]:  # Exclude header
-            arr.append(line.split(&#39;,&#39;)[1].strip())  # Add to list only sites
-
-sites_freq_list = sorted(Counter(arr).items(), 
-                         key=lambda x: x[1], reverse=True)
-
-sites_dict = dict(
-    (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)
-)
-
-ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
-ind_to_sites_dict[0] = &#39;no_site&#39;
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>peak memory: 420.03 MiB, increment: 69.98 MiB
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[71]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sites_freq_list</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[71]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[(&#39;google.com&#39;, 9),
- (&#39;oracle.com&#39;, 8),
- (&#39;vk.com&#39;, 3),
- (&#39;meduza.io&#39;, 3),
- (&#39;mail.google.com&#39;, 2),
- (&#39;football.kulichki.ru&#39;, 2),
- (&#39;geo.mozilla.org&#39;, 1),
- (&#39;accounts.google.com&#39;, 1),
- (&#39;apis.google.com&#39;, 1),
- (&#39;plus.google.com&#39;, 1),
- (&#39;yandex.ru&#39;, 1)]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
@@ -12129,7 +11956,7 @@ ind_to_sites_dict[0] = &#39;no_site&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">to_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -12147,42 +11974,54 @@ ind_to_sites_dict[0] = &#39;no_site&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_train_set_with_fe</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> <span class="c1">#feature_names,</span>
                                     <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                                     <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Func for partition users logs to desireable num of sessions</span>
 <span class="sd">        and prepare training dataset with sessions of particular users.</span>
-<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
     
     <span class="n">sites_dict</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span>
                                        <span class="n">sites_dict_file</span><span class="o">=</span><span class="n">site_freq_path</span><span class="p">,</span>
                                        <span class="n">refresh</span><span class="o">=</span><span class="n">refresh_dict</span><span class="p">)</span>
-        
+    
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing training set...&#39;</span><span class="p">):</span>
-        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span>  <span class="c1"># UPD: deleted parse_dates, added usecols</span>
+            
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">])</span>
         <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sites_dict</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         
         <span class="c1"># Convert with sliding window</span>
         <span class="n">windptr</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">window_size</span><span class="p">)</span>
         <span class="n">sessions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">timedeltas</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">windptr</span><span class="p">:</span>
             <span class="n">sess</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">session_length</span><span class="p">]</span>
             <span class="c1"># All incomplete sessions are being completed by zeros</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">session_length</span><span class="p">:</span>
                 <span class="n">sess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">session_length</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">))]</span>
             <span class="n">sessions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sessions</span><span class="p">,</span> <span class="n">sess</span><span class="p">]</span>
+            <span class="c1"># Num_unique sites in session</span>
+            <span class="c1"># Eval timedelta for session</span>
+            <span class="n">timespan</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">timestamp</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">session_length</span><span class="p">]</span>
+            <span class="n">timedeltas</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">timespan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">timespan</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">))</span>
             
         <span class="c1"># Partition user data to sessions</span>
         <span class="n">sessions</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
+        <span class="n">timedeltas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">timedeltas</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sessions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         
         <span class="c1"># Construct the full dataset, consist of user id&#39;s and sessions</span>
-        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sessions</span><span class="p">,</span>
-                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">session_length</span><span class="p">)])</span>
+        <span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;site&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span> <span class="o">+</span> \
+                        <span class="p">[</span><span class="s1">&#39;time_diff&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)]</span> <span class="o">+</span> \
+                        <span class="p">[</span><span class="s1">&#39;session_timespan&#39;</span><span class="p">,</span> <span class="s1">&#39;#unique_sites&#39;</span><span class="p">,</span> <span class="s1">&#39;start_hour&#39;</span><span class="p">,</span> 
+                         <span class="s1">&#39;day_of_week&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">]</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sessions</span><span class="p">,</span> <span class="n">timedeltas</span><span class="p">)),</span>
+                               <span class="n">columns</span><span class="o">=</span><span class="n">feature_names</span><span class="p">)</span>
+        
         <span class="c1"># Find username in the file name</span>
         <span class="n">user_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">)]</span> <span class="o">*</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -12191,22 +12030,7 @@ ind_to_sites_dict[0] = &#39;no_site&#39;
         
         <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     
-    <span class="k">return</span> <span class="n">to_csr</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">y</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_train_set_with_fe</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span>
-                                    <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-    <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">X</span>  <span class="c1">#to_csr(X), y</span>
 </pre></div>
 
 </div>
@@ -12225,7 +12049,55 @@ ind_to_sites_dict[0] = &#39;no_site&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">prepare_train_set_with_fe</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
+                          <span class="n">site_freq_path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;site_freq_3users.pkl&#39;</span><span class="p">),</span>
+                          <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                          <span class="n">window_size</span><span class="o">=</span><span class="mi">5</span>
+                         <span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 309.31it/s]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[20]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(7, 11)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;site&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span> <span class="o">+</span> \
@@ -12252,21 +12124,10 @@ ind_to_sites_dict[0] = &#39;no_site&#39;
 <div class="prompt"></div>
 
 
-
-
-
- 
- 
-<div id="187ba7d0-5413-4546-aa2c-dc31e4f0d80b"></div>
-<div class="output_subarea output_widget_view ">
-<script type="text/javascript">
-var element = $('#187ba7d0-5413-4546-aa2c-dc31e4f0d80b');
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "ff7b565cb61c4c88a22bbd9c6e61210d"}
-</script>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Preparing training set...:   0%|          | 0/3 [00:00&lt;?, ?it/s]
+</pre>
 </div>
-
 </div>
 
 <div class="output_area">
@@ -12274,9 +12135,71 @@ var element = $('#187ba7d0-5413-4546-aa2c-dc31e4f0d80b');
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
+<div class="output_subarea output_text output_error">
 <pre>
-</pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/internals.py</span> in <span class="ansi-cyan-fg">create_block_manager_from_blocks</span><span class="ansi-blue-fg">(blocks, axes)</span>
+<span class="ansi-green-intense-fg ansi-bold">   4621</span>                 blocks = [make_block(values=blocks[0],
+<span class="ansi-green-fg">-&gt; 4622</span><span class="ansi-red-fg">                                      placement=slice(0, len(axes[0])))]
+</span><span class="ansi-green-intense-fg ansi-bold">   4623</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/internals.py</span> in <span class="ansi-cyan-fg">make_block</span><span class="ansi-blue-fg">(values, placement, klass, ndim, dtype, fastpath)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2956</span> 
+<span class="ansi-green-fg">-&gt; 2957</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> klass<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">,</span> ndim<span class="ansi-blue-fg">=</span>ndim<span class="ansi-blue-fg">,</span> fastpath<span class="ansi-blue-fg">=</span>fastpath<span class="ansi-blue-fg">,</span> placement<span class="ansi-blue-fg">=</span>placement<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2958</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/internals.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, values, placement, ndim, fastpath)</span>
+<span class="ansi-green-intense-fg ansi-bold">    119</span>                              &#39;implies %d&#39; % (len(self.values),
+<span class="ansi-green-fg">--&gt; 120</span><span class="ansi-red-fg">                                              len(self.mgr_locs)))
+</span><span class="ansi-green-intense-fg ansi-bold">    121</span> 
+
+<span class="ansi-red-fg">ValueError</span>: Wrong number of items passed 11, placement implies 24
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-797cd86bd7c6&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>                   site_freq_path=os.path.join(PATH_TO_DATA, 
+<span class="ansi-green-intense-fg ansi-bold">      6</span>                                               &#39;site_freq_3users.pkl&#39;),
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">                   feature_names=feature_names, session_length=10)
+</span>
+<span class="ansi-green-fg">&lt;ipython-input-13-98ccaeaed77e&gt;</span> in <span class="ansi-cyan-fg">prepare_train_set_with_fe</span><span class="ansi-blue-fg">(path_to_csv_files, site_freq_path, feature_names, session_length, window_size, refresh_dict)</span>
+<span class="ansi-green-intense-fg ansi-bold">     37</span>         <span class="ansi-red-fg"># Construct the full dataset, consist of user id&#39;s and sessions</span>
+<span class="ansi-green-intense-fg ansi-bold">     38</span>         temp_df = pd.DataFrame(np.hstack((sessions, timedeltas)),
+<span class="ansi-green-fg">---&gt; 39</span><span class="ansi-red-fg">                                columns=feature_names)
+</span><span class="ansi-green-intense-fg ansi-bold">     40</span> 
+<span class="ansi-green-intense-fg ansi-bold">     41</span>         <span class="ansi-red-fg"># Find username in the file name</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, data, index, columns, dtype, copy)</span>
+<span class="ansi-green-intense-fg ansi-bold">    359</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    360</span>                 mgr = self._init_ndarray(data, index, columns, dtype=dtype,
+<span class="ansi-green-fg">--&gt; 361</span><span class="ansi-red-fg">                                          copy=copy)
+</span><span class="ansi-green-intense-fg ansi-bold">    362</span>         <span class="ansi-green-fg">elif</span> isinstance<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">,</span> types<span class="ansi-blue-fg">.</span>GeneratorType<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    363</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> types<span class="ansi-blue-fg">.</span>GeneratorType<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/frame.py</span> in <span class="ansi-cyan-fg">_init_ndarray</span><span class="ansi-blue-fg">(self, values, index, columns, dtype, copy)</span>
+<span class="ansi-green-intense-fg ansi-bold">    531</span>             values <span class="ansi-blue-fg">=</span> maybe_infer_to_datetimelike<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    532</span> 
+<span class="ansi-green-fg">--&gt; 533</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> create_block_manager_from_blocks<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>values<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">[</span>columns<span class="ansi-blue-fg">,</span> index<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    534</span> 
+<span class="ansi-green-intense-fg ansi-bold">    535</span>     <span class="ansi-blue-fg">@</span>property
+
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/internals.py</span> in <span class="ansi-cyan-fg">create_block_manager_from_blocks</span><span class="ansi-blue-fg">(blocks, axes)</span>
+<span class="ansi-green-intense-fg ansi-bold">   4629</span>         blocks <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>getattr<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;values&#39;</span><span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> b <span class="ansi-green-fg">in</span> blocks<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   4630</span>         tot_items <span class="ansi-blue-fg">=</span> sum<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> b <span class="ansi-green-fg">in</span> blocks<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">-&gt; 4631</span><span class="ansi-red-fg">         </span>construction_error<span class="ansi-blue-fg">(</span>tot_items<span class="ansi-blue-fg">,</span> blocks<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> axes<span class="ansi-blue-fg">,</span> e<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   4632</span> 
+<span class="ansi-green-intense-fg ansi-bold">   4633</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/capstone/lib/python3.6/site-packages/pandas/core/internals.py</span> in <span class="ansi-cyan-fg">construction_error</span><span class="ansi-blue-fg">(tot_items, block_shape, axes, e)</span>
+<span class="ansi-green-intense-fg ansi-bold">   4606</span>         <span class="ansi-green-fg">raise</span> ValueError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Empty data passed with indices specified.&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   4607</span>     raise ValueError(&#34;Shape of passed values is {0}, indices imply {1}&#34;.format(
+<span class="ansi-green-fg">-&gt; 4608</span><span class="ansi-red-fg">         passed, implied))
+</span><span class="ansi-green-intense-fg ansi-bold">   4609</span> 
+<span class="ansi-green-intense-fg ansi-bold">   4610</span> 
+
+<span class="ansi-red-fg">ValueError</span>: Shape of passed values is (11, 2), indices imply (24, 2)</pre>
 </div>
 </div>
 
