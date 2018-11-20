@@ -33,7 +33,7 @@
 
 # ## Часть 1. Построение признаков
 
-# In[9]:
+# In[1]:
 
 
 from __future__ import division, print_function
@@ -48,6 +48,7 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 pd.set_option('display.max.columns', 25)
+from scipy.sparse import csr_matrix
 import pickle
 #pip install seaborn
 import seaborn as sns
@@ -74,41 +75,51 @@ PATH_TO_DATA = 'data'
 # In[3]:
 
 
-def get_dict():
+t = pd.read_csv('data/3users/user0001.csv', parse_dates=['timestamp']).timestamp.values[0]
+t = (t.astype('datetime64[h]'))
+t.astype(object).weekday()
+
+
+# In[108]:
+
+
+def get_dict(path_to_data, sites_dict_file, ids_dict_file):
+    """Auxiliary function for sites counting dict building
+    """
+    
     arr = []
-    """Pull all visited sites from .csv logs to array"""
+    '''Pull all visited sites from .csv logs to array'''
     for file in glob(path_to_data + '/*'):
         with open(file) as f:
             for line in f.readlines()[1:]:  # Exclude header
                 arr.append(line.split(',')[1].strip())  # Add to list only sites
                 
-    """Make counted sorted dict with sites and corresponding # of visits (freqency)"""
+    '''Make counted sorted dict with sites and corresponding # of visits (freqency)'''
     sites_freq_list = sorted(Counter(arr).items(), 
                              key=lambda x: x[1], reverse=True)
-    """Make sites dict in form of {'site': [id, frequency]}"""
+    '''Make sites dict in form of {'site': [id, frequency]}'''
     sites_dict = dict(
         (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)
     )
-    """Make id to site converter"""
+    '''Make id to site converter'''
     id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
     id_to_site_dict[0] = 'no_site'
 
-    """Save dict to file"""
+    '''Save dict to file'''
     with open(sites_dict_file, 'wb') as fout:
         pickle.dump(sites_dict, fout)
 
-    with open(inds_dict_file, 'wb') as fout:
+    with open(ids_dict_file, 'wb') as fout:
         pickle.dump(id_to_site_dict, fout)
 
     return sites_dict, id_to_site_dict
 
 
-def prepare_sites_dict(path_to_data, 
-                       sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
-                       inds_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
+def prepare_sites_dict(path_to_data, sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
+                       ids_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
                        refresh=False):
-    
     """Func to get dictionaries for converting site's name to it's index.
+        
         If dictionary for data in PATH_TO_DATA has already been compiled, 
         functions just pickle dict out of files.
         
@@ -119,19 +130,19 @@ def prepare_sites_dict(path_to_data,
         with open(sites_dict_file, 'rb') as input_file:
             sites_dict = pickle.load(input_file)
             
-        with open(inds_dict_file, 'rb') as input_file:
+        with open(ids_dict_file, 'rb') as input_file:
             id_to_site_dict = pickle.load(input_file)
             
     except FileNotFoundError:
-        sites_dict, id_to_site_dict = get_dict()
+        sites_dict, id_to_site_dict = get_dict(path_to_data, sites_dict_file, ids_dict_file)
         
     if refresh:
-        sites_dict, id_to_site_dict = get_dict()
+        sites_dict, id_to_site_dict = get_dict(path_to_data, sites_dict_file, ids_dict_file)
         
     return sites_dict, id_to_site_dict
 
 
-# In[4]:
+# In[159]:
 
 
 def to_csr(X):
@@ -142,17 +153,17 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[17]:
+# In[175]:
 
 
-def prepare_train_set_with_fe(path_to_csv_files, site_freq_path, #feature_names,
-                                    session_length=10, window_size=10,
-                                    refresh_dict=False):
+def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
+                              session_length=10, window_size=10,
+                              refresh_dict=False, return_table=False):
     """Func for partition users logs to desireable num of sessions
         and prepare training dataset with sessions of particular users.
     """
     
-    full_df = pd.DataFrame()
+    df = pd.DataFrame()
     
     sites_dict, _ = prepare_sites_dict(path_to_csv_files,
                                        sites_dict_file=site_freq_path,
@@ -163,64 +174,82 @@ def prepare_train_set_with_fe(path_to_csv_files, site_freq_path, #feature_names,
         temp_df = pd.read_csv(file, parse_dates=['timestamp'])
         temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
         
-        # Convert with sliding window
+        '''Feature generating with sliding window'''
         windptr = range(0, temp_df.shape[0], window_size)
-        sessions = []
-        timedeltas = []
+        sessions = []  # Sites in a session row
+        timedeltas = []  # Time of the session
+        uniques = []  # Number of unique sites in the session
+        start_hours = []  # Session start hour
+        days_of_week = []  # Session start weekday
         for ptr in windptr:
             sess = temp_df.site_id.values[ptr:ptr+session_length]
-            # All incomplete sessions are being completed by zeros
-            if len(sess) < session_length:
+            if len(sess) < session_length:  # All incomplete session windows are being completed by zeros
                 sess = np.r_[sess, [0] * (session_length - len(sess))]
+                
             sessions = np.r_[sessions, sess]
-            # Num_unique sites in session
-            # Eval timedelta for session
+            
+            uniques.append(len(set(sess)))
+            
             timespan = temp_df.timestamp.values[ptr:ptr+session_length]
             timedeltas.append((timespan[-1] - timespan[0]) / np.timedelta64(1, 's'))
             
-        # Partition user data to sessions
-        sessions = sessions.reshape(-1, session_length)
-        timedeltas = np.asarray(timedeltas).reshape(sessions.shape[0], 1)
+            start_time = timespan[0].astype('datetime64[h]').astype(object)
+            start_hours.append(start_time.hour)
+            
+            days_of_week.append(start_time.weekday())
+            
+        '''Preparing the columns'''
+        sessions = sessions.reshape(-1, session_length)  # Partition user data to sessions
+        timedeltas = np.asarray(timedeltas, dtype=np.int32).reshape(sessions.shape[0], 1)
+        uniques = np.asarray(uniques, dtype=np.int8).reshape(sessions.shape[0], 1)
+        start_hours = np.asarray(start_hours, dtype=np.int8).reshape(sessions.shape[0], 1)
+        days_of_week = np.asarray(days_of_week, dtype=np.int8).reshape(sessions.shape[0], 1)
         
-        # Construct the full dataset, consist of user id's and sessions
-        feature_names = ['site' + str(i) for i in range(1,11)] +                         ['time_diff' + str(j) for j in range(1,10)] +                         ['session_timespan', '#unique_sites', 'start_hour', 
-                         'day_of_week', 'target']
-        temp_df = pd.DataFrame(np.hstack((sessions, timedeltas)),
-                               columns=feature_names)
+        '''Build a full dataset consisting of user id's and sessions'''
+        feature_names = ['site'+ str(x+1) for x in range(session_length)] +                         ['session_timespan', '#unique_sites', 'start_hour', 
+                         'day_of_week']
+        temp_df = pd.DataFrame(np.hstack((sessions, timedeltas, uniques, start_hours, days_of_week)),
+                               columns=feature_names, dtype=np.int32)
         
-        # Find username in the file name
+        '''Find user's id [target feature] in the file name'''
         user_id = re.findall(r'\d+', file)[-1]
         temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
         
-        full_df = full_df.append(temp_df, ignore_index=True)
+        df = df.append(temp_df, ignore_index=True)
         
-        X, y = full_df.iloc[:, :-1].values, full_df.iloc[:, -1].values
-    
-    return X  #to_csr(X), y
+    if return_table:
+        return df
+    else:
+        X_sites, X_add, y = df.iloc[:, :-5].values, df.iloc[:, -5:-1].values, df.iloc[:, -1].values
+        return to_csr(X_sites), X_add, y
 
 
 # **Проверим функцию на игрушечном примере.**
 
-# In[20]:
+# In[180]:
 
 
-prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
+X_sites, X_add, y = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
                           site_freq_path=os.path.join(PATH_TO_DATA, 'site_freq_3users.pkl'),
                           session_length=10,
-                          window_size=5
-                         ).shape
+                          window_size=5,
+                         refresh_dict=True)
 
 
-# In[14]:
+# In[176]:
 
 
-feature_names = ['site' + str(i) for i in range(1,11)] +                 ['time_diff' + str(j) for j in range(1,10)] +                 ['session_timespan', '#unique_sites', 'start_hour', 
-                 'day_of_week', 'target']
 train_data_toy  = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, 
                                                          '3users'), 
                   site_freq_path=os.path.join(PATH_TO_DATA, 
                                               'site_freq_3users.pkl'),
-                  feature_names=feature_names, session_length=10)
+                  session_length=10, refresh_dict=True, return_table=True)
+
+
+# In[177]:
+
+
+train_data_toy
 
 
 # In[5]:
@@ -234,7 +263,7 @@ train_data_toy
 # In[ ]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),\n                                               site_freq_path=os.path.join)")
 
 
 # In[ ]:
