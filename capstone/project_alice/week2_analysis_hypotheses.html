@@ -11895,7 +11895,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[298]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
@@ -11905,6 +11905,7 @@ div#notebook {
 <span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -11938,59 +11939,64 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[280]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="sd">&quot;&quot;&quot;Pull all visited sites from .csv logs to array&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">path_to_data</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]:</span>  <span class="c1"># Exclude header</span>
+                <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>  <span class="c1"># Add to list only sites</span>
+                
+    <span class="sd">&quot;&quot;&quot;Make counted sorted dict with sites and corresponding # of visits (freqency)&quot;&quot;&quot;</span>
+    <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                             <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Make sites dict in form of {&#39;site&#39;: [id, frequency]}&quot;&quot;&quot;</span>
+    <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Make id to site converter&quot;&quot;&quot;</span>
+    <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">id_to_site_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
+
+    <span class="sd">&quot;&quot;&quot;Save dict to file&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">id_to_site_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span>
+
+
 <span class="k">def</span> <span class="nf">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> 
-                       <span class="n">sites_dict_file</span><span class="o">=</span><span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">,</span>
-                       <span class="n">inds_dict_file</span><span class="o">=</span><span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">,</span>
-                       <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                       <span class="n">return_inds_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                       <span class="n">sites_dict_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">),</span>
+                       <span class="n">inds_dict_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">),</span>
+                       <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    
     <span class="sd">&quot;&quot;&quot;Func to get dictionaries for converting site&#39;s name to it&#39;s index.</span>
 <span class="sd">        If dictionary for data in PATH_TO_DATA has already been compiled, </span>
 <span class="sd">        functions just pickle dict out of files.</span>
+<span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
-        <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span> <span class="c1"># UPD deleted &#39;timestamp&#39;</span>
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_data</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing sites dict...&#39;</span><span class="p">):</span>
-            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span>  <span class="c1"># UPD: added usecols</span>
-            <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">full_df</span><span class="o">.</span><span class="n">site</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
-                                 <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>
-            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-            <span class="n">ind_to_sites_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        
-        <span class="c1"># Save dict to file</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">sites_dict_file</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">inds_dict_file</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
-                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ind_to_sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
-            
-        <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
     
+    <span class="c1"># Initial part of the function</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">sites_dict_file</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
             <span class="n">sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>    
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">inds_dict_file</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
-                <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+            <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
             
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
+        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
         
     <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
-        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
+        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
         
-    <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
+    <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span>
 </pre></div>
 
 </div>
@@ -12161,7 +12167,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[198]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">to_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -12179,7 +12185,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[239]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> 
@@ -12233,7 +12239,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[257]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
@@ -12255,7 +12261,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 74.16it/s]
+<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 183.18it/s]
 </pre>
 </div>
 </div>
@@ -12275,7 +12281,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[259]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy_s5_w3</span><span class="p">,</span> <span class="n">y_s5_w3</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
@@ -12297,7 +12303,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 260.40it/s]
+<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 264.11it/s]
 </pre>
 </div>
 </div>
@@ -12308,7 +12314,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[267]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy_s5_w3</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
@@ -12324,7 +12330,7 @@ div#notebook {
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[267]:</div>
+<div class="prompt output_prompt">Out[8]:</div>
 
 
 
@@ -12396,7 +12402,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[269]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">num_users</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">]:</span>
@@ -12432,7 +12438,7 @@ data/site_freq_150users.pkl
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[279]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -12474,22 +12480,16 @@ data/site_freq_150users.pkl
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 15.83it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  9.71it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.16it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 13.16it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  7.23it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  8.51it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  9.63it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.63it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:07&lt;00:00, 17.10it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:11&lt;00:00, 12.95it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:09&lt;00:00, 15.31it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:08&lt;00:00, 17.51it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:16&lt;00:00,  8.89it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:13&lt;00:00, 10.87it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:11&lt;00:00, 12.61it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:10&lt;00:00, 14.34it/s]
+<pre>Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 15.56it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.64it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.48it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 13.50it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  6.82it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  8.36it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  9.65it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.20it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:07&lt;00:00, 17.71it/s]
+Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 </pre>
 </div>
 </div>
@@ -12499,10 +12499,41 @@ Preparing training set...: 100%|██████████| 150/150 [00:10&l
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 1min 28s, sys: 16.4 s, total: 1min 45s
-Wall time: 1min 42s
-</pre>
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;timed exec&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-5-91a1b50d3a4b&gt;</span> in <span class="ansi-cyan-fg">prepare_sparse_train_set_window</span><span class="ansi-blue-fg">(path_to_csv_files, site_freq_path, session_length, window_size, refresh_dict)</span>
+<span class="ansi-green-intense-fg ansi-bold">     24</span>             <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>sess<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&lt;</span> session_length<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     25</span>                 sess <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>r_<span class="ansi-blue-fg">[</span>sess<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">*</span> <span class="ansi-blue-fg">(</span>session_length <span class="ansi-blue-fg">-</span> len<span class="ansi-blue-fg">(</span>sess<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-fg">---&gt; 26</span><span class="ansi-red-fg">             </span>sessions <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>r_<span class="ansi-blue-fg">[</span>sessions<span class="ansi-blue-fg">,</span> sess<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">     27</span> 
+<span class="ansi-green-intense-fg ansi-bold">     28</span>         <span class="ansi-red-fg"># Partition user data to sessions</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/mldaspec/lib/python3.7/site-packages/numpy/lib/index_tricks.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, key)</span>
+<span class="ansi-green-intense-fg ansi-bold">    328</span> 
+<span class="ansi-green-intense-fg ansi-bold">    329</span>         <span class="ansi-red-fg"># Ensure that scalars won&#39;t up-cast unless warranted</span>
+<span class="ansi-green-fg">--&gt; 330</span><span class="ansi-red-fg">         </span>final_dtype <span class="ansi-blue-fg">=</span> find_common_type<span class="ansi-blue-fg">(</span>arraytypes<span class="ansi-blue-fg">,</span> scalartypes<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    331</span>         <span class="ansi-green-fg">if</span> final_dtype <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    332</span>             <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> scalars<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/mldaspec/lib/python3.7/site-packages/numpy/core/numerictypes.py</span> in <span class="ansi-cyan-fg">find_common_type</span><span class="ansi-blue-fg">(array_types, scalar_types)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1002</span>     scalar_types <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>dtype<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> scalar_types<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1003</span> 
+<span class="ansi-green-fg">-&gt; 1004</span><span class="ansi-red-fg">     </span>maxa <span class="ansi-blue-fg">=</span> _can_coerce_all<span class="ansi-blue-fg">(</span>array_types<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1005</span>     maxsc <span class="ansi-blue-fg">=</span> _can_coerce_all<span class="ansi-blue-fg">(</span>scalar_types<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1006</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/mldaspec/lib/python3.7/site-packages/numpy/core/numerictypes.py</span> in <span class="ansi-cyan-fg">_can_coerce_all</span><span class="ansi-blue-fg">(dtypelist, start)</span>
+<span class="ansi-green-intense-fg ansi-bold">    933</span>     thisind <span class="ansi-blue-fg">=</span> start
+<span class="ansi-green-intense-fg ansi-bold">    934</span>     <span class="ansi-green-fg">while</span> thisind <span class="ansi-blue-fg">&lt;</span> __len_test_types<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">         </span>newdtype <span class="ansi-blue-fg">=</span> dtype<span class="ansi-blue-fg">(</span>__test_types<span class="ansi-blue-fg">[</span>thisind<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>         numcoerce <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>x <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> dtypelist <span class="ansi-green-fg">if</span> newdtype <span class="ansi-blue-fg">&gt;=</span> x<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    937</span>         <span class="ansi-green-fg">if</span> numcoerce <span class="ansi-blue-fg">==</span> N<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
 </div>
 </div>
 

@@ -33,7 +33,7 @@
 
 # ## Часть 1. Построение признаков
 
-# In[1]:
+# In[57]:
 
 
 from __future__ import division, print_function
@@ -42,7 +42,8 @@ import warnings
 warnings.filterwarnings('ignore')
 from glob import glob
 import os
-from tqdm import tqdm_notebook
+from collections import Counter
+from tqdm import tqdm
 import numpy as np
 import pandas as pd
 pd.set_option('display.max.columns', 25)
@@ -69,59 +70,152 @@ PATH_TO_DATA = 'data'
 # 
 # Функция должна возвращать новый DataFrame (как возвращала функция *prepare_train_set*), только признаков должно быть на 4 больше. Порядок, в котором добавляются признаки: *site1*, ... *site10*, *session_timespan*, *#unique_sites*, *start_hour*, *day_of_week* и *user_id* (это видно и чуть ниже по тому, как функция вызывается).
 
-# In[ ]:
+# In[78]:
 
 
-from collections import Counter
+get_ipython().run_line_magic('load_ext', 'memory_profiler')
+
+
+# In[79]:
+
+
+get_ipython().run_line_magic('memit', "path_to_data = 'data/150users/'")
+
+
+# In[81]:
+
+
+get_ipython().run_cell_magic('memit', '', "full_df = pd.DataFrame()\nfor file in glob(path_to_data + '/*'):\n    temp_df = pd.read_csv(file)\n    full_df = full_df.append(temp_df, ignore_index=True)\n\nsites_freq_list = sorted(Counter(full_df.site).items(), \n                         key=lambda x: x[1], reverse=True)\nsites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))\nind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())\nind_to_sites_dict[0] = 'no_site'")
+
+
+# In[82]:
+
+
+get_ipython().run_cell_magic('memit', '', "arr = []\nfor file in glob(path_to_data + '/*'):\n    with open(file) as f:\n        for line in f.readlines()[1:]:  # Exclude header\n            arr.append(line.split(',')[1].strip())  # Add to list only sites\n\nsites_freq_list = sorted(Counter(arr).items(), \n                         key=lambda x: x[1], reverse=True)\n\nsites_dict = dict(\n    (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)\n)\n\nind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())\nind_to_sites_dict[0] = 'no_site'")
+
+
+# In[71]:
+
+
+sites_freq_list
+
+
+# In[8]:
+
+
+def get_dict():
+    arr = []
+    """Pull all visited sites from .csv logs to array"""
+    for file in glob(path_to_data + '/*'):
+        with open(file) as f:
+            for line in f.readlines()[1:]:  # Exclude header
+                arr.append(line.split(',')[1].strip())  # Add to list only sites
+                
+    """Make counted sorted dict with sites and corresponding # of visits (freqency)"""
+    sites_freq_list = sorted(Counter(arr).items(), 
+                             key=lambda x: x[1], reverse=True)
+    """Make sites dict in form of {'site': [id, frequency]}"""
+    sites_dict = dict(
+        (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)
+    )
+    """Make id to site converter"""
+    id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
+    id_to_site_dict[0] = 'no_site'
+
+    """Save dict to file"""
+    with open(sites_dict_file, 'wb') as fout:
+        pickle.dump(sites_dict, fout)
+
+    with open(inds_dict_file, 'wb') as fout:
+        pickle.dump(id_to_site_dict, fout)
+
+    return sites_dict, id_to_site_dict
+
+
 def prepare_sites_dict(path_to_data, 
-                       sites_dict_file='sites_dict.pkl',
-                       inds_dict_file='ind_to_sites_dict.pkl',
-                       refresh=False,
-                       return_inds_dict=False):
+                       sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
+                       inds_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
+                       refresh=False):
+    
     """Func to get dictionaries for converting site's name to it's index.
         If dictionary for data in PATH_TO_DATA has already been compiled, 
         functions just pickle dict out of files.
-    """
-    def get_dict():
-        full_df = pd.DataFrame(columns=['site']) # UPD deleted 'timestamp'
-        for file in tqdm(glob(path_to_data + '/*'), desc='Preparing sites dict...'):
-            temp_df = pd.read_csv(file, usecols=['site'])  # UPD: added usecols
-            full_df = full_df.append(temp_df, ignore_index=True)
-
-        sites_freq_list = sorted(Counter(full_df.site).items(), 
-                                 key=lambda x: x[1], reverse=True)
-        sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
-        if return_inds_dict:
-            ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
-            ind_to_sites_dict[0] = 'no_site'
-        else:
-            ind_to_sites_dict = {}
         
-        # Save dict to file
-        with open(os.path.join(PATH_TO_DATA, sites_dict_file), 'wb') as fout:
-            pickle.dump(sites_dict, fout)
-        if return_inds_dict:
-            with open(os.path.join(PATH_TO_DATA, inds_dict_file), 'wb') as fout:
-                pickle.dump(ind_to_sites_dict, fout)
-            
-        return sites_dict, ind_to_sites_dict
+    """
     
+    # Initial part of the function
     try:
-        with open(os.path.join(PATH_TO_DATA, sites_dict_file), 'rb') as input_file:
+        with open(sites_dict_file, 'rb') as input_file:
             sites_dict = pickle.load(input_file)
-        if return_inds_dict:    
-            with open(os.path.join(PATH_TO_DATA, inds_dict_file), 'rb') as input_file:
-                ind_to_sites_dict = pickle.load(input_file)
-        else:
-            ind_to_sites_dict = {}
+            
+        with open(inds_dict_file, 'rb') as input_file:
+            id_to_site_dict = pickle.load(input_file)
             
     except FileNotFoundError:
-        sites_dict, ind_to_sites_dict = get_dict()
+        sites_dict, id_to_site_dict = get_dict()
         
     if refresh:
-        sites_dict, ind_to_sites_dict = get_dict()
+        sites_dict, id_to_site_dict = get_dict()
         
-    return sites_dict, ind_to_sites_dict
+    return sites_dict, id_to_site_dict
+
+
+# In[ ]:
+
+
+def to_csr(X):
+    session_length = X.shape[1]
+    data = [1] * X.ravel().shape[0]
+    indices = X.ravel()
+    indptr = range(0, X.ravel().shape[0] + session_length, session_length)
+    return csr_matrix((data, indices, indptr))[:, 1:]
+
+
+# In[ ]:
+
+
+def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path, 
+                                    session_length=10, window_size=10,
+                                    refresh_dict=False):
+    """Func for partition users logs to desireable num of sessions
+        and prepare training dataset with sessions of particular users.
+    
+    """
+    full_df = pd.DataFrame()
+    
+    sites_dict, _ = prepare_sites_dict(path_to_csv_files,
+                                       sites_dict_file=site_freq_path,
+                                       refresh=refresh_dict)
+        
+    for file in tqdm(glob(path_to_csv_files + '/*'), desc='Preparing training set...'):
+        temp_df = pd.read_csv(file, usecols=['site'])  # UPD: deleted parse_dates, added usecols
+        temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
+        
+        # Convert with sliding window
+        windptr = range(0, temp_df.shape[0], window_size)
+        sessions = []
+        for ptr in windptr:
+            sess = temp_df.site_id.values[ptr:ptr+session_length]
+            # All incomplete sessions are being completed by zeros
+            if len(sess) < session_length:
+                sess = np.r_[sess, [0] * (session_length - len(sess))]
+            sessions = np.r_[sessions, sess]
+            
+        # Partition user data to sessions
+        sessions = sessions.reshape(-1, session_length)
+        
+        # Construct the full dataset, consist of user id's and sessions
+        temp_df = pd.DataFrame(sessions,
+                       columns=['site'+ str(x+1) for x in range(session_length)])
+        # Find username in the file name
+        user_id = re.findall(r'\d+', file)[-1]
+        temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
+        
+        full_df = full_df.append(temp_df, ignore_index=True)
+        
+        X, y = full_df.iloc[:, :-1].values, full_df.iloc[:, -1].values
+    
+    return to_csr(X), y
 
 
 # In[3]:
@@ -129,7 +223,7 @@ def prepare_sites_dict(path_to_data,
 
 def prepare_train_set_with_fe(path_to_csv_files, site_freq_path, feature_names,
                                     session_length=10, window_size=10):
-    
+    pass
 
 
 # **Проверим функцию на игрушечном примере.**

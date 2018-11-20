@@ -276,12 +276,6 @@ user31_data.head()
 # (7600 + (7 - 7600 % 7)) / 7 == 1086.0
 # Number of elements to fill with zeros to make reshape possible is:
 # (7 - 7600 % 7) == 2
-# In[8]:
-
-
-glob('data/3users'+'/*')
-
-
 # In[9]:
 
 

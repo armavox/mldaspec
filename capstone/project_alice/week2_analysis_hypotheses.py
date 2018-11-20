@@ -95,7 +95,7 @@
 # - Замеряйте время выполнения итераций цикла с помощью *time* из *time*, *tqdm* из *tqdm* или с помощью виджета [log_progress](https://github.com/alexanderkuk/log-progress) ([статья](https://habrahabr.ru/post/276725/) о нем на Хабрахабре)
 # - 150 файлов из *capstone_websites_data/150users/* должны обрабатываться за несколько секунд (в зависимости от входных параметров). Если дольше – не страшно, но знайте, что функцию можно ускорить. 
 
-# In[298]:
+# In[1]:
 
 
 from __future__ import division, print_function
@@ -105,6 +105,7 @@ warnings.filterwarnings('ignore')
 from glob import glob
 import os
 import re
+from collections import Counter
 import pickle
 from tqdm import tqdm
 import numpy as np
@@ -124,59 +125,64 @@ plt.rcParams['patch.force_edgecolor'] = True
 PATH_TO_DATA = 'data'
 
 
-# In[280]:
+# In[3]:
 
 
-from collections import Counter
+def get_dict():
+    arr = []
+    """Pull all visited sites from .csv logs to array"""
+    for file in glob(path_to_data + '/*'):
+        with open(file) as f:
+            for line in f.readlines()[1:]:  # Exclude header
+                arr.append(line.split(',')[1].strip())  # Add to list only sites
+                
+    """Make counted sorted dict with sites and corresponding # of visits (freqency)"""
+    sites_freq_list = sorted(Counter(arr).items(), 
+                             key=lambda x: x[1], reverse=True)
+    """Make sites dict in form of {'site': [id, frequency]}"""
+    sites_dict = dict(
+        (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)
+    )
+    """Make id to site converter"""
+    id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
+    id_to_site_dict[0] = 'no_site'
+
+    """Save dict to file"""
+    with open(sites_dict_file, 'wb') as fout:
+        pickle.dump(sites_dict, fout)
+
+    with open(inds_dict_file, 'wb') as fout:
+        pickle.dump(id_to_site_dict, fout)
+
+    return sites_dict, id_to_site_dict
+
+
 def prepare_sites_dict(path_to_data, 
-                       sites_dict_file='sites_dict.pkl',
-                       inds_dict_file='ind_to_sites_dict.pkl',
-                       refresh=False,
-                       return_inds_dict=False):
+                       sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
+                       inds_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
+                       refresh=False):
+    
     """Func to get dictionaries for converting site's name to it's index.
         If dictionary for data in PATH_TO_DATA has already been compiled, 
         functions just pickle dict out of files.
-    """
-    def get_dict():
-        full_df = pd.DataFrame(columns=['site']) # UPD deleted 'timestamp'
-        for file in tqdm(glob(path_to_data + '/*'), desc='Preparing sites dict...'):
-            temp_df = pd.read_csv(file, usecols=['site'])  # UPD: added usecols
-            full_df = full_df.append(temp_df, ignore_index=True)
-
-        sites_freq_list = sorted(Counter(full_df.site).items(), 
-                                 key=lambda x: x[1], reverse=True)
-        sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
-        if return_inds_dict:
-            ind_to_sites_dict = dict((val[0], key) for key, val in sites_dict.items())
-            ind_to_sites_dict[0] = 'no_site'
-        else:
-            ind_to_sites_dict = {}
         
-        # Save dict to file
-        with open(os.path.join(PATH_TO_DATA, sites_dict_file), 'wb') as fout:
-            pickle.dump(sites_dict, fout)
-        if return_inds_dict:
-            with open(os.path.join(PATH_TO_DATA, inds_dict_file), 'wb') as fout:
-                pickle.dump(ind_to_sites_dict, fout)
-            
-        return sites_dict, ind_to_sites_dict
+    """
     
+    # Initial part of the function
     try:
-        with open(os.path.join(PATH_TO_DATA, sites_dict_file), 'rb') as input_file:
+        with open(sites_dict_file, 'rb') as input_file:
             sites_dict = pickle.load(input_file)
-        if return_inds_dict:    
-            with open(os.path.join(PATH_TO_DATA, inds_dict_file), 'rb') as input_file:
-                ind_to_sites_dict = pickle.load(input_file)
-        else:
-            ind_to_sites_dict = {}
+            
+        with open(inds_dict_file, 'rb') as input_file:
+            id_to_site_dict = pickle.load(input_file)
             
     except FileNotFoundError:
-        sites_dict, ind_to_sites_dict = get_dict()
+        sites_dict, id_to_site_dict = get_dict()
         
     if refresh:
-        sites_dict, ind_to_sites_dict = get_dict()
+        sites_dict, id_to_site_dict = get_dict()
         
-    return sites_dict, ind_to_sites_dict
+    return sites_dict, id_to_site_dict
 
 
 # In[207]:
@@ -223,7 +229,7 @@ session = session.reshape(-1, sess_len)
 session
 
 
-# In[198]:
+# In[4]:
 
 
 def to_csr(X):
@@ -234,7 +240,7 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[239]:
+# In[5]:
 
 
 def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path, 
@@ -281,7 +287,7 @@ def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path,
     return to_csr(X), y
 
 
-# In[257]:
+# In[6]:
 
 
 X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
@@ -291,7 +297,7 @@ X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'),
 
 # **Примените полученную функцию с параметрами *session_length=5* и *window_size=3* к игрушечному примеру. Убедитесь, что все работает как надо.**
 
-# In[259]:
+# In[7]:
 
 
 X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
@@ -299,7 +305,7 @@ X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA
                                        session_length=5, window_size=3, refresh_dict=False)
 
 
-# In[267]:
+# In[8]:
 
 
 X_toy_s5_w3.todense()
@@ -317,7 +323,7 @@ y_s5_w3
 # 
 # **На моем ноутбуке этот участок кода отработал за 26 секунд, хотя понятно, что все зависит от эффективности реализации функции *prepare_sparse_train_set_window* и мощности используемого железа. И честно говоря, моя первая реализация была намного менее эффективной (34 минуты), так что тут у Вас есть возможность оптимизировать свой код.**
 
-# In[269]:
+# In[9]:
 
 
 for num_users in [10, 150]:
@@ -325,7 +331,7 @@ for num_users in [10, 150]:
     print(os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl'))
 
 
-# In[279]:
+# In[10]:
 
 
 get_ipython().run_cell_magic('time', '', "import itertools\n\ndata_lengths = []\n\nfor num_users in [10, 150]:\n    path_to_csv = os.path.join(PATH_TO_DATA, f'{num_users}users')\n    path_to_pickle = os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl')\n    for window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n        if window_size <= session_length and (window_size, session_length) != (10, 10):\n            X_sparse, y = prepare_sparse_train_set_window(path_to_csv,\n                                                          path_to_pickle,\n                                                          session_length=session_length,\n                                                          window_size=window_size,\n                                                          refresh_dict=False)\n            X_fout = os.path.join(PATH_TO_DATA, f'X_sparse_{num_users}users_s{session_length}_w{window_size}.pkl')\n            y_fout = os.path.join(PATH_TO_DATA, f'y_{num_users}users_s{session_length}_w{window_size}.pkl')\n            with open(X_fout, 'wb') as fout:\n                pickle.dump(X_sparse, fout)\n            with open(y_fout, 'wb') as fout:\n                pickle.dump(y, fout)\n            \n            data_lengths.append(X_sparse.shape[0])")
