@@ -373,14 +373,16 @@ plt.title('Распределение количества сессий');
 
 # **2. Постройте гистограмму распределения числа уникальных сайтов в сессии (*#unique_sites*). Сделайте гистограмму цвета *aqua*, подпишите оси по-русски.**
 
-# In[98]:
+# В случаях, когда уникальные значения дискретны и их количество невелико, для подсчета количества сессий по каждому значению удобнее использовать `seaborn.countplot()`
+
+# In[351]:
 
 
 hist_data = train_data_10users['#unique_sites']
-plt.hist(hist_data, color='aqua')
-plt.grid(True, alpha=.2)
-plt.xlabel('Число уникальных сайтов в сессии')
-plt.ylabel('Количество сессий')
+s = sns.countplot(hist_data, color='aqua', zorder=2)
+s.set_xlabel('Число уникальных сайтов в сессии')
+s.set_ylabel('Количество сессий')
+plt.grid(True, alpha=.2, zorder=0, axis='y')
 plt.title('Распределение числа\nуникальных сайтов в сессиях');
 
 
@@ -395,17 +397,20 @@ color_dict = dict(
 )
 
 
-# In[305]:
+# In[354]:
 
 
 import matplotlib.cm as cm
 fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
 colors = cm.rainbow_r(np.linspace(0, 1, 10))
-for idx, (user, sub_df) in enumerate(pd.groupby(train_data_10users, 'user_id')): 
-    s = sns.countplot(sub_df['#unique_sites'], color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user)
+for idx, (user, sub_df) in enumerate(pd.groupby(train_data_10users, 'user_id')):
+    s = sns.countplot(sub_df['#unique_sites'], color=color_dict[user], saturation=.4,
+                      ax=ax[idx//4, idx%4], label=user, zorder=2)
     s.set_xlabel('Число уникальных сайтов в сессии')
     s.set_ylabel('Количество сессий')
+    ax[idx//4, idx%4].grid(True, alpha=.2, zorder=0, axis='y')
     s.legend()
+    
     
 fig.suptitle('Распределения количества уникальных сайтов в сессии для всех пользователей', y=1.03,
              fontsize=16)
@@ -420,26 +425,29 @@ fig.tight_layout();
 train_data_10users['start_hour'].unique()
 
 
-# In[291]:
+# In[353]:
 
 
 hist_data = train_data_10users['start_hour']
-plt.hist(hist_data, bins=16, color='darkgreen', align='left')
-plt.xlabel('Час начала сессии')
-plt.ylabel('Количество сессий')
+s = sns.countplot(hist_data, color='darkgreen', saturation=1, zorder=2)
+s.set_xlabel('Час начала сессии')
+s.set_ylabel('Количество сессий')
+plt.grid(True, alpha=.2, zorder=0, axis='y')
 plt.title('Распределение времени начала сессий');
 
 
 # **5. Постройте гистограммы распределения часа начала сессии (*start_hour*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите оси по-русски в каждой из 10 гистограмм.**
 
-# In[302]:
+# In[355]:
 
 
 import matplotlib.cm as cm
 fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
 colors = cm.Greens(np.linspace(0, 1, 12))
 for idx, (user, sub_df) in enumerate(pd.groupby(train_data_10users, 'user_id')):
-    s = sns.countplot(sub_df.start_hour, color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user)
+    s = sns.countplot(sub_df.start_hour, color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user,
+                      zorder=2)
+    ax[idx//4, idx%4].grid(True, alpha=.2, zorder=0, axis='y')
     s.set_xlabel('Час начала сессии')
     s.set_ylabel('Количество сессий')
     s.legend()
@@ -457,11 +465,12 @@ fig.tight_layout();
 import seaborn as sns
 
 
-# In[249]:
+# In[356]:
 
 
 hist_data = train_data_10users['day_of_week']
-s = sns.countplot(hist_data, color='sienna')
+s = sns.countplot(hist_data, color='sienna', zorder=2)
+plt.grid(True, alpha=.2, zorder=0, axis='y')
 s.set_xlabel('День недели')
 s.set_ylabel('Количество сессий')
 s.set_xticklabels(['Пн','Вт','Ср','Чт','Пт','Сб','Вс'])
@@ -470,14 +479,16 @@ s.set_title('Распределение сессий по дням недели'
 
 # **7. Постройте гистограммы распределения дня недели, в который началась сессия (*day_of_week*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Измените метки по оси *X* на ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] – метод *set_xticklabels*. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите по-русски название каждой из 10 гистограмм.**
 
-# In[301]:
+# In[357]:
 
 
 fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
 
 # как вариант, можно и по-другому
-for idx, (user, sub_df) in  enumerate(pd.groupby(train_data_10users, 'user_id')): 
-    s = sns.countplot(sub_df.day_of_week, color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user)
+for idx, (user, sub_df) in  enumerate(pd.groupby(train_data_10users, 'user_id')):
+    s = sns.countplot(sub_df.day_of_week, color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user,
+                      zorder=2)
+    ax[idx//4, idx%4].grid(True, alpha=.2, zorder=0, axis='y')
     s.set_xlabel('День недели')
     s.set_ylabel('Количество сессий')
     s.legend()
