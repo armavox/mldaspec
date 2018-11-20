@@ -11887,12 +11887,74 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<span class="k">def</span> <span class="nf">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> 
+                       <span class="n">sites_dict_file</span><span class="o">=</span><span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">,</span>
+                       <span class="n">inds_dict_file</span><span class="o">=</span><span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">,</span>
+                       <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">return_inds_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Func to get dictionaries for converting site&#39;s name to it&#39;s index.</span>
+<span class="sd">        If dictionary for data in PATH_TO_DATA has already been compiled, </span>
+<span class="sd">        functions just pickle dict out of files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
+        <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span> <span class="c1"># UPD deleted &#39;timestamp&#39;</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_data</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing sites dict...&#39;</span><span class="p">):</span>
+            <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span>  <span class="c1"># UPD: added usecols</span>
+            <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">full_df</span><span class="o">.</span><span class="n">site</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                                 <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">ind_to_sites_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># Save dict to file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">sites_dict_file</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">inds_dict_file</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ind_to_sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">sites_dict_file</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+            <span class="n">sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_inds_dict</span><span class="p">:</span>    
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">inds_dict_file</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+                <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
+        
+    <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
+        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
+        
+    <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">ind_to_sites_dict</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_train_set_with_fe</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">,</span>
                                     <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+    
 </pre></div>
 
 </div>
@@ -11943,10 +12005,10 @@ div#notebook {
 
  
  
-<div id="e1dbd807-0252-4983-a5d3-f9fb0b88fbb6"></div>
+<div id="59d6de19-f833-408a-b391-ccfa4cdabd20"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#e1dbd807-0252-4983-a5d3-f9fb0b88fbb6');
+var element = $('#59d6de19-f833-408a-b391-ccfa4cdabd20');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "ff7b565cb61c4c88a22bbd9c6e61210d"}
