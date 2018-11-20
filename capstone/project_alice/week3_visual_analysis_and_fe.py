@@ -33,7 +33,7 @@
 
 # ## Часть 1. Построение признаков
 
-# In[1]:
+# In[54]:
 
 
 from __future__ import division, print_function
@@ -80,7 +80,7 @@ t = (t.astype('datetime64[h]'))
 t.astype(object).weekday()
 
 
-# In[108]:
+# In[4]:
 
 
 def get_dict(path_to_data, sites_dict_file, ids_dict_file):
@@ -142,7 +142,7 @@ def prepare_sites_dict(path_to_data, sites_dict_file=os.path.join(PATH_TO_DATA, 
     return sites_dict, id_to_site_dict
 
 
-# In[159]:
+# In[5]:
 
 
 def to_csr(X):
@@ -153,7 +153,7 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[175]:
+# In[6]:
 
 
 def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
@@ -226,27 +226,25 @@ def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
 
 # **Проверим функцию на игрушечном примере.**
 
-# In[180]:
+# In[7]:
 
 
 X_sites, X_add, y = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
                           site_freq_path=os.path.join(PATH_TO_DATA, 'site_freq_3users.pkl'),
                           session_length=10,
                           window_size=5,
-                         refresh_dict=True)
+                          refresh_dict=True)
 
 
-# In[176]:
+# In[8]:
 
 
-train_data_toy  = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, 
-                                                         '3users'), 
-                  site_freq_path=os.path.join(PATH_TO_DATA, 
-                                              'site_freq_3users.pkl'),
+train_data_toy  = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
+                  site_freq_path=os.path.join(PATH_TO_DATA, 'site_freq_3users.pkl'),
                   session_length=10, refresh_dict=True, return_table=True)
 
 
-# In[177]:
+# In[9]:
 
 
 train_data_toy
@@ -260,13 +258,13 @@ train_data_toy
 
 # **Примените функцию *prepare_train_set_with_fe* к данным по 10 пользователям, укажите *session_length*=10.**
 
-# In[ ]:
+# In[11]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),\n                                               site_freq_path=os.path.join)")
+get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),\n                                               os.path.join(PATH_TO_DATA, 'site_freq_10users.pkl'),\n                                               return_table=True)")
 
 
-# In[ ]:
+# In[14]:
 
 
 train_data_10users.head()
@@ -274,22 +272,22 @@ train_data_10users.head()
 
 # **Примените функцию *prepare_train_set_with_fe* к данным по 150 пользователям, укажите *session_length*=10.**
 
-# In[ ]:
+# In[15]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_150users = prepare_train_set_with_fe  ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', "train_data_150users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'),\n                                                os.path.join(PATH_TO_DATA, 'site_freq_150users.pkl'),\n                                                return_table=True)")
 
 
 # **Сохраните в pickle-файлы признаки *session_timespan*, *#unique_sites*, *start_hour* и *day_of_week* для 10 и 150 пользователей.**
 
-# In[ ]:
+# In[16]:
 
 
-new_features_10users = ''' ВАШ КОД ЗДЕСЬ '''
-new_features_150users = ''' ВАШ КОД ЗДЕСЬ '''
+new_features_10users = train_data_10users.iloc[:, -5:-1]
+new_features_150users = train_data_150users.iloc[:, -5:-1]
 
 
-# In[ ]:
+# In[18]:
 
 
 with open(os.path.join(PATH_TO_DATA, 
@@ -302,49 +300,50 @@ with open(os.path.join(PATH_TO_DATA,
 
 # **<font color='red'>Вопрос 1. </font> Выведите медианную продолжительность сессии (*session_timespan*) для сессий 10 пользователей.**
 
-# In[ ]:
+# In[35]:
 
 
-''' ВАШ КОД ЗДЕСЬ ''' 
+new_features_10users.describe().astype(int).loc['50%']['session_timespan']
 
 
 # **<font color='red'>Вопрос 2. </font> Выведите медианный день недели, в который началась сессия, для сессий 10 пользователей.**
 
-# In[ ]:
+# In[38]:
 
 
-''' ВАШ КОД ЗДЕСЬ ''' 
+print('2 is Wednesday')
+new_features_10users.describe().astype(int).loc['50%']['day_of_week']
 
 
 # **<font color='red'>Вопрос 3. </font>Выведите медианный час начала сессии для сессий 150 пользователей.**
 
-# In[ ]:
+# In[41]:
 
 
-''' ВАШ КОД ЗДЕСЬ ''' 
+new_features_150users.describe().astype(int).loc['50%']['start_hour']
 
 
 # **<font color='red'>Вопрос 4. </font>Выведите медианное значение числа уникальных сайтов в сессиях 150 пользователей.**
 
-# In[ ]:
+# In[44]:
 
 
-''' ВАШ КОД ЗДЕСЬ ''' 
+new_features_150users.describe().astype(int).loc['50%']['#unique_sites']
 
 
 # ## Часть 2. Визуальный анализ данных
 
 # **Забавы ради, потехи для дадим пользователям имена и ассоциируем с ними цвета.**
 
-# In[ ]:
+# In[48]:
 
 
 id_name_dict = {128: 'Mary-Kate', 39: 'Ashley', 207: 'Lindsey', 127: 'Naomi', 237: 'Avril',
                33: 'Bob', 50: 'Bill', 31: 'John', 100: 'Dick', 241: 'Ed'}
-train_data_10users['target'] = train_data_10users['target'].map(id_name_dict)
+train_data_10users['user_id'] = train_data_10users['user_id'].map(id_name_dict)
 
 
-# In[ ]:
+# In[49]:
 
 
 color_dic = {'Mary-Kate': 'pink', 'Ashley': 'darkviolet', 'Lindsey':'blueviolet', 
@@ -353,72 +352,140 @@ color_dic = {'Mary-Kate': 'pink', 'Ashley': 'darkviolet', 'Lindsey':'blueviolet'
              'Dick': 'slategrey', 'Ed':'brown'}
 
 
+# In[51]:
+
+
+train_data_10users.head()
+
+
 # **1. Постройте гистограмму распределения длины сессии в секундах (*session_timespan*). Ограничьте по *x* значением 200 (иначе слишком тяжелый хвост). Сделайте гистограмму цвета *darkviolet*, подпишите оси по-русски.**
 
-# In[ ]:
+# In[85]:
 
 
-train_data_10users['session_timespan']  ''' ВАШ КОД ЗДЕСЬ '''
+hist_data = train_data_10users['session_timespan']
+plt.hist(hist_data, bins=50, range=(0,200), color='darkviolet')
+plt.grid(True, alpha=.2)
+plt.xlabel('Длина сессии, с')
+plt.ylabel('Количество сессий')
+plt.title('Распределение количества сессий');
 
 
 # **2. Постройте гистограмму распределения числа уникальных сайтов в сессии (*#unique_sites*). Сделайте гистограмму цвета *aqua*, подпишите оси по-русски.**
 
-# In[ ]:
+# In[98]:
 
 
-train_data_10users['#unique_sites']  ''' ВАШ КОД ЗДЕСЬ '''
+hist_data = train_data_10users['#unique_sites']
+plt.hist(hist_data, color='aqua')
+plt.grid(True, alpha=.2)
+plt.xlabel('Число уникальных сайтов в сессии')
+plt.ylabel('Количество сессий')
+plt.title('Распределение числа\nуникальных сайтов в сессиях');
 
 
 # **3. Постройте гистограммы распределения числа уникальных сайтов в сессии (*#unique_sites*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите оси по-русски в каждой из 10 гистограмм.**
 
-# In[ ]:
+# In[202]:
 
 
-fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
+user_list = train_data_10users.user_id.unique()
+color_dict = dict(
+    (user, color) for user, color in zip(user_list, cm.rainbow_r(np.linspace(0, 1, len(user_list))))
+)
 
-# как вариант, можно и по-другому
-for idx, (user, sub_df) in  enumerate(pd.groupby(train_data_10users, 'user_id')): 
-     ''' ВАШ КОД ЗДЕСЬ '''
+
+# In[305]:
+
+
+import matplotlib.cm as cm
+fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
+colors = cm.rainbow_r(np.linspace(0, 1, 10))
+for idx, (user, sub_df) in enumerate(pd.groupby(train_data_10users, 'user_id')): 
+    s = sns.countplot(sub_df['#unique_sites'], color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user)
+    s.set_xlabel('Число уникальных сайтов в сессии')
+    s.set_ylabel('Количество сессий')
+    s.legend()
+    
+fig.suptitle('Распределения количества уникальных сайтов в сессии для всех пользователей', y=1.03,
+             fontsize=16)
+fig.tight_layout();
 
 
 # **4. Постройте гистограмму распределения часа начала сессии (*start_hour*). Сделайте гистограмму цвета *darkgreen*, подпишите оси по-русски.**
 
-# In[ ]:
+# In[287]:
 
 
-train_data_10users['start_hour'] ''' ВАШ КОД ЗДЕСЬ '''
+train_data_10users['start_hour'].unique()
+
+
+# In[291]:
+
+
+hist_data = train_data_10users['start_hour']
+plt.hist(hist_data, bins=16, color='darkgreen', align='left')
+plt.xlabel('Час начала сессии')
+plt.ylabel('Количество сессий')
+plt.title('Распределение времени начала сессий');
 
 
 # **5. Постройте гистограммы распределения часа начала сессии (*start_hour*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите оси по-русски в каждой из 10 гистограмм.**
 
-# In[ ]:
+# In[302]:
 
 
-fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
-
-# как вариант, можно и по-другому
-for idx, (user, sub_df) in  enumerate(pd.groupby(train_data_10users, 'user_id')): 
-     ''' ВАШ КОД ЗДЕСЬ '''
+import matplotlib.cm as cm
+fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
+colors = cm.Greens(np.linspace(0, 1, 12))
+for idx, (user, sub_df) in enumerate(pd.groupby(train_data_10users, 'user_id')):
+    s = sns.countplot(sub_df.start_hour, color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user)
+    s.set_xlabel('Час начала сессии')
+    s.set_ylabel('Количество сессий')
+    s.legend()
+    
+fig.suptitle('Распределения времени старта сессии для всех пользователей', y=1.03,
+             fontsize=16)
+fig.tight_layout();
 
 
 # **6. Постройте гистограмму распределения дня недели, в который началась сессия (*day_of_week*). Сделайте гистограмму цвета *sienna*, подпишите оси по-русски.**
 
-# In[ ]:
+# In[231]:
 
 
-train_data_10users['day_of_week'] ''' ВАШ КОД ЗДЕСЬ '''
+import seaborn as sns
+
+
+# In[249]:
+
+
+hist_data = train_data_10users['day_of_week']
+s = sns.countplot(hist_data, color='sienna')
+s.set_xlabel('День недели')
+s.set_ylabel('Количество сессий')
+s.set_xticklabels(['Пн','Вт','Ср','Чт','Пт','Сб','Вс'])
+s.set_title('Распределение сессий по дням недели');
 
 
 # **7. Постройте гистограммы распределения дня недели, в который началась сессия (*day_of_week*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Измените метки по оси *X* на ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] – метод *set_xticklabels*. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите по-русски название каждой из 10 гистограмм.**
 
-# In[ ]:
+# In[301]:
 
 
-fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
+fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
 
 # как вариант, можно и по-другому
 for idx, (user, sub_df) in  enumerate(pd.groupby(train_data_10users, 'user_id')): 
-     ''' ВАШ КОД ЗДЕСЬ '''
+    s = sns.countplot(sub_df.day_of_week, color=color_dict[user], saturation=.4, ax=ax[idx//4, idx%4], label=user)
+    s.set_xlabel('День недели')
+    s.set_ylabel('Количество сессий')
+    s.legend()
+    s.set_xticklabels(['Пн','Вт','Ср','Чт','Пт','Сб','Вс'])
+    s.set_title('Распределение сессий по дням недели', fontsize=10)
+
+fig.suptitle('Распределение сессий по дням недели для каждого пользователя', y=1.03, fontsize=16)
+fig.tight_layout();
 
 
 # **8. Сделайте выводы про каждого пользователя по построенным графикам.**
