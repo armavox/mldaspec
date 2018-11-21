@@ -317,26 +317,27 @@ num_unique_sites = [np.unique(train_df.values[i, :-1]).shape[0]
 # In[18]:
 
 
-pd.Series(num_unique_sites).value_counts()
+import seaborn as sns
 
-
-# In[19]:
-
-
-pd.Series(num_unique_sites).hist();
+s = sns.countplot(num_unique_sites, color='darkslategray', alpha=.4)
+s.set_xlabel('Количество уникальных сайтов за сессию')
+s.set_ylabel('Количество сессий')
+s.grid(True, axis='y', alpha=.2);
 
 
 # **Проверьте с помощью QQ-плота и критерия Шапиро-Уилка, что эта величина распределена нормально**
 
 # **<font color='red'> Вопрос 2. </font>Распределено ли нормально число уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов (согласно критерию Шапиро-Уилка)?**
 
-# In[20]:
+# In[19]:
 
 
 print(stats.shapiro(num_unique_sites))
 fig, ax = plt.subplots(1, 2, figsize=(12,6))
 
-ax[0].hist(num_unique_sites);
+s=sns.countplot(num_unique_sites, color='darkslategray', alpha=.4, ax=ax[0])
+s.set_xlabel('Number unique sites per session');
+
 stats.probplot(num_unique_sites, dist='norm', plot=ax[1], rvalue=True)
 fig.tight_layout();
 
@@ -345,7 +346,7 @@ fig.tight_layout();
 
 # **<font color='red'> Вопрос 3. </font>Каково p-value при проверке описанной гипотезы?**
 
-# In[21]:
+# In[20]:
 
 
 has_two_similar = (np.array(num_unique_sites) < 10).astype('int')
@@ -356,50 +357,54 @@ has_two_similar
 # - $H_0:$ доля сессий с повторяющимися сайтами = 95%. Против альтернативы:
 # - $H_1:$ доля таких сессий больше чем 95%
 
-# In[22]:
+# In[21]:
 
 
 stats.binom_test(has_two_similar.sum(), len(num_unique_sites),
                  p=0.95, alternative='greater')
 
 
-# In[23]:
+# In[22]:
 
 
 import statsmodels.stats.proportion as psts
-psts.proportions_ztest(has_two_similar.sum(), len(has_two_similar), value=0.95,
-                       prop_var=0.95, alternative='larger')
+psts.proportions_ztest(has_two_similar.sum(), len(has_two_similar),
+                       value=0.95, prop_var=0.95, alternative='larger')
 
 
 # **<font color='red'> Вопрос 4. </font>Каков 95% доверительный интервал Уилсона для доли случаев, когда пользователь повторно посетил какой-то сайт (из п. 3)?**
 
-# In[24]:
+# In[23]:
 
 
 wilson_interval = psts.proportion_confint(has_two_similar.sum(), len(has_two_similar),
                                           method='wilson')
-wilson_interval
-
-
-# In[25]:
-
 
 print('{:.4f} {:.4f}'.format(round(wilson_interval[0], 3),
-                                   round(wilson_interval[1], 3)))
+                              round(wilson_interval[1], 3)))
 
 
 # **Постройте распределение частоты посещения сайтов (сколько раз тот или иной сайт попадается в выборке) для сайтов, которые были посещены как минимум 1000 раз.**
 
-# In[26]:
+# In[25]:
 
 
 with open('data/site_freq_10users.pkl', 'rb') as f_in:
     site_freqs = pickle.load(f_in)
 site_freq_df = pd.DataFrame(site_freqs).T
 site_freq_df.columns = (['site_id', 'freq'])
-top_site_freq_df = site_freq_df[site_freq_df.freq >= 1000]
-top_site_freq_df.freq.hist(grid=False)
-plt.title('Гистограмма распределения частоты посещения сайтов\n(сколько раз тот или иной сайт попадается в выборке)', y=1.02);
+top_site_freq_df = site_freq_df[site_freq_df.freq >= 500]
+
+
+# In[26]:
+
+
+plt.figure(figsize=(12,10))
+s = sns.barplot(top_site_freq_df.freq, top_site_freq_df.index, color='tomato', orient='h')
+# s.set_xticklabels(s.get_xticklabels(), rotation=90)
+s.set_title('Распределение частоты посещения сайтов')
+s.set_xlabel('Количество сессий')
+s.grid(True, axis='x', alpha=.2);
 
 
 # **Постройте 95% доверительный интервал для средней частоты появления сайта в выборке (во всей, уже не только для тех сайтов, что были посещены как минимум 1000 раз) на основе bootstrap. Используйте столько же bootstrap-подвыборок, сколько сайтов оказалось в исходной выборке по 10 пользователям. Берите подвыборки из посчитанного списка частот посещений сайтов – не надо заново считать эти частоты. Учтите, что частоту появления нуля (сайт с индексом 0 появлялся там, где сессии были короче 10 сайтов) включать не надо. Округлите границы интервала до 3 знаков после запятой и запишите через пробел в файл *answer2_5.txt*. Это будет ответом на 5 вопрос теста.**
