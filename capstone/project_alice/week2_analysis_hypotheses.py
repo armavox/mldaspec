@@ -128,105 +128,29 @@ PATH_TO_DATA = 'data'
 # In[3]:
 
 
-def get_dict():
+def get_sites_dict(path_to_csv_files):
+    """Returns sites visit frequency dictionary
+    
+    Form of the dictonary is ``{'sitename': [site_id, frequency]}``.
+    """
+    
     arr = []
-    """Pull all visited sites from .csv logs to array"""
-    for file in glob(path_to_data + '/*'):
+    '''Pull all visited sites from .csv logs to array'''
+    for file in glob(path_to_csv_files + '/*'):
         with open(file) as f:
-            for line in f.readlines()[1:]:  # Exclude header
-                arr.append(line.split(',')[1].strip())  # Add to list only sites
+            lines = f.read().split('\n')
+            for line in lines[1:-1]:  # Exclude header
+                arr.append(line.split(',')[1])
                 
-    """Make counted sorted dict with sites and corresponding # of visits (freqency)"""
-    sites_freq_list = sorted(Counter(arr).items(), 
-                             key=lambda x: x[1], reverse=True)
-    """Make sites dict in form of {'site': [id, frequency]}"""
-    sites_dict = dict(
-        (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)
-    )
-    """Make id to site converter"""
+    '''Make counted sorted dict with sites and corresponding # of visits (freqency)'''
+    sites_freq_list = sorted(Counter(arr).items(), key=lambda x: x[1], reverse=True)
+    '''Make sites dict in form of {'site': [id, frequency]}'''
+    sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
+    '''Make id to site converter'''
     id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
     id_to_site_dict[0] = 'no_site'
 
-    """Save dict to file"""
-    with open(sites_dict_file, 'wb') as fout:
-        pickle.dump(sites_dict, fout)
-
-    with open(inds_dict_file, 'wb') as fout:
-        pickle.dump(id_to_site_dict, fout)
-
     return sites_dict, id_to_site_dict
-
-
-def prepare_sites_dict(path_to_data, 
-                       sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
-                       inds_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
-                       refresh=False):
-    
-    """Func to get dictionaries for converting site's name to it's index.
-        If dictionary for data in PATH_TO_DATA has already been compiled, 
-        functions just pickle dict out of files.
-        
-    """
-    
-    # Initial part of the function
-    try:
-        with open(sites_dict_file, 'rb') as input_file:
-            sites_dict = pickle.load(input_file)
-            
-        with open(inds_dict_file, 'rb') as input_file:
-            id_to_site_dict = pickle.load(input_file)
-            
-    except FileNotFoundError:
-        sites_dict, id_to_site_dict = get_dict()
-        
-    if refresh:
-        sites_dict, id_to_site_dict = get_dict()
-        
-    return sites_dict, id_to_site_dict
-
-
-# In[207]:
-
-
-randarr = np.arange(1, 31)
-
-
-# In[208]:
-
-
-randarr
-
-
-# In[231]:
-
-
-window_size = 5
-sess_len = 12
-
-
-# In[232]:
-
-
-windptr = range(0, randarr.size, window_size)
-list(windptr)
-
-
-# In[233]:
-
-
-session = []
-for ptr in windptr:
-    sess = randarr[ptr:ptr+sess_len]
-    if len(sess) < sess_len:
-        sess = np.r_[sess, [0]*(sess_len - len(sess))]
-    session = np.r_[session, sess]
-    print(ptr, randarr[ptr:ptr+sess_len])
-session
-
-# fill_with_zeros = sess_len - session.shape[0] % sess_len
-# session = np.append(session, [0]*fill_with_zeros)
-session = session.reshape(-1, sess_len)
-session
 
 
 # In[4]:
@@ -243,46 +167,49 @@ def to_csr(X):
 # In[5]:
 
 
-def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path, 
-                                    session_length=10, window_size=10,
-                                    refresh_dict=False):
+def prepare_sparse_train_set_window(path_to_csv_files, 
+                                    session_length=10, 
+                                    window_size=10):
     """Func for partition users logs to desireable num of sessions
         and prepare training dataset with sessions of particular users.
     
     """
-    full_df = pd.DataFrame()
+    full_df = []
     
-    sites_dict, _ = prepare_sites_dict(path_to_csv_files,
-                                               sites_dict_file=site_freq_path,
-                                               refresh=refresh_dict)
+    sites_dict, _ = get_sites_dict(path_to_csv_files)
         
-    for file in tqdm(glob(path_to_csv_files +'/*'), desc='Preparing training set...'):
-        temp_df = pd.read_csv(file, usecols=['site'])  # UPD: deleted parse_dates, added usecols
+    for file in tqdm(glob(path_to_csv_files + '/*'), 
+                     desc='Preparing training set...'):
+        
+        user_id = re.findall(r'\d+', file)[-1]
+        
+        temp_df = pd.read_csv(file, usecols=['site'], engine='c')
         temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
         
-        # Convert with sliding window
+        '''Convert with sliding window'''
+        sessions = np.array([])
         windptr = range(0, temp_df.shape[0], window_size)
-        sessions = []
         for ptr in windptr:
             sess = temp_df.site_id.values[ptr:ptr+session_length]
-            # All incomplete sessions are being completed by zeros
+            '''All incomplete sessions are being completed by zeros'''
             if len(sess) < session_length:
                 sess = np.r_[sess, [0] * (session_length - len(sess))]
-            sessions = np.r_[sessions, sess]
-            
-        # Partition user data to sessions
+            sessions = np.hstack((sessions, sess))
+        '''Partition user data to sessions'''
         sessions = sessions.reshape(-1, session_length)
         
-        # Construct the full dataset, consist of user id's and sessions
-        temp_df = pd.DataFrame(sessions,
-                       columns=['site'+ str(x+1) for x in range(session_length)])
-        # Find username in the file name
-        user_id = re.findall(r'\d+', file)[-1]
+        '''Build the full dataset, consist of user id's and sessions'''
+        temp_df = pd.DataFrame(
+            sessions,
+            columns=['site'+ str(x+1) for x in range(session_length)]
+        )
+        '''Append user ids column'''
         temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
         
-        full_df = full_df.append(temp_df, ignore_index=True)
+        full_df.append(temp_df)
         
-        X, y = full_df.iloc[:, :-1].values, full_df.iloc[:, -1].values
+    full_df = pd.concat(full_df, ignore_index=True)
+    X, y = full_df.iloc[:, :-1].values, full_df.iloc[:, -1].values
     
     return to_csr(X), y
 
@@ -290,9 +217,10 @@ def prepare_sparse_train_set_window(path_to_csv_files, site_freq_path,
 # In[6]:
 
 
-X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
-                                                       os.path.join(PATH_TO_DATA,'site_freq_3users.pkl'),
-                                       session_length=10, window_size=5)
+X, y = prepare_sparse_train_set_window(
+    os.path.join(PATH_TO_DATA,'3users'),
+    session_length=10, window_size=5
+)
 
 
 # **Примените полученную функцию с параметрами *session_length=5* и *window_size=3* к игрушечному примеру. Убедитесь, что все работает как надо.**
@@ -300,9 +228,10 @@ X, y = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'),
 # In[7]:
 
 
-X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA,'3users'), 
-                                                       os.path.join(PATH_TO_DATA,'site_freq_3users.pkl'),
-                                       session_length=5, window_size=3, refresh_dict=False)
+X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(
+    os.path.join(PATH_TO_DATA,'3users'),
+    session_length=5, window_size=3
+)
 
 
 # In[8]:
@@ -311,7 +240,7 @@ X_toy_s5_w3, y_s5_w3 = prepare_sparse_train_set_window(os.path.join(PATH_TO_DATA
 X_toy_s5_w3.todense()
 
 
-# In[268]:
+# In[9]:
 
 
 y_s5_w3
@@ -323,7 +252,7 @@ y_s5_w3
 # 
 # **На моем ноутбуке этот участок кода отработал за 26 секунд, хотя понятно, что все зависит от эффективности реализации функции *prepare_sparse_train_set_window* и мощности используемого железа. И честно говоря, моя первая реализация была намного менее эффективной (34 минуты), так что тут у Вас есть возможность оптимизировать свой код.**
 
-# In[9]:
+# In[10]:
 
 
 for num_users in [10, 150]:
@@ -331,15 +260,15 @@ for num_users in [10, 150]:
     print(os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl'))
 
 
-# In[10]:
+# In[11]:
 
 
-get_ipython().run_cell_magic('time', '', "import itertools\n\ndata_lengths = []\n\nfor num_users in [10, 150]:\n    path_to_csv = os.path.join(PATH_TO_DATA, f'{num_users}users')\n    path_to_pickle = os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl')\n    for window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n        if window_size <= session_length and (window_size, session_length) != (10, 10):\n            X_sparse, y = prepare_sparse_train_set_window(path_to_csv,\n                                                          path_to_pickle,\n                                                          session_length=session_length,\n                                                          window_size=window_size,\n                                                          refresh_dict=False)\n            X_fout = os.path.join(PATH_TO_DATA, f'X_sparse_{num_users}users_s{session_length}_w{window_size}.pkl')\n            y_fout = os.path.join(PATH_TO_DATA, f'y_{num_users}users_s{session_length}_w{window_size}.pkl')\n            with open(X_fout, 'wb') as fout:\n                pickle.dump(X_sparse, fout)\n            with open(y_fout, 'wb') as fout:\n                pickle.dump(y, fout)\n            \n            data_lengths.append(X_sparse.shape[0])")
+get_ipython().run_cell_magic('time', '', "import itertools\n\ndata_lengths = []\n\nfor num_users in [10, 150]:\n    path_to_csv = os.path.join(PATH_TO_DATA, f'{num_users}users')\n#     path_to_pickle = os.path.join(PATH_TO_DATA, f'site_freq_{num_users}users.pkl')\n    for window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n        if window_size <= session_length and (window_size, session_length) != (10, 10):\n            X_sparse, y = prepare_sparse_train_set_window(path_to_csv,\n                                                          session_length=session_length,\n                                                          window_size=window_size)\n            X_fout = os.path.join(PATH_TO_DATA, f'X_sparse_{num_users}users_s{session_length}_w{window_size}.pkl')\n            y_fout = os.path.join(PATH_TO_DATA, f'y_{num_users}users_s{session_length}_w{window_size}.pkl')\n            with open(X_fout, 'wb') as fout:\n                pickle.dump(X_sparse, fout)\n            with open(y_fout, 'wb') as fout:\n                pickle.dump(y, fout)\n            \n            data_lengths.append(X_sparse.shape[0])\nprint('Done.')")
 
 
 # **<font color='red'> Вопрос 1. </font>Сколько всего уникальных значений в списке `data_lengths`?**
 
-# In[283]:
+# In[12]:
 
 
 len(set(data_lengths))
@@ -349,20 +278,20 @@ len(set(data_lengths))
 
 # **Считаем в DataFrame подготовленный на 1 неделе файл `train_data_10users.csv`. Далее будем работать с ним.**
 
-# In[286]:
+# In[13]:
 
 
 train_df = pd.read_csv(os.path.join(PATH_TO_DATA, 'train_data_10users.csv'), 
                        index_col='session_id')
 
 
-# In[287]:
+# In[14]:
 
 
 train_df.head()
 
 
-# In[288]:
+# In[15]:
 
 
 train_df.info()
@@ -370,7 +299,7 @@ train_df.info()
 
 # **Распределение целевого класса:**
 
-# In[289]:
+# In[16]:
 
 
 train_df['user_id'].value_counts()
@@ -378,20 +307,20 @@ train_df['user_id'].value_counts()
 
 # **Посчитаем распределение числа уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов.**
 
-# In[290]:
+# In[17]:
 
 
 num_unique_sites = [np.unique(train_df.values[i, :-1]).shape[0] 
                     for i in range(train_df.shape[0])]
 
 
-# In[291]:
+# In[18]:
 
 
 pd.Series(num_unique_sites).value_counts()
 
 
-# In[299]:
+# In[19]:
 
 
 pd.Series(num_unique_sites).hist();
@@ -401,7 +330,7 @@ pd.Series(num_unique_sites).hist();
 
 # **<font color='red'> Вопрос 2. </font>Распределено ли нормально число уникальных сайтов в каждой сессии из 10 посещенных подряд сайтов (согласно критерию Шапиро-Уилка)?**
 
-# In[315]:
+# In[20]:
 
 
 print(stats.shapiro(num_unique_sites))
@@ -416,16 +345,10 @@ fig.tight_layout();
 
 # **<font color='red'> Вопрос 3. </font>Каково p-value при проверке описанной гипотезы?**
 
-# In[317]:
+# In[21]:
 
 
 has_two_similar = (np.array(num_unique_sites) < 10).astype('int')
-
-
-# In[322]:
-
-
-
 has_two_similar
 
 
@@ -433,14 +356,14 @@ has_two_similar
 # - $H_0:$ доля сессий с повторяющимися сайтами = 95%. Против альтернативы:
 # - $H_1:$ доля таких сессий больше чем 95%
 
-# In[333]:
+# In[22]:
 
 
 stats.binom_test(has_two_similar.sum(), len(num_unique_sites),
                  p=0.95, alternative='greater')
 
 
-# In[339]:
+# In[23]:
 
 
 import statsmodels.stats.proportion as psts
@@ -450,7 +373,7 @@ psts.proportions_ztest(has_two_similar.sum(), len(has_two_similar), value=0.95,
 
 # **<font color='red'> Вопрос 4. </font>Каков 95% доверительный интервал Уилсона для доли случаев, когда пользователь повторно посетил какой-то сайт (из п. 3)?**
 
-# In[343]:
+# In[24]:
 
 
 wilson_interval = psts.proportion_confint(has_two_similar.sum(), len(has_two_similar),
@@ -458,7 +381,7 @@ wilson_interval = psts.proportion_confint(has_two_similar.sum(), len(has_two_sim
 wilson_interval
 
 
-# In[345]:
+# In[25]:
 
 
 print('{:.4f} {:.4f}'.format(round(wilson_interval[0], 3),
@@ -467,7 +390,7 @@ print('{:.4f} {:.4f}'.format(round(wilson_interval[0], 3),
 
 # **Постройте распределение частоты посещения сайтов (сколько раз тот или иной сайт попадается в выборке) для сайтов, которые были посещены как минимум 1000 раз.**
 
-# In[361]:
+# In[26]:
 
 
 with open('data/site_freq_10users.pkl', 'rb') as f_in:
@@ -483,7 +406,7 @@ plt.title('Гистограмма распределения частоты по
 
 # **<font color='red'> Вопрос 5. </font>Каков 95% доверительный интервал для средней частоты появления сайта в выборке?**
 
-# In[362]:
+# In[27]:
 
 
 def get_bootstrap_samples(data, n_samples, random_seed=17):
@@ -493,7 +416,7 @@ def get_bootstrap_samples(data, n_samples, random_seed=17):
     return samples
 
 
-# In[363]:
+# In[28]:
 
 
 def stat_intervals(stat, alpha):
@@ -502,7 +425,7 @@ def stat_intervals(stat, alpha):
     return boundaries
 
 
-# In[367]:
+# In[29]:
 
 
 boot_means = get_bootstrap_samples(site_freq_df.freq.values,
@@ -517,3 +440,50 @@ stat_intervals(boot_means, 0.05)
 # - можно провести больше первичного анализа и проверять прочие интересные гипотезы (а больше их появится после создания признаков на следующей неделе)
 # 
 # На 3 неделе мы займемся визуальным анализом данных и построением признаков.
+
+# ___
+# # Realization Notes
+
+# In[30]:
+
+
+randarr = np.arange(1, 31)
+
+
+# In[31]:
+
+
+randarr
+
+
+# In[32]:
+
+
+window_size = 5
+sess_len = 12
+
+
+# In[33]:
+
+
+windptr = range(0, randarr.size, window_size)
+list(windptr)
+
+
+# In[34]:
+
+
+session = []
+for ptr in windptr:
+    sess = randarr[ptr:ptr+sess_len]
+    if len(sess) < sess_len:
+        sess = np.r_[sess, [0]*(sess_len - len(sess))]
+    session = np.r_[session, sess]
+    print(ptr, randarr[ptr:ptr+sess_len])
+session
+
+# fill_with_zeros = sess_len - session.shape[0] % sess_len
+# session = np.append(session, [0]*fill_with_zeros)
+session = session.reshape(-1, sess_len)
+session
+

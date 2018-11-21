@@ -11942,225 +11942,32 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_dict</span><span class="p">():</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns sites visit frequency dictionary</span>
+<span class="sd">    </span>
+<span class="sd">    Form of the dictonary is ``{&#39;sitename&#39;: [site_id, frequency]}``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="sd">&quot;&quot;&quot;Pull all visited sites from .csv logs to array&quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">path_to_data</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Pull all visited sites from .csv logs to array&#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]:</span>  <span class="c1"># Exclude header</span>
-                <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>  <span class="c1"># Add to list only sites</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># Exclude header</span>
+                <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
                 
-    <span class="sd">&quot;&quot;&quot;Make counted sorted dict with sites and corresponding # of visits (freqency)&quot;&quot;&quot;</span>
-    <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
-                             <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Make sites dict in form of {&#39;site&#39;: [id, frequency]}&quot;&quot;&quot;</span>
-    <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;Make id to site converter&quot;&quot;&quot;</span>
+    <span class="sd">&#39;&#39;&#39;Make counted sorted dict with sites and corresponding # of visits (freqency)&#39;&#39;&#39;</span>
+    <span class="n">sites_freq_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;Make sites dict in form of {&#39;site&#39;: [id, frequency]}&#39;&#39;&#39;</span>
+    <span class="n">sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sites_freq_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="sd">&#39;&#39;&#39;Make id to site converter&#39;&#39;&#39;</span>
     <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sites_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="n">id_to_site_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no_site&#39;</span>
 
-    <span class="sd">&quot;&quot;&quot;Save dict to file&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sites_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">id_to_site_dict</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span>
-
-
-<span class="k">def</span> <span class="nf">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> 
-                       <span class="n">sites_dict_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;sites_dict.pkl&#39;</span><span class="p">),</span>
-                       <span class="n">inds_dict_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;ind_to_sites_dict.pkl&#39;</span><span class="p">),</span>
-                       <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    
-    <span class="sd">&quot;&quot;&quot;Func to get dictionaries for converting site&#39;s name to it&#39;s index.</span>
-<span class="sd">        If dictionary for data in PATH_TO_DATA has already been compiled, </span>
-<span class="sd">        functions just pickle dict out of files.</span>
-<span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="c1"># Initial part of the function</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sites_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
-            <span class="n">sites_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
-            
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inds_dict_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
-            <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
-            
-    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
-        
-    <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
-        <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span> <span class="o">=</span> <span class="n">get_dict</span><span class="p">()</span>
-        
     <span class="k">return</span> <span class="n">sites_dict</span><span class="p">,</span> <span class="n">id_to_site_dict</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[207]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">randarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[208]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">randarr</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[208]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
-       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[231]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">sess_len</span> <span class="o">=</span> <span class="mi">12</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[232]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">windptr</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">randarr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
-<span class="nb">list</span><span class="p">(</span><span class="n">windptr</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[232]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[0, 5, 10, 15, 20, 25]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[233]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">windptr</span><span class="p">:</span>
-    <span class="n">sess</span> <span class="o">=</span> <span class="n">randarr</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">sess_len</span><span class="p">]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sess_len</span><span class="p">:</span>
-        <span class="n">sess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">sess_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">))]</span>
-    <span class="n">session</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">session</span><span class="p">,</span> <span class="n">sess</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">randarr</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">sess_len</span><span class="p">])</span>
-<span class="n">session</span>
-
-<span class="c1"># fill_with_zeros = sess_len - session.shape[0] % sess_len</span>
-<span class="c1"># session = np.append(session, [0]*fill_with_zeros)</span>
-<span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">sess_len</span><span class="p">)</span>
-<span class="n">session</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>0 [ 1  2  3  4  5  6  7  8  9 10 11 12]
-5 [ 6  7  8  9 10 11 12 13 14 15 16 17]
-10 [11 12 13 14 15 16 17 18 19 20 21 22]
-15 [16 17 18 19 20 21 22 23 24 25 26 27]
-20 [21 22 23 24 25 26 27 28 29 30]
-25 [26 27 28 29 30]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[233]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([[ 1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10., 11., 12.],
-       [ 6.,  7.,  8.,  9., 10., 11., 12., 13., 14., 15., 16., 17.],
-       [11., 12., 13., 14., 15., 16., 17., 18., 19., 20., 21., 22.],
-       [16., 17., 18., 19., 20., 21., 22., 23., 24., 25., 26., 27.],
-       [21., 22., 23., 24., 25., 26., 27., 28., 29., 30.,  0.,  0.],
-       [26., 27., 28., 29., 30.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -12188,46 +11995,49 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> <span class="n">site_freq_path</span><span class="p">,</span> 
-                                    <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                                    <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span> 
+                                    <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                                    <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Func for partition users logs to desireable num of sessions</span>
 <span class="sd">        and prepare training dataset with sessions of particular users.</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">full_df</span> <span class="o">=</span> <span class="p">[]</span>
     
-    <span class="n">sites_dict</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">,</span>
-                                               <span class="n">sites_dict_file</span><span class="o">=</span><span class="n">site_freq_path</span><span class="p">,</span>
-                                               <span class="n">refresh</span><span class="o">=</span><span class="n">refresh_dict</span><span class="p">)</span>
+    <span class="n">sites_dict</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_sites_dict</span><span class="p">(</span><span class="n">path_to_csv_files</span><span class="p">)</span>
         
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing training set...&#39;</span><span class="p">):</span>
-        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">])</span>  <span class="c1"># UPD: deleted parse_dates, added usecols</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">path_to_csv_files</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">),</span> 
+                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Preparing training set...&#39;</span><span class="p">):</span>
+        
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">],</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
         <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sites_dict</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         
-        <span class="c1"># Convert with sliding window</span>
+        <span class="sd">&#39;&#39;&#39;Convert with sliding window&#39;&#39;&#39;</span>
+        <span class="n">sessions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="n">windptr</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">window_size</span><span class="p">)</span>
-        <span class="n">sessions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">windptr</span><span class="p">:</span>
             <span class="n">sess</span> <span class="o">=</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">site_id</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">session_length</span><span class="p">]</span>
-            <span class="c1"># All incomplete sessions are being completed by zeros</span>
+            <span class="sd">&#39;&#39;&#39;All incomplete sessions are being completed by zeros&#39;&#39;&#39;</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">session_length</span><span class="p">:</span>
                 <span class="n">sess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">session_length</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">))]</span>
-            <span class="n">sessions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sessions</span><span class="p">,</span> <span class="n">sess</span><span class="p">]</span>
-            
-        <span class="c1"># Partition user data to sessions</span>
+            <span class="n">sessions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sessions</span><span class="p">,</span> <span class="n">sess</span><span class="p">))</span>
+        <span class="sd">&#39;&#39;&#39;Partition user data to sessions&#39;&#39;&#39;</span>
         <span class="n">sessions</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span>
         
-        <span class="c1"># Construct the full dataset, consist of user id&#39;s and sessions</span>
-        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sessions</span><span class="p">,</span>
-                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">session_length</span><span class="p">)])</span>
-        <span class="c1"># Find username in the file name</span>
-        <span class="n">user_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="sd">&#39;&#39;&#39;Build the full dataset, consist of user id&#39;s and sessions&#39;&#39;&#39;</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">sessions</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">session_length</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;Append user ids column&#39;&#39;&#39;</span>
         <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">user_id</span><span class="p">)]</span> <span class="o">*</span> <span class="n">temp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         
-        <span class="n">full_df</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">full_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">)</span>
         
-        <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">full_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">full_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     
     <span class="k">return</span> <span class="n">to_csr</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">y</span>
 </pre></div>
@@ -12242,9 +12052,10 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
-                                                       <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;site_freq_3users.pkl&#39;</span><span class="p">),</span>
-                                       <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span>
+    <span class="n">session_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12261,7 +12072,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 183.18it/s]
+<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 266.60it/s]
 </pre>
 </div>
 </div>
@@ -12284,9 +12095,10 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy_s5_w3</span><span class="p">,</span> <span class="n">y_s5_w3</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span> 
-                                                       <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;site_freq_3users.pkl&#39;</span><span class="p">),</span>
-                                       <span class="n">session_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_toy_s5_w3</span><span class="p">,</span> <span class="n">y_s5_w3</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span><span class="s1">&#39;3users&#39;</span><span class="p">),</span>
+    <span class="n">session_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12303,7 +12115,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 264.11it/s]
+<pre>Preparing training set...: 100%|██████████| 3/3 [00:00&lt;00:00, 297.50it/s]
 </pre>
 </div>
 </div>
@@ -12358,7 +12170,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[268]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_s5_w3</span>
@@ -12374,7 +12186,7 @@ div#notebook {
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[268]:</div>
+<div class="prompt output_prompt">Out[9]:</div>
 
 
 
@@ -12402,7 +12214,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">num_users</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">]:</span>
@@ -12438,7 +12250,7 @@ data/site_freq_150users.pkl
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -12448,14 +12260,12 @@ data/site_freq_150users.pkl
 
 <span class="k">for</span> <span class="n">num_users</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">150</span><span class="p">]:</span>
     <span class="n">path_to_csv</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{num_users}</span><span class="s1">users&#39;</span><span class="p">)</span>
-    <span class="n">path_to_pickle</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;site_freq_</span><span class="si">{num_users}</span><span class="s1">users.pkl&#39;</span><span class="p">)</span>
+<span class="c1">#     path_to_pickle = os.path.join(PATH_TO_DATA, f&#39;site_freq_{num_users}users.pkl&#39;)</span>
     <span class="k">for</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">session_length</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">]):</span>
         <span class="k">if</span> <span class="n">window_size</span> <span class="o">&lt;=</span> <span class="n">session_length</span> <span class="ow">and</span> <span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="n">session_length</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
             <span class="n">X_sparse</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">prepare_sparse_train_set_window</span><span class="p">(</span><span class="n">path_to_csv</span><span class="p">,</span>
-                                                          <span class="n">path_to_pickle</span><span class="p">,</span>
                                                           <span class="n">session_length</span><span class="o">=</span><span class="n">session_length</span><span class="p">,</span>
-                                                          <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">,</span>
-                                                          <span class="n">refresh_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                                          <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span>
             <span class="n">X_fout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;X_sparse_</span><span class="si">{num_users}</span><span class="s1">users_s</span><span class="si">{session_length}</span><span class="s1">_w</span><span class="si">{window_size}</span><span class="s1">.pkl&#39;</span><span class="p">)</span>
             <span class="n">y_fout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;y_</span><span class="si">{num_users}</span><span class="s1">users_s</span><span class="si">{session_length}</span><span class="s1">_w</span><span class="si">{window_size}</span><span class="s1">.pkl&#39;</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">X_fout</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
@@ -12464,6 +12274,7 @@ data/site_freq_150users.pkl
                 <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
             
             <span class="n">data_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_sparse</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12480,16 +12291,22 @@ data/site_freq_150users.pkl
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 15.56it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.64it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.48it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 13.50it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  6.82it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  8.36it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:01&lt;00:00,  9.65it/s]
-Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.20it/s]
-Preparing training set...: 100%|██████████| 150/150 [00:07&lt;00:00, 17.71it/s]
-Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
+<pre>Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 24.61it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 16.03it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 18.88it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 22.63it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 10.10it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 11.48it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 15.87it/s]
+Preparing training set...: 100%|██████████| 10/10 [00:00&lt;00:00, 18.26it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:04&lt;00:00, 36.72it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:05&lt;00:00, 25.12it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:04&lt;00:00, 37.38it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:04&lt;00:00, 36.42it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:09&lt;00:00, 16.59it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:07&lt;00:00, 28.17it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:05&lt;00:00, 33.08it/s]
+Preparing training set...: 100%|██████████| 150/150 [00:05&lt;00:00, 31.28it/s]
 </pre>
 </div>
 </div>
@@ -12499,41 +12316,11 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;timed exec&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-
-<span class="ansi-green-fg">&lt;ipython-input-5-91a1b50d3a4b&gt;</span> in <span class="ansi-cyan-fg">prepare_sparse_train_set_window</span><span class="ansi-blue-fg">(path_to_csv_files, site_freq_path, session_length, window_size, refresh_dict)</span>
-<span class="ansi-green-intense-fg ansi-bold">     24</span>             <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>sess<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&lt;</span> session_length<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     25</span>                 sess <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>r_<span class="ansi-blue-fg">[</span>sess<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">*</span> <span class="ansi-blue-fg">(</span>session_length <span class="ansi-blue-fg">-</span> len<span class="ansi-blue-fg">(</span>sess<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">---&gt; 26</span><span class="ansi-red-fg">             </span>sessions <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>r_<span class="ansi-blue-fg">[</span>sessions<span class="ansi-blue-fg">,</span> sess<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     27</span> 
-<span class="ansi-green-intense-fg ansi-bold">     28</span>         <span class="ansi-red-fg"># Partition user data to sessions</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/mldaspec/lib/python3.7/site-packages/numpy/lib/index_tricks.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, key)</span>
-<span class="ansi-green-intense-fg ansi-bold">    328</span> 
-<span class="ansi-green-intense-fg ansi-bold">    329</span>         <span class="ansi-red-fg"># Ensure that scalars won&#39;t up-cast unless warranted</span>
-<span class="ansi-green-fg">--&gt; 330</span><span class="ansi-red-fg">         </span>final_dtype <span class="ansi-blue-fg">=</span> find_common_type<span class="ansi-blue-fg">(</span>arraytypes<span class="ansi-blue-fg">,</span> scalartypes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    331</span>         <span class="ansi-green-fg">if</span> final_dtype <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    332</span>             <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> scalars<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/mldaspec/lib/python3.7/site-packages/numpy/core/numerictypes.py</span> in <span class="ansi-cyan-fg">find_common_type</span><span class="ansi-blue-fg">(array_types, scalar_types)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1002</span>     scalar_types <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>dtype<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> scalar_types<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">   1003</span> 
-<span class="ansi-green-fg">-&gt; 1004</span><span class="ansi-red-fg">     </span>maxa <span class="ansi-blue-fg">=</span> _can_coerce_all<span class="ansi-blue-fg">(</span>array_types<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1005</span>     maxsc <span class="ansi-blue-fg">=</span> _can_coerce_all<span class="ansi-blue-fg">(</span>scalar_types<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1006</span> 
-
-<span class="ansi-green-fg">~/miniconda3/envs/mldaspec/lib/python3.7/site-packages/numpy/core/numerictypes.py</span> in <span class="ansi-cyan-fg">_can_coerce_all</span><span class="ansi-blue-fg">(dtypelist, start)</span>
-<span class="ansi-green-intense-fg ansi-bold">    933</span>     thisind <span class="ansi-blue-fg">=</span> start
-<span class="ansi-green-intense-fg ansi-bold">    934</span>     <span class="ansi-green-fg">while</span> thisind <span class="ansi-blue-fg">&lt;</span> __len_test_types<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 935</span><span class="ansi-red-fg">         </span>newdtype <span class="ansi-blue-fg">=</span> dtype<span class="ansi-blue-fg">(</span>__test_types<span class="ansi-blue-fg">[</span>thisind<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    936</span>         numcoerce <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>x <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> dtypelist <span class="ansi-green-fg">if</span> newdtype <span class="ansi-blue-fg">&gt;=</span> x<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    937</span>         <span class="ansi-green-fg">if</span> numcoerce <span class="ansi-blue-fg">==</span> N<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Done.
+CPU times: user 57.7 s, sys: 4.84 s, total: 1min 2s
+Wall time: 1min 2s
+</pre>
 </div>
 </div>
 
@@ -12552,7 +12339,7 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[283]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">data_lengths</span><span class="p">))</span>
@@ -12568,7 +12355,7 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[283]:</div>
+<div class="prompt output_prompt">Out[12]:</div>
 
 
 
@@ -12602,7 +12389,7 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[286]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;train_data_10users.csv&#39;</span><span class="p">),</span> 
@@ -12616,7 +12403,7 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[287]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -12632,7 +12419,7 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[287]:</div>
+<div class="prompt output_prompt">Out[14]:</div>
 
 
 
@@ -12766,7 +12553,7 @@ Preparing training set...:   6%|▌         | 9/150 [00:00&lt;00:13, 10.52it/s]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[288]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -12821,7 +12608,7 @@ memory usage: 1.3 MB
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[289]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -12837,7 +12624,7 @@ memory usage: 1.3 MB
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[289]:</div>
+<div class="prompt output_prompt">Out[16]:</div>
 
 
 
@@ -12873,7 +12660,7 @@ Name: user_id, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[290]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_unique_sites</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
@@ -12887,7 +12674,7 @@ Name: user_id, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[291]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -12903,7 +12690,7 @@ Name: user_id, dtype: int64</pre>
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[291]:</div>
+<div class="prompt output_prompt">Out[18]:</div>
 
 
 
@@ -12930,7 +12717,7 @@ dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[299]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">();</span>
@@ -12985,7 +12772,7 @@ height=250
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[315]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">))</span>
@@ -13003,6 +12790,18 @@ height=250
 <div class="output_wrapper">
 <div class="output">
 
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/artem/miniconda3/envs/mldaspec/lib/python3.7/site-packages/scipy/stats/morestats.py:1309: UserWarning: p-value may not be accurate for N &gt; 5000.
+  warnings.warn(&#34;p-value may not be accurate for N &gt; 5000.&#34;)
+</pre>
+</div>
+</div>
 
 <div class="output_area">
 
@@ -13056,23 +12855,11 @@ height=423
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[317]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">has_two_similar</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[322]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">has_two_similar</span>
+<span class="n">has_two_similar</span>
 </pre></div>
 
 </div>
@@ -13085,7 +12872,7 @@ height=423
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[322]:</div>
+<div class="prompt output_prompt">Out[21]:</div>
 
 
 
@@ -13115,7 +12902,7 @@ height=423
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[333]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">binom_test</span><span class="p">(</span><span class="n">has_two_similar</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">num_unique_sites</span><span class="p">),</span>
@@ -13132,7 +12919,7 @@ height=423
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[333]:</div>
+<div class="prompt output_prompt">Out[22]:</div>
 
 
 
@@ -13149,7 +12936,7 @@ height=423
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[339]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.stats.proportion</span> <span class="k">as</span> <span class="nn">psts</span>
@@ -13167,7 +12954,7 @@ height=423
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[339]:</div>
+<div class="prompt output_prompt">Out[23]:</div>
 
 
 
@@ -13193,7 +12980,7 @@ height=423
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[343]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">wilson_interval</span> <span class="o">=</span> <span class="n">psts</span><span class="o">.</span><span class="n">proportion_confint</span><span class="p">(</span><span class="n">has_two_similar</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">has_two_similar</span><span class="p">),</span>
@@ -13211,7 +12998,7 @@ height=423
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[343]:</div>
+<div class="prompt output_prompt">Out[24]:</div>
 
 
 
@@ -13228,7 +13015,7 @@ height=423
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[345]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4f}</span><span class="s1"> </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">wilson_interval</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
@@ -13269,7 +13056,7 @@ height=423
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[361]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/site_freq_10users.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
@@ -13330,7 +13117,7 @@ height=282
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[362]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_bootstrap_samples</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">17</span><span class="p">):</span>
@@ -13347,7 +13134,7 @@ height=282
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[363]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">stat_intervals</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
@@ -13363,7 +13150,7 @@ height=282
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[367]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">boot_means</span> <span class="o">=</span> <span class="n">get_bootstrap_samples</span><span class="p">(</span><span class="n">site_freq_df</span><span class="o">.</span><span class="n">freq</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
@@ -13382,7 +13169,7 @@ height=282
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[367]:</div>
+<div class="prompt output_prompt">Out[29]:</div>
 
 
 
@@ -13410,6 +13197,176 @@ height=282
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr>
+<h1 id="Realization-Notes">Realization Notes<a class="anchor-link" href="#Realization-Notes">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">randarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">randarr</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[31]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">window_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">sess_len</span> <span class="o">=</span> <span class="mi">12</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">windptr</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">randarr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">windptr</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[33]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[0, 5, 10, 15, 20, 25]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">windptr</span><span class="p">:</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">randarr</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">sess_len</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sess_len</span><span class="p">:</span>
+        <span class="n">sess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">sess_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="p">))]</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">session</span><span class="p">,</span> <span class="n">sess</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">randarr</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">sess_len</span><span class="p">])</span>
+<span class="n">session</span>
+
+<span class="c1"># fill_with_zeros = sess_len - session.shape[0] % sess_len</span>
+<span class="c1"># session = np.append(session, [0]*fill_with_zeros)</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">sess_len</span><span class="p">)</span>
+<span class="n">session</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0 [ 1  2  3  4  5  6  7  8  9 10 11 12]
+5 [ 6  7  8  9 10 11 12 13 14 15 16 17]
+10 [11 12 13 14 15 16 17 18 19 20 21 22]
+15 [16 17 18 19 20 21 22 23 24 25 26 27]
+20 [21 22 23 24 25 26 27 28 29 30]
+25 [26 27 28 29 30]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[34]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[ 1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10., 11., 12.],
+       [ 6.,  7.,  8.,  9., 10., 11., 12., 13., 14., 15., 16., 17.],
+       [11., 12., 13., 14., 15., 16., 17., 18., 19., 20., 21., 22.],
+       [16., 17., 18., 19., 20., 21., 22., 23., 24., 25., 26., 27.],
+       [21., 22., 23., 24., 25., 26., 27., 28., 29., 30.,  0.,  0.],
+       [26., 27., 28., 29., 30.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     </div>
   </div>
