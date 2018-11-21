@@ -72,14 +72,6 @@ PATH_TO_DATA = 'data'
 # 
 # Функция должна возвращать новый DataFrame (как возвращала функция *prepare_train_set*), только признаков должно быть на 4 больше. Порядок, в котором добавляются признаки: *site1*, ... *site10*, *session_timespan*, *#unique_sites*, *start_hour*, *day_of_week* и *user_id* (это видно и чуть ниже по тому, как функция вызывается).
 
-# In[3]:
-
-
-t = pd.read_csv('data/3users/user0001.csv', parse_dates=['timestamp']).timestamp.values[0]
-t = (t.astype('datetime64[h]'))
-t.astype(object).weekday()
-
-
 # In[4]:
 
 
@@ -117,14 +109,6 @@ def to_csr(X):
     indices = X.ravel()
     indptr = range(0, X.ravel().shape[0] + session_length, session_length)
     return csr_matrix((data, indices, indptr))[:, 1:]
-
-
-# In[393]:
-
-
-a = np.array([0])
-b = np.array([1,2,3])
-np.hstack((a,b))
 
 
 # In[398]:
@@ -197,32 +181,30 @@ def prepare_train_set_with_fe(path_to_csv_files, session_length=10,
 
 
 # **Проверим функцию на игрушечном примере.**
-
-# In[399]:
-
-
-get_ipython().run_line_magic('lprun', "-f prepare_train_set_with_fe prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'), session_length=10, window_size=5)")
+X_sites, X_add, y = prepare_train_set_with_fe(
+    os.path.join(PATH_TO_DATA, '150users'), session_length=10, window_size=5)
+# In[402]:
 
 
-# In[8]:
-
-
-train_data_toy  = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
-                  site_freq_path=os.path.join(PATH_TO_DATA, 'site_freq_3users.pkl'),
-                  session_length=10, refresh_dict=True, return_table=True)
+train_data_toy  = prepare_train_set_with_fe(
+    os.path.join(PATH_TO_DATA, '3users'), 
+    session_length=10, 
+    window_size=5, 
+    return_table=True
+)
 
 train_data_toy
 
 
 # **Примените функцию *prepare_train_set_with_fe* к данным по 10 пользователям, укажите *session_length*=10.**
 
-# In[9]:
+# In[404]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),\n                                               os.path.join(PATH_TO_DATA, 'site_freq_10users.pkl'),\n                                               return_table=True)")
+get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),\n                                               return_table=True)")
 
 
-# In[10]:
+# In[405]:
 
 
 train_data_10users.head()
@@ -230,10 +212,10 @@ train_data_10users.head()
 
 # **Примените функцию *prepare_train_set_with_fe* к данным по 150 пользователям, укажите *session_length*=10.**
 
-# In[11]:
+# In[406]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_150users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'),\n                                                os.path.join(PATH_TO_DATA, 'site_freq_150users.pkl'),\n                                                return_table=True)")
+get_ipython().run_cell_magic('time', '', "train_data_150users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'),\n                                                return_table=True)")
 
 
 # **Сохраните в pickle-файлы признаки *session_timespan*, *#unique_sites*, *start_hour* и *day_of_week* для 10 и 150 пользователей.**
@@ -563,47 +545,19 @@ s.set_xticklabels(s.get_xticklabels(), rotation=10);
 path_to_csv_files = os.path.join(PATH_TO_DATA, '3users')
 
 
-# In[239]:
-
-
-def get_sites_dict(path_to_csv_files):
-    """Returns sites visit frequency dictionary
-    
-    Form of the dictonary is ``{'sitename': [site_id, frequency]}``.
-    """
-    
-    arr = []
-    '''Pull all visited sites from .csv logs to array'''
-    for file in glob(path_to_csv_files + '/*'):
-        with open(file) as f:
-            lines = f.read().split('\n')
-            for line in lines[1:-1]:  # Exclude header
-                arr.append(line.split(',')[1])
-                
-    '''Make counted sorted dict with sites and corresponding # of visits (freqency)'''
-    sites_freq_list = sorted(Counter(arr).items(), key=lambda x: x[1], reverse=True)
-    '''Make sites dict in form of {'site': [id, frequency]}'''
-    sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
-    '''Make id to site converter'''
-    id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
-    id_to_site_dict[0] = 'no_site'
-
-    return sites_dict, id_to_site_dict
-
-
-# In[362]:
+# In[413]:
 
 
 #_the_number_of_symbols_to_limit_the_line_length_according_to_PEP8_is_______79
-def feature_engineering(path_to_csv_files,  session_length=10):# sites_dict_filepath, 
-                        #ids_dict_filepath, features,
-    """New features
+def feature_engineering(path_to_csv_files,  session_length=10):
+    """Evaluates several new features for given dataset
         
-    Some new features here.
+    Added daytime features, and feature which
+    represents possible users's schedule: 
+    Weekday + hour (of session start).
     """
     
-    #df = pd.DataFrame()
-    temp_list = []
+    df = []
     sites_dict, ids_dict = get_sites_dict(path_to_csv_files)
     
     for file in tqdm(glob(path_to_csv_files + '/*'), 
@@ -623,171 +577,108 @@ def feature_engineering(path_to_csv_files,  session_length=10):# sites_dict_file
         temp_df['dinner'] = ((hour > 19) & (hour <= 23)).astype('int')
         
         temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
-        temp_list.append(temp_df)
+        df.append(temp_df)
         
-    df = pd.concat(temp_list, ignore_index=True)
+    df = pd.concat(df, ignore_index=True)
     return df
 
 
-# In[363]:
+# In[527]:
 
 
-get_ipython().run_line_magic('time', "feature_engineering(os.path.join(PATH_TO_DATA, '150users'))")
+new_features_10users = feature_engineering(os.path.join(PATH_TO_DATA, '10users'))
 
 
-# In[361]:
+# In[416]:
 
 
-get_ipython().run_line_magic('lprun', "-f feature_engineering feature_engineering(os.path.join(PATH_TO_DATA, '150users'))")
-
-
-# In[67]:
-
-
-path = 'data/10users/user0031.csv'
-
-
-# In[100]:
-
-
-a = re.findall(r'\d+', path)
-print(int(a[-1]))
-
-
-# In[ ]:
-
-
-s.path.join(PATH_TO_DATA, 'sites_dict.pkl')
-
-
-# In[317]:
-
-
-tempdf = pd.read_csv('data/10users/user0031.csv', parse_dates=['timestamp'])
-
-
-# In[353]:
-
-
-ls = []
-
-
-# In[354]:
-
-
-ls.append(tempdf)
-
-
-# In[357]:
-
-
-ls.append(tempdf)
-
-
-# In[358]:
-
-
-pd.concat(ls)
-
-
-# In[322]:
-
-
-hour = tempdf['timestamp'].apply(lambda ts: ts.hour)
-tempdf['dayofweek_hour'] = tempdf.timestamp.apply(lambda x: 100*x.dayofweek)+hour
-tempdf
-
-
-# In[251]:
-
-
-pd_ts = tempdf.timestamp[0]
-
-
-# In[254]:
-
-
-pd_ts
-
-
-# In[271]:
-
-
-pd_ts.dayofweek
-
-
-# In[268]:
-
-
-pd_ts.hour
-
-
-# In[296]:
-
-
-d = np.datetime64(pd_ts)
-
-
-# In[305]:
-
-
-np.datetime64(pd_ts).astype(object).hour
-
-
-# In[310]:
-
-
-get_ipython().run_line_magic('timeit', "tempdf['dayofweek_hour'] = tempdf.timestamp.apply(lambda x: 100*x.dayofweek + x.hour)")
-
-
-# In[308]:
-
-
-tempdf
-
-
-# In[49]:
-
-
-freq_dict_10users = site_freq_10users.set_index('site').frequency.to_dict()
-
-
-# In[50]:
-
-
-tempdf['freq'] = tempdf.site.apply(lambda x: freq_dict_10users[x])
-
-
-# In[33]:
-
-
-new_features_10users = feature_engineering ''' ВАШ КОД ЗДЕСЬ ''' 
-
-
-# In[ ]:
-
-
-new_features_150users = feature_engineering ''' ВАШ КОД ЗДЕСЬ ''' 
+new_features_150users = feature_engineering(os.path.join(PATH_TO_DATA, '150users'))
 
 
 # **10. Постройте картинки для новых признаков, поисследуйте их, прокомментируйте результаты.**
 
-# In[ ]:
+# #### Время старта сессии с учетом дня недели
+
+# In[528]:
 
 
-''' ВАШ КОД ЗДЕСЬ ''' 
+new_features_10users['user_id'] = new_features_10users['user_id'].map(id_name_dict)
 
+
+# In[543]:
+
+
+fig, ax = plt.subplots(10, 1, figsize=(18, 32))
+
+new_index = []
+for x in range(7,707, 100):
+    new_index.extend([x+y for y in range(0,17)])
+    
+for idx, (user, sub_df) in enumerate(new_features_10users.groupby('user_id')):
+    y = sub_df.groupby('dayofweek_hour')['user_id'].agg('count').reindex(new_index).fillna(0)
+    s = sns.barplot(new_index, y, color=color_dict[user], ax=ax[idx], label=user, zorder=2)
+    x_labels = s.get_xticklabels()
+    x_labels[0:-1:17] = ['Пн 7','Вт 7','Ср 7','Чт 7 ','Пт 7 ','Сб 7','Вс 7']
+    s.set_xticklabels(x_labels, rotation=90)
+    s.set_xlabel('День недели и время')
+    s.set_ylabel('Количество сессий')
+    s.legend()
+    s.grid(axis='y', alpha=.2, zorder=0)
+    
+suptitle = fig.suptitle('Распределение сессий по дням и времени старта сессии', y=1.03, fontsize=16)
+fig.tight_layout()
+fig.savefig('figs/dayofweek_hour.pdf', bbox_inches='tight', bbox_extra_artist=[suptitle])
+
+
+# #### Признаки учета утренней сессии, дневной, вечерней и тд.
+
+# In[544]:
+
+
+new_features_10users.head()
+
+
+# In[594]:
+
+
+daytime_cols = ['breakfast', 'elevenses', 'lunch', 'teatime', 'supper', 'dinner']
+agg_df = new_features_10users.groupby('user_id')[daytime_cols].agg(np.sum)
+
+fig, ax = plt.subplots(3, 4, figsize=(12,8))
+for idx, user in enumerate(agg_df.index):
+    s = sns.barplot(agg_df.loc[user].index, agg_df.loc[user].values,label=user,
+                    color=color_dict[user], saturation=.4,
+                    ax=ax[idx//4, idx%4], zorder=2)
+    s.set_xticklabels(s.get_xticklabels(), rotation=90)
+    s.legend();
+    s.grid(True, axis='y', alpha=.4, zorder=0)
+
+fig.tight_layout();
+
+
+# ### Выводы
+# **Время начала с учетом дня недели**  
+# Статистика по неделе с учетом времени начала сессии показывает, что для каждого пользователя характерно свое время выхода в сеть. Значит, такие признаки могут оказаться полезными при идентификации пользователя. Так как в данном случае мы будем учитывать некоторый паттерн поведения человека.
+# 
+# **Время дня, когда сессия началась**  
+# Эта статистика показывает, в какое время дня для пользователя более характерно выходить в сеть. В целом в статистике отслеживается некоторый паттерн поведения, поэтому впоследствии такие признаки можно использовать при идентификации пользователя.
 
 # **В конце сохраните в pickle-файлы только те признаки, которые, как Вы предполагаете, помогут идентифицировать пользователя более точно. Это касается и признаков, которые мы вместе создали в начале (*session_timespan, #unique_sites, start_hour, day_of_week*), и Ваших собственных. Можно создать все эти признаки не только для сессий из 10 сайтов, но и для других сочетаний параметров *session_length* и *window_size*.**
 
-# In[ ]:
+# In[602]:
 
 
-selected_features_10users = ''' ВАШ КОД ЗДЕСЬ ''' 
-selected_features_150users = ''' ВАШ КОД ЗДЕСЬ ''' 
+daytime_cols + ['dayofweek_hour']
 
 
-# In[ ]:
+# In[604]:
+
+
+selected_features_10users = new_features_10users[daytime_cols + ['dayofweek_hour']]
+selected_features_150users = new_features_150users[daytime_cols + ['dayofweek_hour']]
+
+
+# In[605]:
 
 
 with open(os.path.join(PATH_TO_DATA, 
