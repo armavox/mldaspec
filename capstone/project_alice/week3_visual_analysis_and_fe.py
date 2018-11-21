@@ -83,62 +83,28 @@ t.astype(object).weekday()
 # In[4]:
 
 
-def get_dict(path_to_data, sites_dict_file, ids_dict_file):
-    """Auxiliary function for sites counting dict building
+def get_sites_dict(path_to_csv_files):
+    """Returns sites visit frequency dictionary
+    
+    Form of the dictonary is ``{'sitename': [site_id, frequency]}``.
     """
     
     arr = []
     '''Pull all visited sites from .csv logs to array'''
-    for file in glob(path_to_data + '/*'):
+    for file in glob(path_to_csv_files + '/*'):
         with open(file) as f:
-            for line in f.readlines()[1:]:  # Exclude header
-                arr.append(line.split(',')[1].strip())  # Add to list only sites
+            lines = f.read().split('\n')
+            for line in lines[1:-1]:  # Exclude header
+                arr.append(line.split(',')[1])
                 
     '''Make counted sorted dict with sites and corresponding # of visits (freqency)'''
-    sites_freq_list = sorted(Counter(arr).items(), 
-                             key=lambda x: x[1], reverse=True)
+    sites_freq_list = sorted(Counter(arr).items(), key=lambda x: x[1], reverse=True)
     '''Make sites dict in form of {'site': [id, frequency]}'''
-    sites_dict = dict(
-        (s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1)
-    )
+    sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
     '''Make id to site converter'''
     id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
     id_to_site_dict[0] = 'no_site'
 
-    '''Save dict to file'''
-    with open(sites_dict_file, 'wb') as fout:
-        pickle.dump(sites_dict, fout)
-
-    with open(ids_dict_file, 'wb') as fout:
-        pickle.dump(id_to_site_dict, fout)
-
-    return sites_dict, id_to_site_dict
-
-
-def prepare_sites_dict(path_to_data, sites_dict_file=os.path.join(PATH_TO_DATA, 'sites_dict.pkl'),
-                       ids_dict_file=os.path.join(PATH_TO_DATA, 'ind_to_sites_dict.pkl'),
-                       refresh=False):
-    """Func to get dictionaries for converting site's name to it's index.
-        
-        If dictionary for data in PATH_TO_DATA has already been compiled, 
-        functions just pickle dict out of files.
-        
-    """
-    
-    # Initial part of the function
-    try:
-        with open(sites_dict_file, 'rb') as input_file:
-            sites_dict = pickle.load(input_file)
-            
-        with open(ids_dict_file, 'rb') as input_file:
-            id_to_site_dict = pickle.load(input_file)
-            
-    except FileNotFoundError:
-        sites_dict, id_to_site_dict = get_dict(path_to_data, sites_dict_file, ids_dict_file)
-        
-    if refresh:
-        sites_dict, id_to_site_dict = get_dict(path_to_data, sites_dict_file, ids_dict_file)
-        
     return sites_dict, id_to_site_dict
 
 
@@ -153,30 +119,35 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[6]:
+# In[393]:
 
 
-def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
-                              session_length=10, window_size=10,
-                              refresh_dict=False, return_table=False):
+a = np.array([0])
+b = np.array([1,2,3])
+np.hstack((a,b))
+
+
+# In[398]:
+
+
+def prepare_train_set_with_fe(path_to_csv_files, session_length=10,
+                              window_size=10, return_table=False):
     """Func for partition users logs to desireable num of sessions
         and prepare training dataset with sessions of particular users.
     """
     
-    df = pd.DataFrame()
+    df = []
     
-    sites_dict, _ = prepare_sites_dict(path_to_csv_files,
-                                       sites_dict_file=site_freq_path,
-                                       refresh=refresh_dict)
+    sites_dict, _ = get_sites_dict(path_to_csv_files)
     
     for file in tqdm(glob(path_to_csv_files + '/*'), desc='Preparing training set...'):
             
-        temp_df = pd.read_csv(file, parse_dates=['timestamp'])
+        temp_df = pd.read_csv(file, parse_dates=['timestamp'], engine='c')
         temp_df['site_id'] = temp_df.site.apply(lambda x: sites_dict[x][0])
         
         '''Feature generating with sliding window'''
         windptr = range(0, temp_df.shape[0], window_size)
-        sessions = []  # Sites in a session row
+        sessions = np.array([])  # Sites in a session row
         timedeltas = []  # Time of the session
         uniques = []  # Number of unique sites in the session
         start_hours = []  # Session start hour
@@ -185,8 +156,8 @@ def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
             sess = temp_df.site_id.values[ptr:ptr+session_length]
             if len(sess) < session_length:  # All incomplete session windows are being completed by zeros
                 sess = np.r_[sess, [0] * (session_length - len(sess))]
-                
-            sessions = np.r_[sessions, sess]
+            
+            sessions = np.hstack((sessions, sess))
             
             uniques.append(len(set(sess)))
             
@@ -214,8 +185,9 @@ def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
         '''Find user's id [target feature] in the file name'''
         user_id = re.findall(r'\d+', file)[-1]
         temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
+        df.append(temp_df)
         
-        df = df.append(temp_df, ignore_index=True)
+    df = pd.concat(df, ignore_index=True)
         
     if return_table:
         return df
@@ -226,14 +198,10 @@ def prepare_train_set_with_fe(path_to_csv_files, site_freq_path,
 
 # **Проверим функцию на игрушечном примере.**
 
-# In[7]:
+# In[399]:
 
 
-X_sites, X_add, y = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '3users'), 
-                          site_freq_path=os.path.join(PATH_TO_DATA, 'site_freq_3users.pkl'),
-                          session_length=10,
-                          window_size=5,
-                          refresh_dict=True)
+get_ipython().run_line_magic('lprun', "-f prepare_train_set_with_fe prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'), session_length=10, window_size=5)")
 
 
 # In[8]:
@@ -589,13 +557,205 @@ s.set_xticklabels(s.get_xticklabels(), rotation=10);
 
 # **Напишите функцию для создания новых признаков и примените ее к исходным данным – каталогам с 10 и 150 файлами. Сделайте это только для набора данных, полученного с параметрами *session_length=10* и *window_size=10*. Сериализуйте полученные матрицы с помощью pickle. Функция может возвращать как только новые признаки, так и старые с новыми. При этом сигнатура функции может быть другой – тут уже свобода выбора.**
 
-# In[32]:
+# In[141]:
 
 
-def feature_engineering(path_to_csv_files, features, session_length=10):
-    '''
-    ВАШ КОД ЗДЕСЬ
-    ''' 
+path_to_csv_files = os.path.join(PATH_TO_DATA, '3users')
+
+
+# In[239]:
+
+
+def get_sites_dict(path_to_csv_files):
+    """Returns sites visit frequency dictionary
+    
+    Form of the dictonary is ``{'sitename': [site_id, frequency]}``.
+    """
+    
+    arr = []
+    '''Pull all visited sites from .csv logs to array'''
+    for file in glob(path_to_csv_files + '/*'):
+        with open(file) as f:
+            lines = f.read().split('\n')
+            for line in lines[1:-1]:  # Exclude header
+                arr.append(line.split(',')[1])
+                
+    '''Make counted sorted dict with sites and corresponding # of visits (freqency)'''
+    sites_freq_list = sorted(Counter(arr).items(), key=lambda x: x[1], reverse=True)
+    '''Make sites dict in form of {'site': [id, frequency]}'''
+    sites_dict = dict((s, [i, freq]) for i, (s, freq) in enumerate(sites_freq_list, 1))
+    '''Make id to site converter'''
+    id_to_site_dict = dict((val[0], key) for key, val in sites_dict.items())
+    id_to_site_dict[0] = 'no_site'
+
+    return sites_dict, id_to_site_dict
+
+
+# In[362]:
+
+
+#_the_number_of_symbols_to_limit_the_line_length_according_to_PEP8_is_______79
+def feature_engineering(path_to_csv_files,  session_length=10):# sites_dict_filepath, 
+                        #ids_dict_filepath, features,
+    """New features
+        
+    Some new features here.
+    """
+    
+    #df = pd.DataFrame()
+    temp_list = []
+    sites_dict, ids_dict = get_sites_dict(path_to_csv_files)
+    
+    for file in tqdm(glob(path_to_csv_files + '/*'), 
+                     desc='Preparing training set...'):
+        user_id = int(re.findall(r'\d+', file)[-1])
+        
+        '''Prepare features'''
+        temp_df = pd.read_csv(file, parse_dates=['timestamp'], engine='c')
+        hour = temp_df['timestamp'].apply(lambda ts: ts.hour)
+        temp_df['dayofweek_hour'] = temp_df.timestamp.apply(lambda x: 100*x.dayofweek) + hour
+        # Daytime features
+        temp_df['breakfast'] = ((hour >= 7) & (hour <= 9)).astype('int')
+        temp_df['elevenses'] = ((hour > 9) & (hour <= 12)).astype('int')
+        temp_df['lunch'] = ((hour > 12) & (hour <= 14)).astype('int')
+        temp_df['teatime'] = ((hour > 14) & (hour <= 17)).astype('int')
+        temp_df['supper'] = ((hour > 17) & (hour <= 19)).astype('int')
+        temp_df['dinner'] = ((hour > 19) & (hour <= 23)).astype('int')
+        
+        temp_df['user_id'] = [int(user_id)] * temp_df.shape[0]
+        temp_list.append(temp_df)
+        
+    df = pd.concat(temp_list, ignore_index=True)
+    return df
+
+
+# In[363]:
+
+
+get_ipython().run_line_magic('time', "feature_engineering(os.path.join(PATH_TO_DATA, '150users'))")
+
+
+# In[361]:
+
+
+get_ipython().run_line_magic('lprun', "-f feature_engineering feature_engineering(os.path.join(PATH_TO_DATA, '150users'))")
+
+
+# In[67]:
+
+
+path = 'data/10users/user0031.csv'
+
+
+# In[100]:
+
+
+a = re.findall(r'\d+', path)
+print(int(a[-1]))
+
+
+# In[ ]:
+
+
+s.path.join(PATH_TO_DATA, 'sites_dict.pkl')
+
+
+# In[317]:
+
+
+tempdf = pd.read_csv('data/10users/user0031.csv', parse_dates=['timestamp'])
+
+
+# In[353]:
+
+
+ls = []
+
+
+# In[354]:
+
+
+ls.append(tempdf)
+
+
+# In[357]:
+
+
+ls.append(tempdf)
+
+
+# In[358]:
+
+
+pd.concat(ls)
+
+
+# In[322]:
+
+
+hour = tempdf['timestamp'].apply(lambda ts: ts.hour)
+tempdf['dayofweek_hour'] = tempdf.timestamp.apply(lambda x: 100*x.dayofweek)+hour
+tempdf
+
+
+# In[251]:
+
+
+pd_ts = tempdf.timestamp[0]
+
+
+# In[254]:
+
+
+pd_ts
+
+
+# In[271]:
+
+
+pd_ts.dayofweek
+
+
+# In[268]:
+
+
+pd_ts.hour
+
+
+# In[296]:
+
+
+d = np.datetime64(pd_ts)
+
+
+# In[305]:
+
+
+np.datetime64(pd_ts).astype(object).hour
+
+
+# In[310]:
+
+
+get_ipython().run_line_magic('timeit', "tempdf['dayofweek_hour'] = tempdf.timestamp.apply(lambda x: 100*x.dayofweek + x.hour)")
+
+
+# In[308]:
+
+
+tempdf
+
+
+# In[49]:
+
+
+freq_dict_10users = site_freq_10users.set_index('site').frequency.to_dict()
+
+
+# In[50]:
+
+
+tempdf['freq'] = tempdf.site.apply(lambda x: freq_dict_10users[x])
 
 
 # In[33]:
