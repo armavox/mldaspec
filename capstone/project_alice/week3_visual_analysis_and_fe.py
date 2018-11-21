@@ -592,7 +592,7 @@ new_features_150users = feature_engineering(os.path.join(PATH_TO_DATA, '150users
 new_features_10users['user_id'] = new_features_10users['user_id'].map(id_name_dict)
 
 
-# In[34]:
+# In[40]:
 
 
 fig, ax = plt.subplots(10, 1, figsize=(18, 32))
@@ -612,7 +612,7 @@ for idx, (user, sub_df) in enumerate(new_features_10users.groupby('user_id')):
     s.legend()
     s.grid(axis='y', alpha=.2, zorder=0)
     
-suptitle = fig.suptitle('Распределение сессий по дням и времени старта сессии', y=1.03, fontsize=16)
+suptitle = fig.suptitle('Распределение сессий по дням и времени старта сессии', y=1.005, fontsize=16)
 fig.tight_layout()
 fig.savefig('figs/dayofweek_hour.pdf', bbox_inches='tight', bbox_extra_artist=[suptitle])
 
