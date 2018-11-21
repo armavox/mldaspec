@@ -72,7 +72,7 @@ PATH_TO_DATA = 'data'
 # 
 # Функция должна возвращать новый DataFrame (как возвращала функция *prepare_train_set*), только признаков должно быть на 4 больше. Порядок, в котором добавляются признаки: *site1*, ... *site10*, *session_timespan*, *#unique_sites*, *start_hour*, *day_of_week* и *user_id* (это видно и чуть ниже по тому, как функция вызывается).
 
-# In[4]:
+# In[3]:
 
 
 def get_sites_dict(path_to_csv_files):
@@ -100,7 +100,7 @@ def get_sites_dict(path_to_csv_files):
     return sites_dict, id_to_site_dict
 
 
-# In[5]:
+# In[4]:
 
 
 def to_csr(X):
@@ -111,7 +111,7 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[398]:
+# In[5]:
 
 
 def prepare_train_set_with_fe(path_to_csv_files, session_length=10,
@@ -183,7 +183,7 @@ def prepare_train_set_with_fe(path_to_csv_files, session_length=10,
 # **Проверим функцию на игрушечном примере.**
 X_sites, X_add, y = prepare_train_set_with_fe(
     os.path.join(PATH_TO_DATA, '150users'), session_length=10, window_size=5)
-# In[402]:
+# In[6]:
 
 
 train_data_toy  = prepare_train_set_with_fe(
@@ -198,13 +198,14 @@ train_data_toy
 
 # **Примените функцию *prepare_train_set_with_fe* к данным по 10 пользователям, укажите *session_length*=10.**
 
-# In[404]:
+# In[7]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),\n                                               return_table=True)")
+train_data_10users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '10users'),
+                                               return_table=True)
 
 
-# In[405]:
+# In[8]:
 
 
 train_data_10users.head()
@@ -212,22 +213,23 @@ train_data_10users.head()
 
 # **Примените функцию *prepare_train_set_with_fe* к данным по 150 пользователям, укажите *session_length*=10.**
 
-# In[406]:
+# In[9]:
 
 
-get_ipython().run_cell_magic('time', '', "train_data_150users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'),\n                                                return_table=True)")
+train_data_150users = prepare_train_set_with_fe(os.path.join(PATH_TO_DATA, '150users'),
+                                                return_table=True)
 
 
 # **Сохраните в pickle-файлы признаки *session_timespan*, *#unique_sites*, *start_hour* и *day_of_week* для 10 и 150 пользователей.**
 
-# In[12]:
+# In[10]:
 
 
 new_features_10users = train_data_10users.iloc[:, -5:-1]
 new_features_150users = train_data_150users.iloc[:, -5:-1]
 
 
-# In[13]:
+# In[11]:
 
 
 with open(os.path.join(PATH_TO_DATA, 
@@ -240,7 +242,7 @@ with open(os.path.join(PATH_TO_DATA,
 
 # **<font color='red'>Вопрос 1. </font> Выведите медианную продолжительность сессии (*session_timespan*) для сессий 10 пользователей.**
 
-# In[14]:
+# In[12]:
 
 
 new_features_10users.describe().astype(int).loc['50%']['session_timespan']
@@ -248,7 +250,7 @@ new_features_10users.describe().astype(int).loc['50%']['session_timespan']
 
 # **<font color='red'>Вопрос 2. </font> Выведите медианный день недели, в который началась сессия, для сессий 10 пользователей.**
 
-# In[15]:
+# In[13]:
 
 
 print('2 is Wednesday')
@@ -257,7 +259,7 @@ new_features_10users.describe().astype(int).loc['50%']['day_of_week']
 
 # **<font color='red'>Вопрос 3. </font>Выведите медианный час начала сессии для сессий 150 пользователей.**
 
-# In[16]:
+# In[14]:
 
 
 new_features_150users.describe().astype(int).loc['50%']['start_hour']
@@ -265,7 +267,7 @@ new_features_150users.describe().astype(int).loc['50%']['start_hour']
 
 # **<font color='red'>Вопрос 4. </font>Выведите медианное значение числа уникальных сайтов в сессиях 150 пользователей.**
 
-# In[17]:
+# In[15]:
 
 
 new_features_150users.describe().astype(int).loc['50%']['#unique_sites']
@@ -275,7 +277,7 @@ new_features_150users.describe().astype(int).loc['50%']['#unique_sites']
 
 # **Забавы ради, потехи для дадим пользователям имена и ассоциируем с ними цвета.**
 
-# In[18]:
+# In[16]:
 
 
 id_name_dict = {128: 'Mary-Kate', 39: 'Ashley', 207: 'Lindsey', 127: 'Naomi', 237: 'Avril',
@@ -283,13 +285,9 @@ id_name_dict = {128: 'Mary-Kate', 39: 'Ashley', 207: 'Lindsey', 127: 'Naomi', 23
 train_data_10users['user_id'] = train_data_10users['user_id'].map(id_name_dict)
 
 
-# In[19]:
+# In[17]:
 
 
-# color_dic = {'Mary-Kate': 'pink', 'Ashley': 'darkviolet', 'Lindsey':'blueviolet', 
-#              'Naomi': 'hotpink', 'Avril': 'orchid', 
-#              'Bob': 'firebrick', 'Bill': 'gold', 'John': 'forestgreen', 
-#              'Dick': 'slategrey', 'Ed':'brown'}
 import matplotlib.cm as cm
 user_list = train_data_10users.user_id.unique()
 color_dict = dict(
@@ -297,7 +295,7 @@ color_dict = dict(
 )
 
 
-# In[20]:
+# In[18]:
 
 
 train_data_10users.head()
@@ -305,15 +303,15 @@ train_data_10users.head()
 
 # **1. Постройте гистограмму распределения длины сессии в секундах (*session_timespan*). Ограничьте по *x* значением 200 (иначе слишком тяжелый хвост). Сделайте гистограмму цвета *darkviolet*, подпишите оси по-русски.**
 
-# In[21]:
+# In[19]:
 
 
 hist_data = train_data_10users['session_timespan']
 plt.hist(hist_data, bins=50, range=(0,200), color='darkviolet', zorder=2)
 plt.grid(True, alpha=.2, zorder=0)
-plt.xlabel('Длина сессии, с')
+plt.xlabel('Длительность сессии, с')
 plt.ylabel('Количество сессий')
-plt.title('Распределение количества сессий');
+plt.title('Распределение длительности сессий');
 plt.savefig('figs/sessions_overall.pdf')
 
 
@@ -321,7 +319,7 @@ plt.savefig('figs/sessions_overall.pdf')
 
 # В случаях, когда уникальные значения дискретны и их количество невелико, для подсчета количества сессий по каждому значению удобнее использовать `seaborn.countplot()`
 
-# In[22]:
+# In[20]:
 
 
 hist_data = train_data_10users['#unique_sites']
@@ -335,7 +333,7 @@ plt.savefig('figs/#unique_sites_overall.pdf')
 
 # **3. Постройте гистограммы распределения числа уникальных сайтов в сессии (*#unique_sites*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите оси по-русски в каждой из 10 гистограмм.**
 
-# In[23]:
+# In[21]:
 
 
 fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
@@ -357,7 +355,7 @@ fig.savefig('figs/#unique_sites_per_user.pdf', bbox_inches='tight', bbox_extra_a
 
 # **4. Постройте гистограмму распределения часа начала сессии (*start_hour*). Сделайте гистограмму цвета *darkgreen*, подпишите оси по-русски.**
 
-# In[24]:
+# In[22]:
 
 
 hist_data = train_data_10users['start_hour']
@@ -371,7 +369,7 @@ plt.savefig('figs/start_hour_overall.pdf')
 
 # **5. Постройте гистограммы распределения часа начала сессии (*start_hour*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите оси по-русски в каждой из 10 гистограмм.**
 
-# In[25]:
+# In[23]:
 
 
 import matplotlib.cm as cm
@@ -393,7 +391,7 @@ fig.savefig('figs/start_hour_per_user.pdf', bbox_inches='tight', bbox_extra_arti
 
 # **6. Постройте гистограмму распределения дня недели, в который началась сессия (*day_of_week*). Сделайте гистограмму цвета *sienna*, подпишите оси по-русски.**
 
-# In[26]:
+# In[24]:
 
 
 hist_data = train_data_10users['day_of_week']
@@ -408,7 +406,7 @@ plt.savefig('figs/day_of_week_overall.pdf')
 
 # **7. Постройте гистограммы распределения дня недели, в который началась сессия (*day_of_week*) для каждого из 10 пользователей по отдельности. Используйте *subplots*, чтоб разместить все 10 картинок на одной большой. Измените метки по оси *X* на ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] – метод *set_xticklabels*. Пометьте легендой каждую картинку, на легенде должно быть написано имя пользователя. Для каждого пользователя раскрасьте гистограмму его/ее цветом (*color_dic*). Подпишите по-русски название каждой из 10 гистограмм.**
 
-# In[27]:
+# In[25]:
 
 
 fig, ax = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
@@ -484,7 +482,7 @@ fig.savefig('figs/day_of_week_per_user.pdf', bbox_inches='tight', bbox_extra_art
 
 # **Загрузите сохраненный ранее в pickle-файл частотный словарь сайтов для 10 пользователей. **
 
-# In[28]:
+# In[26]:
 
 
 with open('data/site_freq_150users.pkl', 'rb') as f:
@@ -499,22 +497,16 @@ site_freq_10users_top10
 
 # **Определите топ-10 самых посещаемых сайтов (*top10_sites*) и соответствующие кол-ва посещений (*top10_freqs*).**
 
-# In[29]:
-
-
-site_freq_10users_top10.index.values
-
-
-# In[30]:
+# In[28]:
 
 
 top10_freqs = site_freq_10users_top10.frequency.values
-top10_sites = site_freq_10users_top10.index.values
+top10_sites = site_freq_10users_top10.site.values
 
 
 # **9. Нарисуйте *seaborn barplot*, показывающий частоты посещений топ-10 сайтов. Сделайте подписи сайтов вертикальными, иначе они сливаются (*xticks*).**
 
-# In[31]:
+# In[29]:
 
 
 plt.figure(figsize=(16,4))
@@ -537,15 +529,15 @@ s.set_xticklabels(s.get_xticklabels(), rotation=10);
 # - частота посещения Facebook
 # - ...
 
-# **Напишите функцию для создания новых признаков и примените ее к исходным данным – каталогам с 10 и 150 файлами. Сделайте это только для набора данных, полученного с параметрами *session_length=10* и *window_size=10*. Сериализуйте полученные матрицы с помощью pickle. Функция может возвращать как только новые признаки, так и старые с новыми. При этом сигнатура функции может быть другой – тут уже свобода выбора.**
+# _**Напишите функцию для создания новых признаков и примените ее к исходным данным – каталогам с 10 и 150 файлами. Сделайте это только для набора данных, полученного с параметрами *session_length=10* и *window_size=10*. Сериализуйте полученные матрицы с помощью pickle. Функция может возвращать как только новые признаки, так и старые с новыми. При этом сигнатура функции может быть другой – тут уже свобода выбора.**_
 
-# In[141]:
+# ### Конструирование новых признаков
 
+# На мой взгляд признаки связанные с посещаемостью сайтов уже заложены в sparse матрицах. Самые популярные сайты, наиболее характерные сайты можно будет выделить с помощью конструирования признаков с использованием, например `PCA` или матричного разложения. Поэтому на данном этапе будем конструировать признаки на основе метое времени посещения сайта. 
+# 
+# **Вышеприведенные гистограммы не дают нам полного представления о паттерне поведения пользователя** в течение недели. При этом, из гистограмм мы видим, что **пользователю может быть характерно выходить в сеть утром или во второй половине дня, реже выходить в сеть в обеденное время, а также выходить меньше или больше в выходные дни.** Поэтому мы составим признаки, которые более точно отражают паттерн поведения пользователя в течение недели и впоследствии попробуем применить его для обучения модели.
 
-path_to_csv_files = os.path.join(PATH_TO_DATA, '3users')
-
-
-# In[413]:
+# In[31]:
 
 
 #_the_number_of_symbols_to_limit_the_line_length_according_to_PEP8_is_______79
@@ -583,15 +575,10 @@ def feature_engineering(path_to_csv_files,  session_length=10):
     return df
 
 
-# In[527]:
+# In[32]:
 
 
 new_features_10users = feature_engineering(os.path.join(PATH_TO_DATA, '10users'))
-
-
-# In[416]:
-
-
 new_features_150users = feature_engineering(os.path.join(PATH_TO_DATA, '150users'))
 
 
@@ -599,13 +586,13 @@ new_features_150users = feature_engineering(os.path.join(PATH_TO_DATA, '150users
 
 # #### Время старта сессии с учетом дня недели
 
-# In[528]:
+# In[33]:
 
 
 new_features_10users['user_id'] = new_features_10users['user_id'].map(id_name_dict)
 
 
-# In[543]:
+# In[34]:
 
 
 fig, ax = plt.subplots(10, 1, figsize=(18, 32))
@@ -632,13 +619,13 @@ fig.savefig('figs/dayofweek_hour.pdf', bbox_inches='tight', bbox_extra_artist=[s
 
 # #### Признаки учета утренней сессии, дневной, вечерней и тд.
 
-# In[544]:
+# In[35]:
 
 
 new_features_10users.head()
 
 
-# In[594]:
+# In[36]:
 
 
 daytime_cols = ['breakfast', 'elevenses', 'lunch', 'teatime', 'supper', 'dinner']
@@ -657,7 +644,7 @@ fig.tight_layout();
 
 
 # ### Выводы
-# **Время начала с учетом дня недели**  
+# **Время начала сессии с учетом дня недели**  
 # Статистика по неделе с учетом времени начала сессии показывает, что для каждого пользователя характерно свое время выхода в сеть. Значит, такие признаки могут оказаться полезными при идентификации пользователя. Так как в данном случае мы будем учитывать некоторый паттерн поведения человека.
 # 
 # **Время дня, когда сессия началась**  
@@ -665,20 +652,14 @@ fig.tight_layout();
 
 # **В конце сохраните в pickle-файлы только те признаки, которые, как Вы предполагаете, помогут идентифицировать пользователя более точно. Это касается и признаков, которые мы вместе создали в начале (*session_timespan, #unique_sites, start_hour, day_of_week*), и Ваших собственных. Можно создать все эти признаки не только для сессий из 10 сайтов, но и для других сочетаний параметров *session_length* и *window_size*.**
 
-# In[602]:
-
-
-daytime_cols + ['dayofweek_hour']
-
-
-# In[604]:
+# In[37]:
 
 
 selected_features_10users = new_features_10users[daytime_cols + ['dayofweek_hour']]
 selected_features_150users = new_features_150users[daytime_cols + ['dayofweek_hour']]
 
 
-# In[605]:
+# In[38]:
 
 
 with open(os.path.join(PATH_TO_DATA, 
