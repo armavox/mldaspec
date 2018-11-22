@@ -11856,24 +11856,24 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPython 3.6.1
-IPython 5.3.0
+<pre>CPython 3.7.1
+IPython 6.5.0
 
-numpy 1.13.3
-scipy 0.19.0
-pandas 0.20.1
-matplotlib 2.1.0
-statsmodels 0.8.0
-sklearn 0.19.0
+numpy 1.15.1
+scipy 1.1.0
+pandas 0.23.4
+matplotlib 2.2.3
+statsmodels 0.9.0
+sklearn 0.20.0
 
-compiler   : GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57)
+compiler   : Clang 4.0.1 (tags/RELEASE_401/final)
 system     : Darwin
 release    : 16.7.0
 machine    : x86_64
 processor  : i386
 CPU cores  : 8
 interpreter: 64bit
-Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
+Git hash   : e092c281d784f9aa5b8e165c554f27391d226f35
 </pre>
 </div>
 </div>
@@ -11884,7 +11884,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
@@ -11912,7 +11912,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Поменяйте на свой путь к данным</span>
@@ -11926,7 +11926,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">write_answer_to_file</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -11958,7 +11958,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;X_sparse_10users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">X_sparse_10users_pkl</span><span class="p">:</span>
@@ -11983,7 +11983,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_sparse_10users</span><span class="o">.</span><span class="n">shape</span>
@@ -11999,7 +11999,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[5]:</div>
+<div class="prompt output_prompt">Out[13]:</div>
 
 
 
@@ -12025,7 +12025,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_sparse_10users</span><span class="p">,</span> <span class="n">y_10users</span><span class="p">,</span> 
@@ -12049,7 +12049,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
@@ -12071,7 +12071,7 @@ Git hash   : ca8e6e4e47061a4c44a8506c9741b1c65fc9249a
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_validation_curves</span><span class="p">(</span><span class="n">param_values</span><span class="p">,</span> <span class="n">grid_cv_results_</span><span class="p">):</span>
@@ -12226,7 +12226,7 @@ Valid score: 0.584
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
@@ -12239,7 +12239,7 @@ Valid score: 0.584
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">forest</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -12256,7 +12256,7 @@ Valid score: 0.584
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[18]:</div>
+<div class="prompt output_prompt">Out[27]:</div>
 
 
 
@@ -12278,7 +12278,7 @@ Valid score: 0.584
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">acc_score</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">forest</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">))</span>
@@ -12291,7 +12291,7 @@ Valid score: 0.584
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Out-of-Bag score: </span><span class="si">{forest.oob_score_:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -12375,7 +12375,7 @@ Valid score: 0.731
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">LogisticRegressionCV</span>
@@ -12442,7 +12442,7 @@ Valid score: 0.731
 <div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Out-of-Bag score: </span><span class="si">{cv_score:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CV score: </span><span class="si">{cv_score:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Valid score: </span><span class="si">{acc_score:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -12714,7 +12714,7 @@ height=272
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit_c_values2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -12739,29 +12739,62 @@ height=272
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>[Parallel(n_jobs=-1)]: Done   3 out of   3 | elapsed:   27.3s finished
+<pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 8 concurrent workers.
+[Parallel(n_jobs=-1)]: Done   3 out of   3 | elapsed:   17.3s finished
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[35]:</div>
+<div class="prompt output_prompt">Out[17]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>LogisticRegressionCV(Cs=array([ 0.1    ,  0.46316,  0.82632,  1.18947,  1.55263,  1.91579,
-        2.27895,  2.64211,  3.00526,  3.36842,  3.73158,  4.09474,
-        4.45789,  4.82105,  5.18421,  5.54737,  5.91053,  6.27368,
-        6.63684,  7.     ]),
+<pre>LogisticRegressionCV(Cs=array([0.1    , 0.46316, 0.82632, 1.18947, 1.55263, 1.91579, 2.27895,
+       2.64211, 3.00526, 3.36842, 3.73158, 4.09474, 4.45789, 4.82105,
+       5.18421, 5.54737, 5.91053, 6.27368, 6.63684, 7.     ]),
            class_weight=None,
            cv=StratifiedKFold(n_splits=3, random_state=17, shuffle=True),
            dual=False, fit_intercept=True, intercept_scaling=1.0,
            max_iter=100, multi_class=&#39;multinomial&#39;, n_jobs=-1,
            penalty=&#39;l2&#39;, random_state=17, refit=True, scoring=None,
            solver=&#39;lbfgs&#39;, tol=0.0001, verbose=1)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit_grid_searcher2</span><span class="o">.</span><span class="n">C_</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[18]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.46315789473684205</pre>
 </div>
 
 </div>
@@ -12781,7 +12814,7 @@ height=272
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">C_scores</span> <span class="o">=</span> <span class="p">[]</span>
@@ -12801,16 +12834,16 @@ height=272
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[36]:</div>
+<div class="prompt output_prompt">Out[19]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>array([ 0.7354267 ,  0.75879135,  0.75848784,  0.75777611,  0.75818317,
-        0.75818404,  0.75818404,  0.75737171,  0.75696561,  0.75686494,
-        0.75686482,  0.75666178,  0.75574758,  0.75554476,  0.75524069,
-        0.75463168,  0.7547338 ,  0.75463214,  0.7544292 ,  0.75381935])</pre>
+<pre>array([0.7354267 , 0.75889304, 0.75848784, 0.75777611, 0.75818339,
+       0.75798073, 0.75808257, 0.7573715 , 0.75686414, 0.75696642,
+       0.75706776, 0.75666178, 0.75584927, 0.75564624, 0.75524069,
+       0.75463168, 0.75463211, 0.75463214, 0.75442901, 0.75402251])</pre>
 </div>
 
 </div>
@@ -12821,7 +12854,7 @@ height=272
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit_mean_cv_scores2</span> <span class="o">=</span> <span class="n">C_scores</span>
@@ -12843,12 +12876,12 @@ height=272
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">best_C</span> <span class="o">=</span> <span class="n">logit_grid_searcher2</span><span class="o">.</span><span class="n">Cs_</span><span class="p">[</span><span class="n">logit_mean_cv_scores2</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit_best_C</span> <span class="o">=</span> <span class="n">logit_grid_searcher2</span><span class="o">.</span><span class="n">Cs_</span><span class="p">[</span><span class="n">logit_mean_cv_scores2</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
 
-<span class="n">logit_mean_cv_scores2</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">best_C</span>
+<span class="n">logit_mean_cv_scores2</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">logit_best_C</span>
 </pre></div>
 
 </div>
@@ -12861,13 +12894,13 @@ height=272
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[38]:</div>
+<div class="prompt output_prompt">Out[21]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.75879135139568743, 0.4631578947368421)</pre>
+<pre>(0.7588930394168386, 0.4631578947368421)</pre>
 </div>
 
 </div>
@@ -12878,7 +12911,7 @@ height=272
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit_grid_searcher2</span><span class="o">.</span><span class="n">C_</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -12894,7 +12927,7 @@ height=272
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[39]:</div>
+<div class="prompt output_prompt">Out[22]:</div>
 
 
 
@@ -12981,7 +13014,7 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[107]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit_grid_searcher2</span><span class="o">.</span><span class="n">Cs</span> <span class="o">=</span> <span class="p">[</span><span class="n">best_C</span><span class="p">]</span>
@@ -13007,14 +13040,14 @@ height=263
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Done   3 out of   3 | elapsed:    3.2s finished
 [Parallel(n_jobs=-1)]: Done   3 out of   3 | elapsed:    3.2s finished
-[Parallel(n_jobs=-1)]: Done   3 out of   3 | elapsed:    3.2s finished
+[Parallel(n_jobs=-1)]: Done   3 out of   3 | elapsed:    3.4s finished
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[53]:</div>
+<div class="prompt output_prompt">Out[107]:</div>
 
 
 
@@ -13023,6 +13056,39 @@ height=263
 <pre>(0.77506518132258828, 0.7587914134194883)</pre>
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[109]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CV score: {cv_score.mean():.3f}&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Valid score: </span><span class="si">{logit_cv_acc:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CV score: 0.759
+Valid score: 0.775
+</pre>
+</div>
 </div>
 
 </div>
@@ -13452,6 +13518,51 @@ height=263
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[166]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">best_C</span> <span class="o">=</span> <span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_params_</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[170]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logit</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">best_C</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{(accuracy_score(y_valid, logit.predict(X_valid))):.3f}&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.781
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -13463,23 +13574,10 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[95]:</div>
+<div class="prompt input_prompt">In&nbsp;[123]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_params_</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">]]}</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[97]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">svm_cv_acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">svm_cv_acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">))</span>
 <span class="n">cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">svm_grid_searcher2</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">cv_score</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">svm_cv_acc</span>
 </pre></div>
@@ -13494,7 +13592,7 @@ height=263
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[97]:</div>
+<div class="prompt output_prompt">Out[123]:</div>
 
 
 
@@ -13511,7 +13609,40 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="prompt input_prompt">In&nbsp;[124]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CV score: {cv_score.mean():.3f}&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Valid score: </span><span class="si">{svm_cv_acc:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CV score: 0.765
+Valid score: 0.781
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[125]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">write_answer_to_file</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">cv_score</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">3</span><span class="p">),</span>
@@ -13562,12 +13693,11 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[154]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">model_assessment</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">path_to_X_pickle</span><span class="p">,</span> <span class="n">path_to_y_pickle</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Estimates CV-accuracy for (1 - test_size) share of (X_sparse, y) </span>
+    <span class="sd">&quot;&quot;&quot;Estimates CV-accuracy for (1 - test_size) share of (X_sparse, y) </span>
 <span class="sd">    loaded from path_to_X_pickle and path_to_y_pickle and holdout accuracy for (test_size) share of (X_sparse, y).</span>
 <span class="sd">    The split is made with stratified train_test_split with params random_state and test_size.</span>
 <span class="sd">    </span>
@@ -13580,9 +13710,22 @@ height=263
 <span class="sd">    </span>
 <span class="sd">    :returns mean CV-accuracy for (X_train, y_train) and accuracy for (X_valid, y_valid) where (X_train, y_train)</span>
 <span class="sd">    and (X_valid, y_valid) are (1 - test_size) and (testsize) shares of (X_sparse, y).</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_X_pickle</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">X_pickle</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">X_pickle</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_y_pickle</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">y_pickle</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">y_pickle</span><span class="p">)</span>
+    
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+                                                         <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="c1">#     print(X_train.shape, y_train.shape)</span>
+    <span class="n">cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">acc_score</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">cv_score</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">acc_score</span>
 </pre></div>
 
 </div>
@@ -13601,15 +13744,35 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[155]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_assessment</span><span class="p">(</span><span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> 
                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;X_sparse_10users.pkl&#39;</span><span class="p">),</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;y_10users.pkl&#39;</span><span class="p">),</span> <span class="n">skf</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;y_10users.pkl&#39;</span><span class="p">),</span> <span class="n">skf</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[155]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0.76468532445509807, 0.78075373311211183)</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -13635,7 +13798,7 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[128]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>cp <span class="nv">$PATH_TO_DATA</span>/X_sparse_10users.pkl <span class="nv">$PATH_TO_DATA</span>/X_sparse_10users_s10_w10.pkl 
@@ -13651,20 +13814,95 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[157]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">estimator</span> <span class="o">=</span> <span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_estimator_</span>
-
+<span class="n">users</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="k">for</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">session_length</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">]):</span>
     <span class="k">if</span> <span class="n">window_size</span> <span class="o">&lt;=</span> <span class="n">session_length</span><span class="p">:</span>
-        <span class="n">path_to_X_pkl</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
-        <span class="n">path_to_y_pkl</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
-        <span class="nb">print</span>           <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+        <span class="n">path_to_X_pkl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;X_sparse_</span><span class="si">{users}</span><span class="s1">users_s</span><span class="si">{session_length}</span><span class="s1">_w</span><span class="si">{window_size}</span><span class="s1">.pkl&#39;</span><span class="p">)</span>
+        <span class="n">path_to_y_pkl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;y_</span><span class="si">{users}</span><span class="s1">users_s</span><span class="si">{session_length}</span><span class="s1">_w</span><span class="si">{window_size}</span><span class="s1">.pkl&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">path_to_X_pkl</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">model_assessment</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">path_to_X_pkl</span><span class="p">,</span> <span class="n">path_to_y_pkl</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">))</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>data/X_sparse_10users_s15_w10.pkl
+(0.82382149552781048, 0.84048352690210948)
+data/X_sparse_10users_s10_w10.pkl
+(0.76468532445509807, 0.78075373311211183)
+data/X_sparse_10users_s15_w7.pkl
+(0.84794037698440983, 0.85432221669155473)
+data/X_sparse_10users_s10_w7.pkl
+(0.79701614637346518, 0.80736684917869583)
+data/X_sparse_10users_s7_w7.pkl
+(0.75298911148303416, 0.76173884187821472)
+data/X_sparse_10users_s15_w5.pkl
+(0.86800137255434695, 0.87529634898055952)
+data/X_sparse_10users_s10_w5.pkl
+(0.81592472053180387, 0.82456140350877194)
+data/X_sparse_10users_s7_w5.pkl
+(0.77405867456322597, 0.78532479848269321)
+data/X_sparse_10users_s5_w5.pkl
+(0.72528306503988282, 0.73624940730203892)
+CPU times: user 7.86 s, sys: 662 ms, total: 8.52 s
+Wall time: 14.2 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[148]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;X_sparse_10users_s15_w7.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">X_sparse</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;y_10users_s15_w7.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">y_temp</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[148]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((14060, 4913), (14060,))</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -13680,13 +13918,94 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[159]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path_to_X_sparse_10users_s15_w5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;X_sparse_10users_s15_w5.pkl&#39;</span><span class="p">)</span>
+<span class="n">path_to_y_10users_s15_w5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;y_10users_s15_w5.pkl&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[162]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">best_window_scores</span> <span class="o">=</span> <span class="n">model_assessment</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">path_to_X_sparse_10users_s15_w5</span><span class="p">,</span> <span class="n">path_to_y_10users_s15_w5</span><span class="p">,</span> 
+                 <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[163]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CV scores: </span><span class="si">{best_window_scores[0]:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Valid scores: </span><span class="si">{best_window_scores[1]:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CV scores: 0.868
+Valid scores: 0.875
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[176]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">write_answer_to_file</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">best_window_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+                      <span class="nb">round</span><span class="p">(</span><span class="n">best_window_scores</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)],</span>
+                      <span class="s1">&#39;answer4_5.txt&#39;</span><span class="p">)</span>
+<span class="o">!</span>cat answer4_5.txt
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.868 0.875 </pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13703,19 +14022,44 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[165]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">estimator</span> <span class="o">=</span> <span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_estimator_</span>
-
+<span class="n">users</span><span class="o">=</span><span class="mi">150</span>
 <span class="k">for</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">session_length</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)]:</span>
-    <span class="n">path_to_X_pkl</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
-    <span class="n">path_to_y_pkl</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
-    <span class="nb">print</span>           <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+    <span class="n">path_to_X_pkl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;X_sparse_</span><span class="si">{users}</span><span class="s1">users_s</span><span class="si">{session_length}</span><span class="s1">_w</span><span class="si">{window_size}</span><span class="s1">.pkl&#39;</span><span class="p">)</span>
+    <span class="n">path_to_y_pkl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;y_</span><span class="si">{users}</span><span class="s1">users_s</span><span class="si">{session_length}</span><span class="s1">_w</span><span class="si">{window_size}</span><span class="s1">.pkl&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">path_to_X_pkl</span><span class="p">[</span><span class="o">-</span><span class="mi">11</span><span class="p">],</span> <span class="n">model_assessment</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">path_to_X_pkl</span><span class="p">,</span> <span class="n">path_to_y_pkl</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">))</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>data/X_sparse_150users_s5_w5.pkl
+(0.40858659509908596, 0.42171606560568453)
+data/X_sparse_150users_s7_w7.pkl
+(0.43638649409423974, 0.45295840855673264)
+data/X_sparse_150users_s10_w10.pkl
+(0.46125889994279129, 0.48362769425388019)
+CPU times: user 3min 23s, sys: 1.26 s, total: 3min 24s
+Wall time: 5min 48s
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13731,13 +14075,103 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[173]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path_to_X_pkl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;X_sparse_150users.pkl&#39;</span><span class="p">)</span>
+<span class="n">path_to_y_pkl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;y_150users.pkl&#39;</span><span class="p">)</span>
+
+<span class="n">best_150users_scores</span> <span class="o">=</span> <span class="n">model_assessment</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">path_to_X_pkl</span><span class="p">,</span> <span class="n">path_to_y_pkl</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">)</span>
+<span class="n">best_150users_scores</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[173]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0.46125889994279129, 0.48362769425388019)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[174]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CV score: </span><span class="si">{best_150users_scores[0]:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Validation score: </span><span class="si">{best_150users_scores[1]:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CV score: 0.461
+Validation score: 0.484
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[178]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">write_answer_to_file</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">best_150users_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+                      <span class="nb">round</span><span class="p">(</span><span class="n">best_150users_scores</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)],</span>
+                      <span class="s1">&#39;answer4_6.txt&#39;</span><span class="p">)</span>
+<span class="o">!</span>cat answer4_6.txt
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.461 0.484 </pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13770,7 +14204,7 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_DATA</span><span class="p">,</span> <span class="s1">&#39;X_sparse_150users.pkl&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">X_sparse_150users_pkl</span><span class="p">:</span>
@@ -13786,12 +14220,11 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train_150</span><span class="p">,</span> <span class="n">X_valid_150</span><span class="p">,</span> <span class="n">y_train_150</span><span class="p">,</span> <span class="n">y_valid_150</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_sparse_150users</span><span class="p">,</span> 
-                                                                      <span class="n">y_150users</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> 
-                                                     <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y_150users</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train_150</span><span class="p">,</span> <span class="n">X_valid_150</span><span class="p">,</span> <span class="n">y_train_150</span><span class="p">,</span> <span class="n">y_valid_150</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X_sparse_150users</span><span class="p">,</span> <span class="n">y_150users</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y_150users</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -13810,15 +14243,34 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">logit_cv_150users</span> <span class="o">=</span> <span class="n">LogisticRegressionCV</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<span class="n">logit_cv_150users</span> <span class="o">=</span> <span class="n">LogisticRegressionCV</span><span class="p">(</span><span class="n">Cs</span><span class="o">=</span><span class="p">[</span><span class="n">logit_best_C</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">logit_cv_150users</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_150</span><span class="p">,</span> <span class="n">y_train_150</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 7min 43s, sys: 14.4 s, total: 7min 57s
+Wall time: 3min 21s
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13834,15 +14286,183 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cv_scores_by_user</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">logit_cv_150users</span><span class="o">.</span><span class="n">scores_</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;User </span><span class="si">{}</span><span class="s1">, CV score: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+    <span class="n">cv_scores_by_user</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">logit_cv_150users</span><span class="o">.</span><span class="n">scores_</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;User </span><span class="si">{}</span><span class="s1">, CV score: </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">logit_cv_150users</span><span class="o">.</span><span class="n">scores_</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>User 6, CV score: 0.9958
+User 13, CV score: 0.9962
+User 15, CV score: 0.9951
+User 16, CV score: 0.9918
+User 28, CV score: 0.9900
+User 31, CV score: 0.9946
+User 33, CV score: 0.9936
+User 39, CV score: 0.9857
+User 46, CV score: 0.9980
+User 49, CV score: 0.9949
+User 50, CV score: 0.9945
+User 53, CV score: 0.9936
+User 65, CV score: 0.9970
+User 66, CV score: 0.9950
+User 82, CV score: 0.9964
+User 85, CV score: 0.9963
+User 89, CV score: 0.9905
+User 92, CV score: 0.9944
+User 100, CV score: 0.9947
+User 102, CV score: 0.9912
+User 103, CV score: 0.9798
+User 105, CV score: 0.9968
+User 106, CV score: 0.9945
+User 118, CV score: 0.9907
+User 119, CV score: 0.9966
+User 120, CV score: 0.9942
+User 126, CV score: 0.9950
+User 127, CV score: 0.9911
+User 128, CV score: 0.9846
+User 138, CV score: 0.9972
+User 158, CV score: 0.9970
+User 160, CV score: 0.9969
+User 165, CV score: 0.9973
+User 172, CV score: 0.9965
+User 177, CV score: 0.9968
+User 203, CV score: 0.9973
+User 207, CV score: 0.9874
+User 223, CV score: 0.9965
+User 233, CV score: 0.9963
+User 235, CV score: 0.9967
+User 236, CV score: 0.9901
+User 237, CV score: 0.9892
+User 238, CV score: 0.9963
+User 240, CV score: 0.9958
+User 241, CV score: 0.9960
+User 242, CV score: 0.9950
+User 245, CV score: 0.9960
+User 246, CV score: 0.9970
+User 249, CV score: 0.9951
+User 252, CV score: 0.9964
+User 254, CV score: 0.9916
+User 256, CV score: 0.9961
+User 258, CV score: 0.9958
+User 259, CV score: 0.9951
+User 260, CV score: 0.9973
+User 261, CV score: 0.9897
+User 263, CV score: 0.9926
+User 264, CV score: 0.9967
+User 269, CV score: 0.9870
+User 270, CV score: 0.9890
+User 273, CV score: 0.9944
+User 287, CV score: 0.9904
+User 294, CV score: 0.9959
+User 298, CV score: 0.9910
+User 301, CV score: 0.9971
+User 308, CV score: 0.9957
+User 315, CV score: 0.9974
+User 318, CV score: 0.9957
+User 327, CV score: 0.9967
+User 332, CV score: 0.9968
+User 333, CV score: 0.9961
+User 339, CV score: 0.9970
+User 340, CV score: 0.9967
+User 342, CV score: 0.9922
+User 344, CV score: 0.9967
+User 351, CV score: 0.9924
+User 356, CV score: 0.9975
+User 361, CV score: 0.9966
+User 363, CV score: 0.9964
+User 411, CV score: 0.9908
+User 417, CV score: 0.9969
+User 425, CV score: 0.9943
+User 430, CV score: 0.9962
+User 435, CV score: 0.9971
+User 436, CV score: 0.9951
+User 440, CV score: 0.9971
+User 444, CV score: 0.9975
+User 475, CV score: 0.9893
+User 476, CV score: 0.9968
+User 486, CV score: 0.9954
+User 515, CV score: 0.9942
+User 533, CV score: 0.9937
+User 561, CV score: 0.9845
+User 563, CV score: 0.9969
+User 564, CV score: 0.9955
+User 568, CV score: 0.9919
+User 569, CV score: 0.9893
+User 570, CV score: 0.9983
+User 573, CV score: 0.9910
+User 575, CV score: 0.9901
+User 576, CV score: 0.9944
+User 580, CV score: 0.9865
+User 583, CV score: 0.9804
+User 584, CV score: 0.9813
+User 600, CV score: 0.9915
+User 603, CV score: 0.9956
+User 605, CV score: 0.9973
+User 640, CV score: 0.9972
+User 647, CV score: 0.9974
+User 653, CV score: 0.9974
+User 664, CV score: 0.9953
+User 665, CV score: 0.9970
+User 677, CV score: 0.9966
+User 692, CV score: 0.9969
+User 697, CV score: 0.9957
+User 705, CV score: 0.9965
+User 722, CV score: 0.9945
+User 740, CV score: 0.9967
+User 741, CV score: 0.9970
+User 756, CV score: 0.9955
+User 780, CV score: 0.9964
+User 784, CV score: 0.9964
+User 785, CV score: 0.9972
+User 797, CV score: 0.9957
+User 812, CV score: 0.9946
+User 844, CV score: 0.9970
+User 859, CV score: 0.9981
+User 868, CV score: 0.9967
+User 875, CV score: 0.9954
+User 932, CV score: 0.9902
+User 996, CV score: 0.9926
+User 1014, CV score: 0.9970
+User 1040, CV score: 0.9969
+User 1054, CV score: 0.9965
+User 1248, CV score: 0.9977
+User 1267, CV score: 0.9974
+User 1299, CV score: 0.9969
+User 1371, CV score: 0.9933
+User 1797, CV score: 0.9944
+User 1798, CV score: 0.9963
+User 1993, CV score: 0.9967
+User 2118, CV score: 0.9976
+User 2174, CV score: 0.9956
+User 2191, CV score: 0.9952
+User 2250, CV score: 0.9974
+User 2355, CV score: 0.9955
+User 2408, CV score: 0.9934
+User 2493, CV score: 0.9965
+User 2625, CV score: 0.9959
+User 2902, CV score: 0.9971
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13859,13 +14479,16 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">class_distr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">y_train_150</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">))</span>
+<span class="n">user_share</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">acc_diff_vs_constant</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="k">for</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_train_150</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+    <span class="n">user_share</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_distr</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">class_distr</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">acc_diff_vs_constant</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_scores_by_user</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">user_share</span><span class="p">[</span><span class="n">user_id</span><span class="p">])</span>
 </pre></div>
 
 </div>
@@ -13875,13 +14498,34 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_better_than_default</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">acc_diff_vs_constant</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">num_better_than_default</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[49]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>137</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -13897,13 +14541,78 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">.</span><span class="mi">907</span> <span class="o">*</span> <span class="mi">150</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[45]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>136.05</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">better_than_default_share</span> <span class="o">=</span> <span class="n">num_better_than_default</span> <span class="o">/</span> <span class="mi">150</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">write_answer_to_file</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">better_than_default_share</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+                    <span class="s1">&#39;answer4_7.txt&#39;</span><span class="p">)</span>
+<span class="o">!</span>cat answer4_7.txt
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.913 </pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -13919,10 +14628,76 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[67]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_binary_128</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">y_train_150</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">))[</span><span class="mi">128</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[67]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1957</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_150users</span> <span class="o">==</span> <span class="mi">128</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[70]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>2796</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_binary_128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_150users</span> <span class="o">==</span> <span class="mi">128</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -13932,7 +14707,7 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">learning_curve</span>
@@ -13972,7 +14747,7 @@ height=263
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">train_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="n">estimator</span> <span class="o">=</span> <span class="n">svm_grid_searcher2</span><span class="o">.</span><span class="n">best_estimator_</span>
-<span class="n">n_train</span><span class="p">,</span> <span class="n">val_train</span><span class="p">,</span> <span class="n">val_test</span> <span class="o">=</span> <span class="n">learning_curve</span> <span class="s1">&#39;&#39;&#39; ВАШ КОД ЗДЕСЬ &#39;&#39;&#39;</span>
+<span class="n">n_train</span><span class="p">,</span> <span class="n">val_train</span><span class="p">,</span> <span class="n">val_test</span> <span class="o">=</span> <span class="n">learning_curve</span><span class="p">(</span><span class="n">logit_cv_150users</span><span class="p">,</span> <span class="p">)</span>
 </pre></div>
 
 </div>
