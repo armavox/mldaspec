@@ -45,7 +45,7 @@ get_ipython().run_line_magic('load_ext', 'watermark')
 get_ipython().run_line_magic('watermark', '-v -m -p numpy,scipy,pandas,matplotlib,statsmodels,sklearn -g')
 
 
-# In[4]:
+# In[3]:
 
 
 from __future__ import division, print_function
@@ -66,14 +66,14 @@ from sklearn.model_selection import train_test_split, cross_val_score, Stratifie
 from sklearn.metrics import accuracy_score, f1_score
 
 
-# In[8]:
+# In[4]:
 
 
 # Поменяйте на свой путь к данным
 PATH_TO_DATA = 'data'
 
 
-# In[9]:
+# In[5]:
 
 
 def write_answer_to_file(value, filename):
@@ -85,7 +85,7 @@ def write_answer_to_file(value, filename):
 
 # **Загрузим сериализованные ранее объекты *X_sparse_10users* и *y_10users*, соответствующие обучающей выборке для 10 пользователей.**
 
-# In[12]:
+# In[6]:
 
 
 with open(os.path.join(PATH_TO_DATA, 'X_sparse_10users.pkl'), 'rb') as X_sparse_10users_pkl:
@@ -96,7 +96,7 @@ with open(os.path.join(PATH_TO_DATA, 'y_10users.pkl'), 'rb') as y_10users_pkl:
 
 # **Здесь более 14 тысяч сессий и почти 5 тысяч уникальных посещенных сайтов.**
 
-# In[13]:
+# In[7]:
 
 
 X_sparse_10users.shape
@@ -104,7 +104,7 @@ X_sparse_10users.shape
 
 # **Разобьем выборку на 2 части. На одной будем проводить кросс-валидацию, на второй – оценивать модель, обученную после кросс-валидации.**
 
-# In[14]:
+# In[8]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(X_sparse_10users, y_10users, 
@@ -114,7 +114,7 @@ X_train, X_valid, y_train, y_valid = train_test_split(X_sparse_10users, y_10user
 
 # **Зададим заранее тип кросс-валидации: 3-кратная, с перемешиванием, параметр random_state=17 – для воспроизводимости.**
 
-# In[15]:
+# In[9]:
 
 
 skf = StratifiedKFold(n_splits=3, shuffle=True, random_state=17)
@@ -122,7 +122,7 @@ skf = StratifiedKFold(n_splits=3, shuffle=True, random_state=17)
 
 # **Вспомогательная функция для отрисовки кривых валидации после запуска GridSearchCV (или RandomizedCV).**
 
-# In[16]:
+# In[10]:
 
 
 def plot_validation_curves(param_values, grid_cv_results_):
@@ -137,67 +137,72 @@ def plot_validation_curves(param_values, grid_cv_results_):
     plt.legend()
 
 
+# ### K-Nearest Neighbors
+
 # **1. Обучите `KNeighborsClassifier` со 100 ближайшими соседями (остальные параметры оставьте по умолчанию, только `n_jobs`=-1 для распараллеливания) и посмотрите на долю правильных ответов на 3-кратной кросс-валидации (ради воспроизводимости используйте для этого объект `StratifiedKFold` `skf`) по выборке `(X_train, y_train)` и отдельно на выборке `(X_valid, y_valid)`.**
 
-# In[9]:
+# In[11]:
 
 
 from sklearn.neighbors import KNeighborsClassifier
 
 
-# In[102]:
+# In[12]:
 
 
-knn = KNeighborsClassifier(n_neighbors=100, n_jobs=-1).fit(X_train, y_train)
+knn = KNeighborsClassifier(n_neighbors=100, n_jobs=-1)
+knn.fit(X_train, y_train)
 
 
 # **<font color='red'>Вопрос 1. </font> Посчитайте доли правильных ответов для KNeighborsClassifier на кросс-валидации и отложенной выборке. Округлите каждое до 3 знаков после запятой и введите через пробел.**
 
-# In[103]:
+# In[13]:
 
 
 cv_score = cross_val_score(knn, X_train, y_train, cv=skf, n_jobs=-1)
 acc_score = accuracy_score(y_valid, knn.predict(X_valid))
 
 
-# In[104]:
+# In[14]:
 
 
 print(f'CV score: {cv_score.mean():.3f}')
 print(f'Valid score: {acc_score:.3f}')
 
 
-# In[101]:
+# In[15]:
 
 
 write_answer_to_file([round(cv_score.mean(), 3),
-                     round(acc_score, 3)],
+                      round(acc_score, 3)],
                      'answer4_1.txt')
 get_ipython().system('cat answer4_1.txt')
 
 
+# ### Random Forest
+
 # **2. Обучите случайный лес (`RandomForestClassifier`) из 100 деревьев (для воспроизводимости `random_state`=17). Посмотрите на OOB-оценку (для этого надо сразу установить `oob_score`=True) и на долю правильных ответов на выборке `(X_valid, y_valid)`. Для распараллеливания задайте `n_jobs`=-1.**
 
-# In[26]:
+# In[16]:
 
 
 from sklearn.ensemble import RandomForestClassifier
 
 
-# In[27]:
+# In[17]:
 
 
 forest = RandomForestClassifier(n_estimators=100, random_state=17, oob_score=True, n_jobs=-1)
 forest.fit(X_train, y_train)
 
 
-# In[28]:
+# In[18]:
 
 
 acc_score = accuracy_score(y_valid, forest.predict(X_valid))
 
 
-# In[29]:
+# In[19]:
 
 
 print(f'Out-of-Bag score: {forest.oob_score_:.3f}')
@@ -206,7 +211,7 @@ print(f'Valid score: {acc_score:.3f}')
 
 # **<font color='red'>Вопрос 2. </font> Посчитайте доли правильных ответов для `RandomForestClassifier` при Out-of-Bag оценке и на отложенной выборке. Округлите каждое до 3 знаков после запятой и введите через пробел.**
 
-# In[21]:
+# In[20]:
 
 
 write_answer_to_file([round(forest.oob_score_, 3),
@@ -215,31 +220,28 @@ write_answer_to_file([round(forest.oob_score_, 3),
 get_ipython().system('cat answer4_2.txt')
 
 
+# ### Logistic Regression
+
 # **3. Обучите логистическую регрессию (`LogisticRegression`) с параметром `C` по умолчанию и `random_state`=17 (для воспроизводимости). Посмотрите на долю правильных ответов на кросс-валидации (используйте объект `skf`, созданный ранее) и на выборке `(X_valid, y_valid)`. Для распараллеливания задайте `n_jobs=-1`.**
 
-# In[6]:
+# In[21]:
 
 
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 
 
-# In[25]:
+# In[22]:
 
 
 logit = LogisticRegression(random_state=17, n_jobs=-1)
 logit.fit(X_train, y_train)
 
 
-# In[26]:
+# In[23]:
 
 
 cv_score = cross_val_score(logit, X_train, y_train, cv=skf).mean()
 acc_score = accuracy_score(y_valid, logit.predict(X_valid))
-
-
-# In[27]:
-
-
 print(f'CV score: {cv_score:.3f}')
 print(f'Valid score: {acc_score:.3f}')
 
@@ -250,7 +252,7 @@ print(f'Valid score: {acc_score:.3f}')
 # 
 # **Нарисуйте кривые валидации по параметру `C`.**
 
-# In[28]:
+# In[24]:
 
 
 logit_c_values1 = np.logspace(-4, 2, 10)
@@ -263,30 +265,25 @@ logit_grid_searcher1.fit(X_train, y_train)
 
 # Средние значения доли правильных ответов на кросс-валидации по каждому из 10 параметров `C`.
 
-# In[29]:
+# In[25]:
+
+
+logit_grid_searcher1.C_.mean()
+
+
+# In[26]:
 
 
 C_scores = []
 for key, value in logit_grid_searcher1.scores_.items():
     C_scores.append(logit_grid_searcher1.scores_[key].mean(axis=0))
-C_scores = np.asarray(C_scores).mean(axis=0)
-
-
-# In[30]:
-
-
-C_scores
-
-
-# In[31]:
-
-
-logit_mean_cv_scores1 = C_scores
+logit_mean_cv_scores1 = np.asarray(C_scores).mean(axis=0)
+print(logit_mean_cv_scores1)
 
 
 # Выведите лучшее значение доли правильных ответов на кросс-валидации и соответствующее значение `C`.
 
-# In[32]:
+# In[27]:
 
 
 logit_mean_cv_scores1.max(), logit_grid_searcher1.Cs_[logit_mean_cv_scores1.argmax()]
@@ -294,9 +291,10 @@ logit_mean_cv_scores1.max(), logit_grid_searcher1.Cs_[logit_mean_cv_scores1.argm
 
 # Нарисуйте график зависимости доли правильных ответов на кросс-валидации от `C`.
 
-# In[34]:
+# In[28]:
 
 
+plt.figure(figsize=(12,4))
 plt.plot(np.log10(logit_c_values1), logit_mean_cv_scores1)
 plt.grid(True, alpha=.4, axis='x')
 plt.xlabel('log10(C)')
@@ -307,7 +305,7 @@ for x, y in zip(np.log10(logit_c_values1), logit_mean_cv_scores1):
 
 # **Теперь то же самое, только значения параметра `C` перебирайте в диапазоне `np.linspace`(0.1, 7, 20). Опять нарисуйте кривые валидации, определите максимальное значение доли правильных ответов на кросс-валидации.**
 
-# In[17]:
+# In[29]:
 
 
 logit_c_values2 = np.linspace(0.1, 7, 20)
@@ -318,7 +316,7 @@ logit_grid_searcher2 = LogisticRegressionCV(logit_c_values2, cv=skf,
 logit_grid_searcher2.fit(X_train, y_train)
 
 
-# In[18]:
+# In[30]:
 
 
 logit_grid_searcher2.C_.mean()
@@ -326,41 +324,27 @@ logit_grid_searcher2.C_.mean()
 
 # Средние значения доли правильных ответов на кросс-валидации по каждому из 10 параметров `C`.
 
-# In[19]:
+# In[31]:
 
 
 C_scores = []
 for key, value in logit_grid_searcher2.scores_.items():
     C_scores.append(logit_grid_searcher2.scores_[key].mean(axis=0))
-C_scores = np.asarray(C_scores).mean(axis=0)
-C_scores
-
-
-# In[20]:
-
-
-logit_mean_cv_scores2 = C_scores
+logit_mean_cv_scores2 = np.asarray(C_scores).mean(axis=0)
 
 
 # Выведите лучшее значение доли правильных ответов на кросс-валидации и соответствующее значение `C`.
 
-# In[21]:
+# In[32]:
 
 
 logit_best_C = logit_grid_searcher2.Cs_[logit_mean_cv_scores2.argmax()]
-
 logit_mean_cv_scores2.max(), logit_best_C
-
-
-# In[22]:
-
-
-logit_grid_searcher2.C_.mean()
 
 
 # Нарисуйте график зависимости доли правильных ответов на кросс-валидации от `C`.
 
-# In[40]:
+# In[33]:
 
 
 plt.figure(figsize=(12,4))
@@ -376,24 +360,13 @@ for x, y in zip(logit_c_values2, logit_mean_cv_scores2):
 
 # **<font color='red'>Вопрос 3. </font>Посчитайте доли правильных ответов для `logit_grid_searcher2` на кросс-валидации для лучшего значения параметра `C` и на отложенной выборке. Округлите каждое до 3 знаков после запятой и выведите через пробел.**
 
-# In[107]:
+# In[35]:
 
 
-logit_grid_searcher2.Cs = [best_C]
-
-logit_cv_acc = accuracy_score(y_valid, logit_grid_searcher2.predict(X_valid))
-cv_score = cross_val_score(logit_grid_searcher2, X_train, y_train, cv=skf, n_jobs=-1)
-logit_cv_acc, cv_score.mean()
+get_ipython().run_cell_magic('time', '', "logit_grid_searcher2.Cs = [logit_best_C]\nlogit_cv_acc = accuracy_score(y_valid, logit_grid_searcher2.predict(X_valid))\ncv_score = cross_val_score(logit_grid_searcher2, X_train, y_train, cv=skf, n_jobs=-1)\n\nprint(f'CV score: {cv_score.mean():.3f}')\nprint(f'Valid score: {logit_cv_acc:.3f}')")
 
 
-# In[109]:
-
-
-print(f'CV score: {cv_score.mean():.3f}')
-print(f'Valid score: {logit_cv_acc:.3f}')
-
-
-# In[54]:
+# In[36]:
 
 
 write_answer_to_file([round(cv_score.mean(), 3),
@@ -402,32 +375,29 @@ write_answer_to_file([round(cv_score.mean(), 3),
 get_ipython().system('cat answer4_3.txt')
 
 
+# ### Linear SVC
+
 # **4. Обучите линейный SVM (`LinearSVC`) с параметром `C`=1 и `random_state`=17 (для воспроизводимости). Посмотрите на долю правильных ответов на кросс-валидации (используйте объект `skf`, созданный ранее) и на выборке `(X_valid, y_valid)`.**
 
-# In[55]:
+# In[37]:
 
 
 from sklearn.svm import LinearSVC
 
 
-# In[58]:
+# In[38]:
 
 
 svm = LinearSVC(random_state=17).fit(X_train, y_train)
 acc_score = accuracy_score(y_valid, svm.predict(X_valid))
 cv_score = cross_val_score(svm, X_train, y_train, cv=skf, n_jobs=-1)
-cv_score.mean(), acc_score
+print(f'CV score: {cv_score.mean():.3f}')
+print(f'Valid score: {acc_score:.3f}')
 
 
 # **С помощью `GridSearchCV` подберите параметр `C` для SVM сначала в широком диапазоне: 10 значений от 1e-4 до 1e4, используйте `linspace` из NumPy. Нарисуйте кривые валидации.**
 
-# In[62]:
-
-
-sorted(svm_grid_searcher1.get_params().keys())
-
-
-# In[63]:
+# In[39]:
 
 
 get_ipython().run_cell_magic('time', '', "svm_params1 = {'C': np.linspace(1e-4, 1e4, 10)}\n\nsvm_grid_searcher1 = GridSearchCV(svm, svm_params1, return_train_score=True, n_jobs=-1)\nsvm_grid_searcher1.fit(X_train, y_train)")
@@ -435,7 +405,7 @@ get_ipython().run_cell_magic('time', '', "svm_params1 = {'C': np.linspace(1e-4, 
 
 # Выведите лучшее значение доли правильных ответов на кросс-валидации и соответствующее значение `C`.
 
-# In[65]:
+# In[40]:
 
 
 svm_grid_searcher1.best_score_, svm_grid_searcher1.best_params_
@@ -443,7 +413,7 @@ svm_grid_searcher1.best_score_, svm_grid_searcher1.best_params_
 
 # Нарисуйте график зависимости доли правильных ответов на кросс-валидации от `C`.
 
-# In[68]:
+# In[41]:
 
 
 plot_validation_curves(svm_params1['C'], svm_grid_searcher1.cv_results_)
@@ -455,7 +425,7 @@ plt.ylabel('Accuracy score');
 # 
 # **С помощью `GridSearchCV` подберите параметр `C` для SVM в диапазоне (1e-3, 1), 30 значений, используйте `linspace` из NumPy. Нарисуйте кривые валидации.**
 
-# In[76]:
+# In[42]:
 
 
 get_ipython().run_cell_magic('time', '', "svm_params2 = {'C': np.linspace(1e-3, 1, 30)}\n\nsvm_grid_searcher2 = GridSearchCV(svm, svm_params2, cv=skf, return_train_score=True, n_jobs=-1)\nsvm_grid_searcher2.fit(X_train, y_train)")
@@ -463,7 +433,7 @@ get_ipython().run_cell_magic('time', '', "svm_params2 = {'C': np.linspace(1e-3, 
 
 # Выведите лучшее значение доли правильных ответов на кросс-валидации и соответствующее значение `C`.
 
-# In[77]:
+# In[43]:
 
 
 svm_grid_searcher2.best_score_, svm_grid_searcher2.best_params_
@@ -471,7 +441,7 @@ svm_grid_searcher2.best_score_, svm_grid_searcher2.best_params_
 
 # Нарисуйте график зависимости доли правильных ответов на кросс-валидации от С.
 
-# In[78]:
+# In[44]:
 
 
 plot_validation_curves(svm_params2['C'], svm_grid_searcher2.cv_results_)
@@ -481,37 +451,32 @@ plt.ylabel('Accuracy score');
 
 # Выведите долю правильных ответов на выборке `(X_valid, y_valid)` для `LinearSVC` с лучшим найденным значением `C`.
 
-# In[166]:
+# In[45]:
 
 
-best_C = svm_grid_searcher2.best_params_['C']
+svm_best_C = svm_grid_searcher2.best_params_['C']
 
 
-# In[170]:
+# In[46]:
 
 
-logit = LinearSVC(C=best_C, random_state=1).fit(X_train, y_train)
-print(f'{(accuracy_score(y_valid, logit.predict(X_valid))):.3f}')
+svm = LinearSVC(C=svm_best_C, random_state=1).fit(X_train, y_train)
+print(f'{(accuracy_score(y_valid, svm.predict(X_valid))):.3f}')
 
 
 # **<font color='red'>Вопрос 4. </font> Посчитайте доли правильных ответов для `svm_grid_searcher2` на кросс-валидации для лучшего значения параметра `C` и на отложенной выборке. Округлите каждое до 3 знаков после запятой и выведите через пробел.**
 
-# In[123]:
+# In[47]:
 
 
 svm_cv_acc = accuracy_score(y_valid, svm_grid_searcher2.best_estimator_.predict(X_valid))
-cv_score = cross_val_score(svm_grid_searcher2, X_train, y_train, cv=skf, n_jobs=-1)
-cv_score.mean(), svm_cv_acc
-
-
-# In[124]:
-
+cv_score = cross_val_score(svm_grid_searcher2.best_estimator_, X_train, y_train, cv=skf, n_jobs=-1)
 
 print(f'CV score: {cv_score.mean():.3f}')
 print(f'Valid score: {svm_cv_acc:.3f}')
 
 
-# In[125]:
+# In[48]:
 
 
 write_answer_to_file([round(cv_score.mean(), 3),
@@ -526,7 +491,7 @@ get_ipython().system('cat answer4_4.txt')
 # 
 # **Определите функцию `model_assessment`, ее документация описана ниже. Обратите внимание на все детали. Например, на то, что разбиение  выборки с `train_test_split` должно быть стратифицированным. Не теряйте нигде `random_state`.**
 
-# In[154]:
+# In[49]:
 
 
 def model_assessment(estimator, path_to_X_pickle, path_to_y_pickle, cv, random_state=17, test_size=0.3):
@@ -563,12 +528,10 @@ def model_assessment(estimator, path_to_X_pickle, path_to_y_pickle, cv, random_s
 
 # **Убедитесь, что функция работает.**
 
-# In[155]:
+# In[50]:
 
 
-model_assessment(svm_grid_searcher2.best_estimator_, 
-                 os.path.join(PATH_TO_DATA, 'X_sparse_10users.pkl'),
-                 os.path.join(PATH_TO_DATA, 'y_10users.pkl'), skf, random_state=17, test_size=0.3)
+get_ipython().run_cell_magic('time', '', "cv, val = model_assessment(svm_grid_searcher2.best_estimator_, \n                           os.path.join(PATH_TO_DATA, 'X_sparse_10users.pkl'),\n                           os.path.join(PATH_TO_DATA, 'y_10users.pkl'), cv=skf, test_size=0.3,\n                           random_state=17)\nprint(f'CV score: {cv:.3f}')\nprint(f'Valid score: {val:.3f}')")
 
 
 # **Примените функцию *model_assessment* для лучшего алгоритма из предыдущей части (а именно, `svm_grid_searcher2.best_estimator_`) и 9 выборок вида с разными сочетаниями параметров *session_length* и *window_size* для 10 пользователей. Выведите в цикле параметры *session_length* и *window_size*, а также результат вывода функции *model_assessment*. 
@@ -585,46 +548,34 @@ get_ipython().system('cp $PATH_TO_DATA/y_10users.pkl $PATH_TO_DATA/y_10users_s10
 get_ipython().system('cp $PATH_TO_DATA/y_150users.pkl $PATH_TO_DATA/y_150users_s10_w10.pkl ')
 
 
-# In[157]:
+# In[51]:
 
 
-get_ipython().run_cell_magic('time', '', "estimator = svm_grid_searcher2.best_estimator_\nusers = 10\nfor window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n    if window_size <= session_length:\n        path_to_X_pkl = os.path.join(PATH_TO_DATA, f'X_sparse_{users}users_s{session_length}_w{window_size}.pkl')\n        path_to_y_pkl = os.path.join(PATH_TO_DATA, f'y_{users}users_s{session_length}_w{window_size}.pkl')\n        print(path_to_X_pkl)\n        print(model_assessment(estimator, path_to_X_pkl, path_to_y_pkl, cv=skf))")
-
-
-# In[148]:
-
-
-with open(os.path.join(PATH_TO_DATA, f'X_sparse_10users_s15_w7.pkl'), 'rb')as f:
-    X_sparse = pickle.load(f)
-
-with open(os.path.join(PATH_TO_DATA, f'y_10users_s15_w7.pkl'), 'rb')as f:
-    y_temp = pickle.load(f)
+get_ipython().run_cell_magic('time', '', "estimator = svm_grid_searcher2.best_estimator_\nusers = 10\nfor window_size, session_length in itertools.product([10, 7, 5], [15, 10, 7, 5]):\n    if window_size <= session_length:\n        path_to_X_pkl = os.path.join(PATH_TO_DATA, f'X_sparse_{users}users_s{session_length}_w{window_size}.pkl')\n        path_to_y_pkl = os.path.join(PATH_TO_DATA, f'y_{users}users_s{session_length}_w{window_size}.pkl')\n        print(path_to_X_pkl[-11:-4], model_assessment(estimator, path_to_X_pkl, path_to_y_pkl, cv=skf))")
 
 
 # **<font color='red'>Вопрос 5. </font> Посчитайте доли правильных ответов для `LinearSVC` с настроенным параметром `C` и выборки `X_sparse_10users_s15_w5`. Укажите доли правильных ответов на кросс-валидации и на отложенной выборке. Округлите каждое до 3 знаков после запятой и выведите через пробел.**
 
-# In[159]:
+# In[52]:
 
 
 path_to_X_sparse_10users_s15_w5 = os.path.join(PATH_TO_DATA, f'X_sparse_10users_s15_w5.pkl')
 path_to_y_10users_s15_w5 = os.path.join(PATH_TO_DATA, f'y_10users_s15_w5.pkl')
 
-
-# In[162]:
-
-
-best_window_scores = model_assessment(estimator, path_to_X_sparse_10users_s15_w5, path_to_y_10users_s15_w5, 
-                 cv=skf)
+best_window_scores = model_assessment(estimator, 
+                                      path_to_X_sparse_10users_s15_w5, 
+                                      path_to_y_10users_s15_w5, 
+                                      cv=skf)
 
 
-# In[163]:
+# In[53]:
 
 
 print(f'CV scores: {best_window_scores[0]:.3f}')
 print(f'Valid scores: {best_window_scores[1]:.3f}')
 
 
-# In[176]:
+# In[54]:
 
 
 write_answer_to_file([round(best_window_scores[0], 3),
@@ -637,32 +588,28 @@ get_ipython().system('cat answer4_5.txt')
 # 
 # **Сделайте вывод о том, как качество классификации зависит от длины сессии и ширины окна.**
 
-# In[165]:
+# In[55]:
 
 
-get_ipython().run_cell_magic('time', '', "estimator = svm_grid_searcher2.best_estimator_\nusers=150\nfor window_size, session_length in [(5,5), (7,7), (10,10)]:\n    path_to_X_pkl = os.path.join(PATH_TO_DATA, f'X_sparse_{users}users_s{session_length}_w{window_size}.pkl')\n    path_to_y_pkl = os.path.join(PATH_TO_DATA, f'y_{users}users_s{session_length}_w{window_size}.pkl')\n    print(path_to_X_pkl[-11], model_assessment(estimator, path_to_X_pkl, path_to_y_pkl, cv=skf))")
+get_ipython().run_cell_magic('time', '', "estimator = svm_grid_searcher2.best_estimator_\nusers=150\nfor window_size, session_length in [(5,5), (7,7), (10,10)]:\n    path_to_X_pkl = os.path.join(PATH_TO_DATA, f'X_sparse_{users}users_s{session_length}_w{window_size}.pkl')\n    path_to_y_pkl = os.path.join(PATH_TO_DATA, f'y_{users}users_s{session_length}_w{window_size}.pkl')\n    print(path_to_X_pkl[-11:-4], model_assessment(estimator, path_to_X_pkl, path_to_y_pkl, cv=skf))")
 
 
 # **<font color='red'>Вопрос 6. </font> Посчитайте доли правильных ответов для `LinearSVC` с настроенным параметром `C` и выборки `X_sparse_150users`. Укажите доли правильных ответов на кросс-валидации и на отложенной выборке. Округлите каждое до 3 знаков после запятой и выведите через пробел.**
 
-# In[173]:
+# In[56]:
 
 
-path_to_X_pkl = os.path.join(PATH_TO_DATA, f'X_sparse_150users.pkl')
-path_to_y_pkl = os.path.join(PATH_TO_DATA, f'y_150users.pkl')
-
-best_150users_scores = model_assessment(estimator, path_to_X_pkl, path_to_y_pkl, cv=skf)
-best_150users_scores
+get_ipython().run_cell_magic('time', '', "path_to_X_pkl = os.path.join(PATH_TO_DATA, f'X_sparse_150users.pkl')\npath_to_y_pkl = os.path.join(PATH_TO_DATA, f'y_150users.pkl')\n\nbest_150users_scores = model_assessment(estimator, \n                                        path_to_X_pkl, \n                                        path_to_y_pkl, \n                                        cv=skf)")
 
 
-# In[174]:
+# In[57]:
 
 
 print(f'CV score: {best_150users_scores[0]:.3f}')
 print(f'Validation score: {best_150users_scores[1]:.3f}')
 
 
-# In[178]:
+# In[58]:
 
 
 write_answer_to_file([round(best_150users_scores[0], 3),
@@ -677,7 +624,7 @@ get_ipython().system('cat answer4_6.txt')
 
 # **Загрузим сериализованные ранее объекты *X_sparse_150users* и *y_150users*, соответствующие обучающей выборке для 150 пользователей с параметрами (*session_length, window_size*) = (10,10). Так же точно разобьем их на 70% и 30%.**
 
-# In[23]:
+# In[59]:
 
 
 with open(os.path.join(PATH_TO_DATA, 'X_sparse_150users.pkl'), 'rb') as X_sparse_150users_pkl:
@@ -686,7 +633,7 @@ with open(os.path.join(PATH_TO_DATA, 'y_150users.pkl'), 'rb') as y_150users_pkl:
     y_150users = pickle.load(y_150users_pkl)
 
 
-# In[24]:
+# In[60]:
 
 
 X_train_150, X_valid_150, y_train_150, y_valid_150 = train_test_split(
@@ -695,15 +642,15 @@ X_train_150, X_valid_150, y_train_150, y_valid_150 = train_test_split(
 
 # **Обучите `LogisticRegressionCV` для одного значения параметра `C` (лучшего на кросс-валидации в 1 части, используйте точное значение, не на глаз). Теперь будем решать 150 задач "Один-против-Всех", поэтому укажите аргумент `multi_class`='ovr'. Как всегда, где возможно, указывайте `n_jobs=-1` и `random_state`=17.**
 
-# In[25]:
+# In[61]:
 
 
-get_ipython().run_cell_magic('time', '', "logit_cv_150users = LogisticRegressionCV(Cs=[logit_best_C], random_state=17, cv=skf, n_jobs=-1, multi_class='ovr')\nlogit_cv_150users.fit(X_train_150, y_train_150)")
+get_ipython().run_cell_magic('time', '', "logit_cv_150users = LogisticRegressionCV(Cs=[logit_best_C], multi_class='ovr', cv=skf, \n                                         random_state=17, n_jobs=-1)\nlogit_cv_150users.fit(X_train_150, y_train_150)")
 
 
 # **Посмотрите на средние доли правильных ответов на кросс-валидации в задаче идентификации каждого пользователя по отдельности.**
 
-# In[30]:
+# In[62]:
 
 
 cv_scores_by_user = {}
@@ -715,7 +662,7 @@ for user_id in logit_cv_150users.scores_:
 # **Результаты кажутся впечатляющими, но возможно, мы забываем про дисбаланс классов, и высокую долю правильных ответов можно получить константным прогнозом. Посчитайте для каждого пользователя разницу между долей правильных ответов на кросс-валидации (только что посчитанную с помощью `LogisticRegressionCV`) и долей меток в *y_train_150*, отличных от ID 
 #  этого пользователя (именно такую долю правильных ответов можно получить, если классификатор всегда "говорит", что это не пользователь с номером $i$ в задаче классификации $i$-vs-All).**
 
-# In[48]:
+# In[63]:
 
 
 class_distr = np.bincount(y_train_150.astype('int'))
@@ -727,7 +674,7 @@ for user_id in np.unique(y_train_150):
     acc_diff_vs_constant[user_id] = cv_scores_by_user[user_id] - (1 - user_share[user_id])
 
 
-# In[49]:
+# In[64]:
 
 
 num_better_than_default = (np.array(list(acc_diff_vs_constant.values())) > 0).sum()
@@ -736,19 +683,19 @@ num_better_than_default
 
 # **<font color='red'>Вопрос 7. </font> Посчитайте долю пользователей, для которых логистическая регрессия на кросс-валидации дает прогноз лучше константного. Округлите до 3 знаков после запятой.**
 
-# In[45]:
+# In[65]:
 
 
 .907 * 150
 
 
-# In[42]:
+# In[66]:
 
 
 better_than_default_share = num_better_than_default / 150
 
 
-# In[43]:
+# In[67]:
 
 
 write_answer_to_file([round(better_than_default_share, 3)],
@@ -758,25 +705,7 @@ get_ipython().system('cat answer4_7.txt')
 
 # **Дальше будем строить кривые обучения для конкретного пользователя, допустим, для 128-го. Составьте новый бинарный вектор на основе *y_150users*, его значения будут 1 или 0 в зависимости от того, равен ли ID-шник пользователя 128.**
 
-# In[67]:
-
-
-np.bincount(y_train_150.astype('int'))[128]
-
-
-# In[70]:
-
-
-np.array(y_150users == 128, dtype='int').sum()
-
-
 # In[71]:
-
-
-y_binary_128 = np.array(y_150users == 128, dtype='int')
-
-
-# In[72]:
 
 
 from sklearn.model_selection import learning_curve
@@ -796,15 +725,27 @@ def plot_learning_curve(val_train, val_test, train_sizes,
 
 # **Посчитайте доли правильных ответов на кросс-валидации в задаче классификации "user128-vs-All" в зависимости от размера выборки. Не помешает посмотреть встроенную документацию для *learning_curve*.**
 
-# In[ ]:
+# In[72]:
 
 
-get_ipython().run_cell_magic('time', '', 'train_sizes = np.linspace(0.25, 1, 20)\nestimator = svm_grid_searcher2.best_estimator_\nn_train, val_train, val_test = learning_curve(logit_cv_150users, )')
+'''Почему-то без train-test split не работает lerning curve'''
+y_binary_128 = np.array(y_150users == 128, dtype='int')
+
+X_train_150, _, y_train_150, _ = train_test_split(
+    X_sparse_150users, y_binary_128, test_size=0.01, random_state=17, stratify=y_binary_128)
 
 
-# In[ ]:
+# In[73]:
 
 
+get_ipython().run_cell_magic('time', '', 'train_sizes = np.linspace(0.25, 1, 20)\nn_train, val_train, val_test = learning_curve(logit_cv_150users, X_train_150, y_train_150, \n                                              train_sizes=train_sizes, cv=skf, n_jobs=-1,\n                                              random_state=17)')
+
+
+# In[74]:
+
+
+plt.figure(figsize=(12,4))
+plt.grid(True, alpha=.4)
 plot_learning_curve(val_train, val_test, n_train, 
                     xlabel='train_size', ylabel='accuracy')
 
