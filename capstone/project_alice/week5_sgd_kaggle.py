@@ -61,7 +61,7 @@ from sklearn.metrics import roc_auc_score
 PATH_TO_DATA = 'competition_data'
 
 
-# In[24]:
+# In[5]:
 
 
 def write_answer_to_file(value, filename):
@@ -69,7 +69,7 @@ def write_answer_to_file(value, filename):
             fout.writelines([str(item) + ' ' for item in value])
 
 
-# In[5]:
+# In[6]:
 
 
 train_df = pd.read_csv(os.path.join(PATH_TO_DATA, 'train_sessions.csv'),
@@ -78,7 +78,7 @@ test_df = pd.read_csv(os.path.join(PATH_TO_DATA, 'test_sessions.csv'),
                       index_col='session_id')
 
 
-# In[6]:
+# In[7]:
 
 
 train_df.head()
@@ -86,7 +86,7 @@ train_df.head()
 
 # **Объединим обучающую и тестовую выборки – это понадобится, чтоб вместе потом привести их к разреженному формату.**
 
-# In[7]:
+# In[8]:
 
 
 train_test_df = pd.concat([train_df, test_df])
@@ -106,19 +106,19 @@ train_test_df = pd.concat([train_df, test_df])
 # 
 # Пропуски возникают там, где сессии короткие (менее 10 сайтов). Скажем, если человек 1 января 2015 года посетил *vk.com* в 20:01, потом *yandex.ru* в 20:29, затем *google.com* в 20:33, то первая его сессия будет состоять только из двух сайтов (site1 – ID сайта *vk.com*, time1 – 2015-01-01 20:01:00, site2 – ID сайта  *yandex.ru*, time2 – 2015-01-01 20:29:00, остальные признаки – NaN), а начиная с *google.com* пойдет новая сессия, потому что уже прошло более 30 минут с момента посещения *vk.com*.
 
-# In[8]:
+# In[9]:
 
 
 train_df.info()
 
 
-# In[9]:
+# In[10]:
 
 
 test_df.head()
 
 
-# In[10]:
+# In[11]:
 
 
 test_df.info()
@@ -126,7 +126,7 @@ test_df.info()
 
 # **В обучающей выборке – 2297 сессий одного пользователя (Alice) и 251264 сессий – других пользователей, не Элис. Дисбаланс классов очень сильный, и смотреть на долю верных ответов (accuracy) непоказательно.**
 
-# In[11]:
+# In[12]:
 
 
 train_df['target'].value_counts()
@@ -134,13 +134,13 @@ train_df['target'].value_counts()
 
 # **Пока для прогноза будем использовать только индексы посещенных сайтов. Индексы нумеровались с 1, так что заменим пропуски на нули.**
 
-# In[12]:
+# In[13]:
 
 
 train_test_df_sites = train_test_df[['site%d' % i for i in range(1, 11)]].fillna(0).astype('int')
 
 
-# In[13]:
+# In[14]:
 
 
 train_test_df_sites.head(10)
@@ -152,13 +152,13 @@ train_test_df_sites.head(10)
 # 
 # **Выделите в отдельный вектор *y* ответы на обучающей выборке.**
 
-# In[16]:
+# In[15]:
 
 
 get_ipython().system('ls competition_data/')
 
 
-# In[14]:
+# In[16]:
 
 
 def to_csr(X):
@@ -169,7 +169,7 @@ def to_csr(X):
     return csr_matrix((data, indices, indptr))[:, 1:]
 
 
-# In[31]:
+# In[17]:
 
 
 train_test_sparse = to_csr(train_test_df_sites.values)
@@ -180,7 +180,7 @@ y = train_df['target']
 
 # **<font color='red'>Вопрос 1. </font> Выведите размерности матриц *X_train_sparse* и *X_test_sparse* – 4 числа на одной строке через пробел: число строк и столбцов матрицы *X_train_sparse*, затем число строк и столбцов матрицы *X_test_sparse*.**
 
-# In[34]:
+# In[18]:
 
 
 num = X_train_sparse.shape, X_test_sparse.shape
@@ -189,7 +189,7 @@ write_answer_to_file(list(np.array((list(num))).flatten()), 'answer5_1.txt')
 get_ipython().system('cat answer5_1.txt')
 
 
-# In[51]:
+# In[19]:
 
 
 y.shape
@@ -197,7 +197,7 @@ y.shape
 
 # **Сохраним в pickle-файлы объекты *X_train_sparse*, *X_test_sparse* и *y* (последний – в файл *kaggle_data/train_target.pkl*).**
 
-# In[35]:
+# In[20]:
 
 
 with open(os.path.join(PATH_TO_DATA, 'X_train_sparse.pkl'), 'wb') as X_train_sparse_pkl:
@@ -210,7 +210,7 @@ with open(os.path.join(PATH_TO_DATA, 'train_target.pkl'), 'wb') as train_target_
 
 # **Разобьем обучающую выборку на 2 части в пропорции 7/3, причем не перемешивая. Исходные данные упорядочены по времени, тестовая выборка по времени четко отделена от обучающей, это же соблюдем и здесь.**
 
-# In[36]:
+# In[21]:
 
 
 train_share = int(.7 * X_train_sparse.shape[0])
@@ -220,7 +220,7 @@ X_valid, y_valid  = X_train_sparse[train_share:, :], y[train_share:]
 
 # **Создайте объект `sklearn.linear_model.SGDClassifier` с логистической функцией потерь и параметром *random_state*=17. Остальные параметры оставьте по умолчанию, разве что *n_jobs*=-1 никогда не помешает. Обучите  модель на выборке `(X_train, y_train)`.**
 
-# In[37]:
+# In[22]:
 
 
 sgd_logit = SGDClassifier(loss='log', random_state=17, n_jobs=-1)
@@ -229,7 +229,7 @@ sgd_logit.fit(X_train, y_train)
 
 # **Сделайте прогноз в виде предсказанных вероятностей того, что это сессия Элис, на отложенной выборке *(X_valid, y_valid)*.**
 
-# In[49]:
+# In[23]:
 
 
 logit_valid_pred_proba = sgd_logit.predict_proba(X_valid)[:,1]
@@ -237,7 +237,7 @@ logit_valid_pred_proba = sgd_logit.predict_proba(X_valid)[:,1]
 
 # **<font color='red'>Вопрос 2. </font> Посчитайте ROC AUC логистической регрессии, обученной с помощью стохастического градиентного спуска, на отложенной выборке. Округлите до 3 знаков после разделителя.**
 
-# In[50]:
+# In[24]:
 
 
 ans = round(roc_auc_score(y_valid, logit_valid_pred_proba), 3)
@@ -248,13 +248,13 @@ get_ipython().system('cat answer5_2.txt')
 
 # **Сделайте прогноз в виде предсказанных вероятностей отнесения к классу 1 для тестовой выборки с помощью той же *sgd_logit*, обученной уже на всей обучающей выборке (а не на 70%).**
 
-# In[55]:
+# In[25]:
 
 
 get_ipython().run_cell_magic('time', '', 'sgd_logit.fit(X_train_sparse, y)\nlogit_test_pred_proba = sgd_logit.predict_proba(X_test_sparse)[:, 1]')
 
 
-# In[56]:
+# In[26]:
 
 
 logit_test_pred_proba.shape
@@ -264,7 +264,7 @@ logit_test_pred_proba.shape
 # 
 # **Результат, который мы только что получили, соответствует бейзлайну "SGDCLassifer" на лидерборде, задача на эту неделю – как минимум его побить.**
 
-# In[57]:
+# In[27]:
 
 
 def write_to_submission_file(predicted_labels, out_file,
@@ -276,7 +276,7 @@ def write_to_submission_file(predicted_labels, out_file,
     predicted_df.to_csv(out_file, index_label=index_label)
 
 
-# In[58]:
+# In[28]:
 
 
 write_to_submission_file(logit_test_pred_proba, '[ydf_mipt]_useless_subm.csv')

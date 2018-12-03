@@ -44,6 +44,7 @@
 
 import os
 import pandas as pd
+import numpy as np
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 
@@ -51,27 +52,35 @@ from sklearn.linear_model import LogisticRegression, SGDClassifier
 # In[2]:
 
 
-# Поменяйте на свой путь к данным
-PATH_TO_DATA = 'capstone_user_identification'
+def write_answer_to_file(value, filename):
+    with open(filename, 'w') as fout:
+            fout.writelines([str(item) + ' ' for item in value])
 
-
-# **Загрузим обучающую и тестовую выборки. Можете заметить, что тестовые сессии здесь по времени четко отделены от сессий в обучающей выборке. **
 
 # In[3]:
 
 
-train_df_400 = pd.read_csv(os.path.join(PATH_TO_DATA,'train_sessions_400users.csv'), 
-                           index_col='session_id')
+# Поменяйте на свой путь к данным
+PATH_TO_DATA = 'data'
 
+
+# **Загрузим обучающую и тестовую выборки. Можете заметить, что тестовые сессии здесь по времени четко отделены от сессий в обучающей выборке. **
 
 # In[4]:
 
 
-test_df_400 = pd.read_csv(os.path.join(PATH_TO_DATA,'test_sessions_400users.csv'), 
-                           index_col='session_id')
+train_df_400 = pd.read_csv(os.path.join(PATH_TO_DATA,'train_sessions_400users.csv'), 
+                           index_col='session_id', engine='c')
 
 
 # In[5]:
+
+
+test_df_400 = pd.read_csv(os.path.join(PATH_TO_DATA,'test_sessions_400users.csv'), 
+                           index_col='session_id', engine='c')
+
+
+# In[6]:
 
 
 train_df_400.head()
@@ -79,7 +88,7 @@ train_df_400.head()
 
 # **Видим, что в обучающей выборке 182793 сессий, в тестовой – 46473, и сессии действительно принадлежат 400 различным пользователям.**
 
-# In[6]:
+# In[7]:
 
 
 train_df_400.shape, test_df_400.shape, train_df_400['user_id'].nunique()
@@ -87,12 +96,18 @@ train_df_400.shape, test_df_400.shape, train_df_400['user_id'].nunique()
 
 # **Vowpal Wabbit любит, чтоб метки классов были распределены от 1 до K, где K – число классов в задаче классификации (в нашем случае – 400). Поэтому придется применить `LabelEncoder`, да еще и +1 потом добавить (`LabelEncoder` переводит метки в диапозон от 0 до K-1). Потом надо будет применить обратное преобразование.**
 
-# In[ ]:
+# In[8]:
 
 
-y = ''' ВАШ КОД ЗДЕСЬ '''
-class_encoder = ''' ВАШ КОД ЗДЕСЬ '''
-y_for_vw = ''' ВАШ КОД ЗДЕСЬ '''
+from sklearn.preprocessing import LabelEncoder
+
+
+# In[94]:
+
+
+y = train_df_400['user_id']
+class_encoder = LabelEncoder()
+y_for_vw = class_encoder.fit_transform(y) + 1
 
 
 # **Далее будем сравнивать VW с SGDClassifier и с логистической регрессией. Всем моделям этим нужна предобработка входных данных. Подготовьте для sklearn-моделей разреженные матрицы, как мы это делали в 5 части:**
@@ -102,26 +117,45 @@ y_for_vw = ''' ВАШ КОД ЗДЕСЬ '''
 # - переведите в разреженный формат `csr_matrix`
 # - разбейте обратно на обучающую и тестовую части
 
-# In[ ]:
+# In[10]:
 
 
 sites = ['site' + str(i) for i in range(1, 11)]
 
 
-# In[ ]:
+# In[11]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
-X_train_sparse = ''' ВАШ КОД ЗДЕСЬ '''
-X_test_sparse = ''' ВАШ КОД ЗДЕСЬ '''
-y = ''' ВАШ КОД ЗДЕСЬ '''
+def to_csr(X):
+    session_length = X.shape[1]
+    data = [1] * X.ravel().shape[0]
+    indices = X.ravel()
+    indptr = range(0, X.ravel().shape[0] + session_length, session_length)
+    return csr_matrix((data, indices, indptr))[:, 1:]
+
+
+# In[12]:
+
+
+full_df = pd.concat([train_df_400.drop('user_id', axis=1).fillna(0), test_df_400.fillna(0)])
+full_sparse = to_csr(full_df[sites].values)
+split_idx = train_df_400.shape[0]
+X_train_sparse = full_sparse[:split_idx, :]
+X_test_sparse = full_sparse[split_idx:, :]
+y = y.values
+
+
+# In[13]:
+
+
+full_sparse
 
 
 # ### 2.2. Валидация по отложенной выборке
 
 # **Выделим обучающую (70%) и отложенную (30%) части исходной обучающей выборки. Данные не перемешиваем, учитываем, что сессии отсортированы по времени.**
 
-# In[ ]:
+# In[14]:
 
 
 train_share = int(.7 * train_df_400.shape[0])
@@ -131,13 +165,25 @@ X_train_part_sparse = X_train_sparse[:train_share, :]
 X_valid_sparse = X_train_sparse[train_share:, :]
 
 
-# In[ ]:
+# In[15]:
 
 
 y_train_part = y[:train_share]
 y_valid = y[train_share:]
 y_train_part_for_vw = y_for_vw[:train_share]
 y_valid_for_vw = y_for_vw[train_share:]
+
+
+# In[16]:
+
+
+y_valid
+
+
+# In[17]:
+
+
+y_valid_for_vw
 
 
 # **Реализуйте функцию, `arrays_to_vw`, переводящую обучающую выборку в формат Vowpal Wabbit.**
@@ -152,37 +198,84 @@ y_valid_for_vw = y_for_vw[train_share:]
 # - надо пройтись по всем строкам матрицы `X` и записать через пробел все значения, предварительно добавив вперед нужную метку класса из вектора `y` и знак-разделитель `|`
 # - в тестовой выборке на месте меток целевого класса можно писать произвольные, допустим, 1
 
-# In[ ]:
+# In[18]:
+
+
+for row in train_df_part.values[:10]:
+    print(' '.join(row.astype(int).astype('str')))
+
+
+# In[19]:
+
+
+def to_vw_format(array, label=None):
+    return str(label or '') + ' |text ' + ' '.join(document) + '\n'
+
+
+# In[63]:
 
 
 def arrays_to_vw(X, y=None, train=True, out_file='tmp.vw'):
-    ''' ВАШ КОД ЗДЕСЬ '''
-    pass
+    with open(out_file, 'w') as fout:
+        for i, row in enumerate(X):
+            label = y[i] if not y is None else y
+            string = str(label or '1') + ' | ' + ' '.join(row.astype(int).astype('str')) + '\n'
+            fout.write(string)
 
 
 # **Примените написанную функцию к части обучащей выборки `(train_df_part, y_train_part_for_vw)`, к отложенной выборке `(valid_df, y_valid_for_vw)`, ко всей обучающей выборке и ко всей тестовой выборке. Обратите внимание, что на вход наш метод принимает именно матрицы и вектора `NumPy`.**
 
-# In[ ]:
+# In[64]:
 
 
-get_ipython().run_cell_magic('time', '', "# будет 4 вызова\narrays_to_vw ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', "# будет 4 вызова\narrays_to_vw(train_df_part.values, y_train_part_for_vw, out_file=os.path.join(PATH_TO_DATA, 'train_part.vw'))\narrays_to_vw(valid_df.values, y_valid_for_vw, out_file=os.path.join(PATH_TO_DATA, 'valid.vw'))\narrays_to_vw(train_df_400[sites].values, y_for_vw, out_file=os.path.join(PATH_TO_DATA, 'train.vw'))")
+
+
+# In[65]:
+
+
+arrays_to_vw(test_df_400[sites].values,  out_file=os.path.join(PATH_TO_DATA, 'test.vw'))
+
+
+# In[66]:
+
+
+get_ipython().system('head -3 $PATH_TO_DATA/test.vw')
 
 
 # **Результат должен получиться таким.**
 
-# In[7]:
+# In[67]:
 
 
 get_ipython().system('head -3 $PATH_TO_DATA/train_part.vw')
 
 
-# In[8]:
+# In[68]:
 
 
 get_ipython().system('head -3  $PATH_TO_DATA/valid.vw')
 
 
-# In[9]:
+# In[69]:
+
+
+get_ipython().system('head -3 $PATH_TO_DATA/test.vw')
+
+
+# In[27]:
+
+
+get_ipython().system('head -3 $PATH_TO_DATA/train_part.vw')
+
+
+# In[28]:
+
+
+get_ipython().system('head -3  $PATH_TO_DATA/valid.vw')
+
+
+# In[29]:
 
 
 get_ipython().system('head -3 $PATH_TO_DATA/test.vw')
@@ -190,7 +283,13 @@ get_ipython().system('head -3 $PATH_TO_DATA/test.vw')
 
 # **Обучите модель Vowpal Wabbitна выборке `train_part.vw`. Укажите, что решается задача классификации с 400 классами (`--oaa`), сделайте 3 прохода по выборке (`--passes`). Задайте некоторый кэш-файл (`--cache_file`, можно просто указать флаг `-c`), так VW будет быстрее делать все следующие после первого проходы по выборке (прошлый кэш-файл удаляется с помощью аргумента `-k`). Также укажите значение параметра `b`=26. Это число бит, используемых для хэширования, в данном случае нужно больше, чем 18 по умолчанию. Наконец, укажите `random_seed`=17. Остальные параметры пока не меняйте, далее уже в свободном режиме соревнования можете попробовать другие функции потерь.**
 
-# In[ ]:
+# In[30]:
+
+
+get_ipython().system('vw --help ')
+
+
+# In[31]:
 
 
 train_part_vw = os.path.join(PATH_TO_DATA, 'train_part.vw')
@@ -201,47 +300,65 @@ model = os.path.join(PATH_TO_DATA, 'vw_model.vw')
 pred = os.path.join(PATH_TO_DATA, 'vw_pred.csv')
 
 
-# In[ ]:
+# In[80]:
 
 
-get_ipython().run_cell_magic('time', '', "!vw ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', '!vw --oaa 400 -d $PATH_TO_DATA/train_part.vw \\\n-f 400users_part_model.vw --passes 3 -c -b 28 --random_seed 17')
 
 
 # **Запишите прогнозы на выборке *valid.vw* в *vw_valid_pred.csv*.**
 
-# In[ ]:
+# In[81]:
 
 
-get_ipython().run_cell_magic('time', '', "!vw ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', '!vw -t -i 400users_part_model.vw -d $PATH_TO_DATA/valid.vw \\\n-p $PATH_TO_DATA/vw_valid_pred.csv --random_seed 17')
 
 
 # **Считайте прогнозы *kaggle_data/vw_valid_pred.csv*  из файла и посмотрите на долю правильных ответов на отложенной части.**
 
-# In[ ]:
+# In[82]:
 
 
-''' ВАШ КОД ЗДЕСЬ '''
+valid_preds = pd.read_csv('data/vw_valid_pred.csv', header=None)
+
+
+# In[83]:
+
+
+np.unique(valid_preds)
+
+
+# In[35]:
+
+
+from sklearn.metrics import accuracy_score
+
+
+# In[36]:
+
+
+accuracy_score(y_valid_for_vw, valid_preds.values)
 
 
 # **Теперь обучите `SGDClassifier` (3 прохода по выборке, логистическая функция потерь) и `LogisticRegression` на 70% разреженной обучающей выборки – `(X_train_part_sparse, y_train_part)`, сделайте прогноз для отложенной выборки `(X_valid_sparse, y_valid)` и посчитайте доли верных ответов. Логистическая регрессия будет обучаться не быстро (у меня – 4 минуты) – это нормально. Укажите везде `random_state`=17, `n_jobs`=-1. Для `SGDClassifier` также укажите `max_iter=3`.**
 
-# In[ ]:
+# In[37]:
 
 
-logit = ''' ВАШ КОД ЗДЕСЬ '''
-sgd_logit = ''' ВАШ КОД ЗДЕСЬ '''
+logit = LogisticRegression(random_state=17, n_jobs=-1, solver='lbfgs', multi_class='auto')
+sgd_logit = SGDClassifier(random_state=17, n_jobs=-1, max_iter=3)
 
 
-# In[ ]:
+# In[38]:
 
 
-get_ipython().run_cell_magic('time', '', "logit.fit ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', 'logit.fit(X_train_part_sparse, y_train_part)\naccuracy_score(y_valid, logit.predict(X_valid_sparse))')
 
 
-# In[ ]:
+# In[70]:
 
 
-get_ipython().run_cell_magic('time', '', "sgd_logit.fit ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', 'sgd_logit.fit(X_train_part_sparse, y_train_part)\naccuracy_score(y_valid, sgd_logit.predict(X_valid_sparse))')
 
 
 # **<font color='red'>Вопрос 1. </font> Посчитайте долю правильных ответов на отложенной выборке для Vowpal Wabbit, округлите до 3 знаков после запятой.**
@@ -250,15 +367,21 @@ get_ipython().run_cell_magic('time', '', "sgd_logit.fit ''' ВАШ КОД ЗДЕ
 # 
 # **<font color='red'>Вопрос 3. </font> Посчитайте долю правильных ответов на отложенной выборке для логистической регрессии, округлите до 3 знаков после запятой.**
 
-# In[ ]:
+# In[73]:
 
 
-vw_valid_acc = ''' ВАШ КОД ЗДЕСЬ '''
-sgd_valid_acc = ''' ВАШ КОД ЗДЕСЬ '''
-logit_valid_acc = ''' ВАШ КОД ЗДЕСЬ '''
+sgd_valid_acc
 
 
-# In[ ]:
+# In[72]:
+
+
+vw_valid_acc = round(accuracy_score(y_valid_for_vw, valid_preds.values), 3)
+sgd_valid_acc = round(accuracy_score(y_valid, sgd_logit.predict(X_valid_sparse)), 3)
+logit_valid_acc = round(accuracy_score(y_valid, logit.predict(X_valid_sparse)), 3)
+
+
+# In[41]:
 
 
 def write_answer_to_file(answer, file_address):
@@ -266,7 +389,7 @@ def write_answer_to_file(answer, file_address):
         out_f.write(str(answer))
 
 
-# In[ ]:
+# In[42]:
 
 
 write_answer_to_file(round(vw_valid_acc, 3), 'answer6_1.txt')
@@ -278,23 +401,41 @@ write_answer_to_file(round(logit_valid_acc, 3), 'answer6_3.txt')
 
 # **Обучите модель VW с теми же параметрами на всей обучающей выборке – *train.vw*.**
 
-# In[ ]:
+# In[74]:
 
 
-get_ipython().run_cell_magic('time', '', "!vw ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', '!vw --oaa 400 -d $PATH_TO_DATA/train.vw \\\n-f 400users_model.vw --passes 3 -c -b 28 --random_seed 17')
 
 
 # **Сделайте прогноз для тестовой выборки.**
 
-# In[ ]:
+# In[84]:
 
 
-get_ipython().run_cell_magic('time', '', "!vw ''' ВАШ КОД ЗДЕСЬ '''")
+get_ipython().run_cell_magic('time', '', '!vw -t -i 400users_model.vw -d $PATH_TO_DATA/test.vw \\\n-p $PATH_TO_DATA/test_preds.csv --random_seed 17')
+
+
+# In[85]:
+
+
+preds = pd.read_csv('data/test_preds.csv', header=None).values.ravel()
+
+
+# In[86]:
+
+
+preds = class_encoder.inverse_transform(preds - 1)
+
+
+# In[89]:
+
+
+np.unique(preds)
 
 
 # **Запишите прогноз в файл, примените обратное преобразование меток (был LabelEncoder и потом +1 в меткам) и отправьте решение на Kaggle.**
 
-# In[ ]:
+# In[47]:
 
 
 def write_to_submission_file(predicted_labels, out_file,
@@ -306,13 +447,20 @@ def write_to_submission_file(predicted_labels, out_file,
     predicted_df.to_csv(out_file, index_label=index_label)
 
 
-# In[ ]:
+# In[95]:
 
 
-vw_pred = ''' ВАШ КОД ЗДЕСЬ '''
+vw_pred = pd.read_csv('data/test_preds.csv', header=None).values.ravel()
+vw_pred = class_encoder.inverse_transform(vw_pred - 1)
 
 
-# In[ ]:
+# In[96]:
+
+
+np.unique(vw_pred)
+
+
+# In[97]:
 
 
 write_to_submission_file(vw_pred, os.path.join(PATH_TO_DATA, 'vw_400_users.csv'))
@@ -329,7 +477,25 @@ write_to_submission_file(vw_pred, os.path.join(PATH_TO_DATA, 'vw_400_users.csv')
 # In[ ]:
 
 
-write_to_submission_file(sgd_logit_test_pred, 
+get_ipython().run_cell_magic('time', '', 'logit.fit(X_train_sparse, y)')
+
+
+# In[100]:
+
+
+logit_test_pred = logit.predict(X_test_sparse)
+
+
+# In[101]:
+
+
+get_ipython().run_cell_magic('time', '', 'sgd_logit.fit(X_train_sparse, y)\nsgd_logit_test_pred = sgd_logit.predict(X_test_sparse)')
+
+
+# In[102]:
+
+
+write_to_submission_file(logit_test_pred, 
                          os.path.join(PATH_TO_DATA, 'logit_400_users.csv'))
 write_to_submission_file(sgd_logit_test_pred, 
                          os.path.join(PATH_TO_DATA, 'sgd_400_users.csv'))
@@ -344,10 +510,10 @@ write_to_submission_file(sgd_logit_test_pred,
 # **<font color='red'>Вопрос 6. </font> Какова доля правильных ответов на публичной части тестовой выборки (public leaderboard)  для логистической регрессии?**
 # 
 
-# In[ ]:
+# In[104]:
 
 
-vw_lb_score, sgd_lb_score, logit_lb_score = ''' ВАШ КОД ЗДЕСЬ '''
+vw_lb_score, sgd_lb_score, logit_lb_score = 0.18768, 0.15153, 0.19422
 
 write_answer_to_file(round(vw_lb_score, 3), 'answer6_4.txt')
 write_answer_to_file(round(sgd_lb_score, 3), 'answer6_5.txt')

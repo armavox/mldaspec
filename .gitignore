@@ -8,3 +8,5 @@ __pycache__
 **/umn_foursquare_datasets/*
 **/ans*
 **/competition_data/*
+*.vw
+*.cache
